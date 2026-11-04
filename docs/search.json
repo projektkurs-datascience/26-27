@@ -1531,5 +1531,201 @@
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "✍️ Ihr Bundesland hervorheben",
     "text": "✍️ Ihr Bundesland hervorheben\nHeben Sie statt Baden-Württemberg ein anderes Bundesland hervor, z.B. Ihr Heimatbundesland. Passen Sie auch den Untertitel an.\nZusatz: Zeichnen Sie mit geom_hline() den westdeutschen Median ein.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHinweis\n\n\nDen Namen in Zeile 2 und im subtitle ändern. Die Namen müssen exakt stimmen: unique(gesamtdaten$bundesland_name) zeigt alle.\n\n\n\n\n\n\n\n\n\n\n\nLösung (Beispiel NRW)\n\n\ngesamtdaten |&gt;\n  mutate(hervor = bundesland_name == \"Nordrhein-Westfalen\") |&gt;\n  ggplot(aes(x = ost_name, y = alo_quote)) +\n  geom_jitter(aes(colour = hervor), width = 0.25, height = 0, alpha = 0.6) +\n  geom_boxplot(alpha = 0, outlier.shape = NA, width = 0.5) +\n  scale_colour_manual(values = c(\"grey60\", \"#1b5e20\"), guide = \"none\") +\n  labs(subtitle = \"Nordrhein-Westfalen grün\", x = NULL, y = \"Arbeitslosenquote (%)\") +\n  theme_minimal()\nNRW streut über fast den ganzen westdeutschen Bereich: Münsterland unten, Ruhrgebiet ganz oben."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#wo-stehen-wir",
+    "href": "slides/VL_KI_und_Projekte.html#wo-stehen-wir",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Wo stehen wir?",
+    "text": "Wo stehen wir?\n\n\nBisher: gemeinsam in der Vorlesung\n\nCase-Study Teil 1 und 2: Daten beschaffen, prüfen, beschreiben, zeigen\nProjekt 1: Testprojekt\nChat AI als Werkzeug und als Gegenspieler (Bug Hunts 1–10)\n\n\nAb jetzt: selbstständig im Team\n\nProjekt 2 und 3 mit Bericht und Screencast\nDrei Personen, ein Repository, eine Abgabe\nUnd danach: andere Teams begutachten\n\n\n\n\nWas ist in einem Teamprojekt schwieriger als in einem Einzelprojekt? Was ist leichter?"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#probeklausur",
+    "href": "slides/VL_KI_und_Projekte.html#probeklausur",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Probeklausur",
+    "text": "Probeklausur\n\nWann und wo: Freitag, 20. November, 10:00 Uhr im H4/5. Die Vorlesung läuft an diesem Tag bis ca. 11:45 Uhr.\nWie: am eigenen Laptop im Safe Exam Browser (SEB)\nDanach: freiwilliges Experiment mit echter Geldauszahlung, anschließend Kick-off zu Projekt 2\n\n\n\nBis zur Probeklausur: Safe Exam Browser installieren und mit einem der 4 Testdurchläufe ausprobieren (wird morgen freigeschaltet). Laptop geladen mitbringen. Wer den SEB erst am Tag selbst installiert, verliert Zeit."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#projekt-kick-offs",
+    "href": "slides/VL_KI_und_Projekte.html#projekt-kick-offs",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Projekt-Kick-offs",
+    "text": "Projekt-Kick-offs\n\nNeue Gruppen vor jedem selbstständigen Projekt\nKick-off vor jedem Projekt mit Ihrer Tutorin oder Ihrem Tutor, verpflichtend: Sie lernen Ihr Team und das Projekt kennen\nDie Hälfte der Kick-offs findet in Präsenz statt, mit Kaffee (Kakao/Tee) und Plunder, die andere Hälfte online. Wer jetzt online startet, hat im Sommersemester den Präsenz-Kick-off.\nDie Einladung zum GitHub-Repository kommt im Lauf des Tages: innerhalb von 7 Tagen annehmen\n\n\nAm Freitag bekommen Sie eine Mail mit Ihrer Gruppe, Ihrem Tutoriumstermin und dem Termin für den Kick-off."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#leitlinien-welche-antwort-ist-besser",
+    "href": "slides/VL_KI_und_Projekte.html#leitlinien-welche-antwort-ist-besser",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Leitlinien: Welche Antwort ist besser?",
+    "text": "Leitlinien: Welche Antwort ist besser?\nAufgabe: “Vergleichen Sie die Arbeitslosenquote in Ost- und Westdeutschland.”\n\n\n\n\n\nAntwort A\n\nmit group_by(ost_name) und summarise(mean(alo_quote)) Mittelwert berechnet\nOst 7.13, West 5.26\nOst ist höher\n\n\n\n\n\n\n\n\nAntwort B\nDie Landkreise in Ostdeutschland haben 2024 im Mittel eine Arbeitslosenquote von 7,13 %, die in Westdeutschland von 5,26 %. Im Westen ist die Streuung aber größer: Einige westdeutsche Kreise wie Gelsenkirchen liegen deutlich über jedem ostdeutschen Kreis.\n\n\n\n\n\nDie Leitlinien zur Projektabgabe verlangen:\n\nGanze Sätze statt Stichpunkte, Dezimalkomma, Einheiten\nKein Code in der abgegebenen HTML (echo = FALSE), keine Beschreibung des Codes\nErgebnisse interpretieren: Was fällt auf, und warum?"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#quellen-angeben",
+    "href": "slides/VL_KI_und_Projekte.html#quellen-angeben",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Quellen angeben",
+    "text": "Quellen angeben\n\nCode oder Beispiele aus dem Netz (StackOverflow, Blogs, Lehrbücher) dürfen Sie nutzen, aber mit Quelle: im Fließtext nennen und verlinken\nOhne Quelle ist es ein Plagiat: Das ganze Projekt wird mit 5,0 bewertet\nDiskutieren zwischen den Gruppen ist erwünscht, Code und Texte weitergeben ist nicht erlaubt\nRTutor Problem Sets bearbeiten Sie allein\n\n\n\n\n\n\n\nAlles Weitere steht in unseren Quellen- und KI-Guidelines."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#ki-nutzung-dokumentieren",
+    "href": "slides/VL_KI_und_Projekte.html#ki-nutzung-dokumentieren",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "KI-Nutzung dokumentieren",
+    "text": "KI-Nutzung dokumentieren\nKI-Tools wie Chat AI dürfen Sie nutzen. Wie bei jeder Quelle müssen Sie das angeben (Richtlinie der Uni Ulm). Dafür steht am Ende jeder Projektvorlage diese Tabelle:\n\n\n| Aufgabe | Coding | Beschreibung | Interpretation | Textliche Verbesserungen |\n|---------|--------|--------------|----------------|--------------------------|\n| 1       |   3    |      1       |       2        |            4             |\n| 2       |        |              |                |                          |\n| ...     |        |              |                |                          |\n\n\nPro Aufgabe und Bereich: 1 = gar nicht bis 5 = sehr viel\nDie Tabelle erscheint nicht in der HTML (Chunk mit echo = FALSE), steht aber in der .Rmd\nDamit erfüllen Sie Ihre Zitationspflicht\n\n\n\n\nWo würden Sie in Aufgabe 1 eine 5 eintragen? Wo wäre eine 5 ein Warnsignal für Sie selbst?"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#ki-als-partner-nicht-als-ersatz",
+    "href": "slides/VL_KI_und_Projekte.html#ki-als-partner-nicht-als-ersatz",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "KI als Partner, nicht als Ersatz",
+    "text": "KI als Partner, nicht als Ersatz\n\n\nKI als Tutor\n\nKonzepte auf verschiedenen Niveaus erklären lassen: einfach → formal → angewandt auf Ihr Projekt\n“Erkläre jede Zeile dieses Codes.”\n“Stelle mir drei Fragen, mit denen ich prüfe, ob ich das verstanden habe.”\n\n\nKI als Sparringspartner\n\nBrainstorming: Hypothesen, Grafiktypen, Analysestrategien\n“Welche Alternativen gibt es?”\n“Finde drei Schwächen in meinem Ansatz.”\nGliederung Ihrer Antwort prüfen lassen\n\n\n\n\nErst selbst die Aufgabe verstehen und lösen, dann die KI fragen. Nur wer weiß, wie eine gute Antwort aussieht, erkennt eine schlechte."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#prompting-kurz-wiederholt",
+    "href": "slides/VL_KI_und_Projekte.html#prompting-kurz-wiederholt",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "🔁 Prompting: kurz wiederholt",
+    "text": "🔁 Prompting: kurz wiederholt\nAus Teil 1: Aufgabe, Instruktionen, Kontext. Etwas feiner als Formel:\n\n\n\n\n\n\n\n\nBaustein\nFrage\nBeispiel\n\n\n\n\nRolle\nWer soll antworten?\n“Du bist mein R-Tutor.”\n\n\nAufgabe\nWas genau?\n“Vergleiche die Arbeitslosenquote der Bundesländer.”\n\n\nKontext\nWas muss die KI wissen?\nglimpse()-Output, Paket (tidyverse), Kurs\n\n\nFormat\nWie soll das Ergebnis aussehen?\n“Kommentierter Code, danach drei Sätze Erklärung.”\n\n\nEinschränkungen\nWas ist tabu, was muss geprüft werden?\n“Nur dplyr. Liefere zu jedem Schritt einen Check mit.”\n\n\n\n\n\n\n\n\n\n\nNicht weiter? “Stelle mir fünf Fragen, die dir helfen, mir die bestmögliche Antwort zu geben.” Fehler entdeckt? Sagen Sie es der KI konkret, mit Zeile und Output."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#jetzt-sie-prompt-verbessern",
+    "href": "slides/VL_KI_und_Projekte.html#jetzt-sie-prompt-verbessern",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "✍️ Jetzt Sie: Prompt verbessern",
+    "text": "✍️ Jetzt Sie: Prompt verbessern\nEin typischer erster Prompt:\n\n\n\n“mach mir ne grafik zur arbeitslosigkeit in deutschland”\n\n\n\n\n3 Minuten, zu zweit: Schreiben Sie den Prompt mit den fünf Bausteinen neu. Was fehlt der KI am meisten?"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#prompt-verbessern-ein-vorschlag",
+    "href": "slides/VL_KI_und_Projekte.html#prompt-verbessern-ein-vorschlag",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Prompt verbessern: ein Vorschlag",
+    "text": "Prompt verbessern: ein Vorschlag\n\n\n\n“Du bist mein R-Tutor (Rolle). Ich möchte zeigen, ob sich die Arbeitslosenquoten der Landkreise in Ost- und Westdeutschland unterscheiden (Aufgabe). Mein Datensatz gesamtdaten hat 400 Landkreise, hier der glimpse()-Output: … Die Spalte ost_name hat die Werte”Ostdeutschland” und “Westdeutschland” (Kontext). Schlage zwei passende Grafiktypen vor, begründe kurz, und schreibe für einen davon kommentierten ggplot2-Code (Format). Nutze nur das tidyverse, zeige alle Datenpunkte, und sag mir, wie ich prüfe, dass keine Landkreise fehlen (Einschränkungen).”\n\n\n\n\n\nDie KI rät keine Spaltennamen, weil der glimpse()-Output dabei ist\nFrage zuerst, Grafik danach: Die KI soll begründen, nicht nur liefern\nDer Check ist Teil der Antwort: Wer nrow() nicht prüft, merkt fehlende Kreise nicht"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#coding-mit-llms",
+    "href": "slides/VL_KI_und_Projekte.html#coding-mit-llms",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Coding mit LLMs",
+    "text": "Coding mit LLMs\n\nGut für: Grundgerüst, Standardaufgaben, Fehlermeldungen erklären, Syntax nachschlagen\nGenerierten Code immer ausführen und prüfen: nrow(), colSums(is.na()), ein Wert, den Sie kennen\nVersionskontrolle nutzen: vor dem Einfügen committen, dann können Sie zurück\nNachfragen: “Erkläre jede Codezeile.”, “Welche stillen Fehler könnte dieser Code haben?”\n\n\n\nCode, den Sie nicht erklären können, gehört nicht in Ihre Abgabe. Sie sind als Gruppe für alles verantwortlich, was Sie einreichen."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#bug-hunt-11-der-hilfsbereite-code",
+    "href": "slides/VL_KI_und_Projekte.html#bug-hunt-11-der-hilfsbereite-code",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "🐛 Bug Hunt 11: Der hilfsbereite Code",
+    "text": "🐛 Bug Hunt 11: Der hilfsbereite Code\nPrompt: “Berechne die Arbeitslosenquote je Bundesland als gewichtetes Mittel der Kreise.” Chat AI:\ngesamtdaten |&gt;\n  group_by(bundesland_name) |&gt;\n  summarise(alo_land = weighted_mean(alo_quote, w = Einwohner))\n\n\n\n“Damit gewichten Sie jeden Kreis mit seiner Bevölkerung. Das Ergebnis entspricht der offiziellen Arbeitslosenquote der Bundesagentur für Arbeit.”\n\n\n\n\n3 Minuten, zu zweit: Wie viele Fehler finden Sie? Welcher fällt sofort auf, welcher erst spät, welcher nie von selbst?"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#bug-hunt-11-auflösung",
+    "href": "slides/VL_KI_und_Projekte.html#bug-hunt-11-auflösung",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "🐛 Bug Hunt 11: Auflösung",
+    "text": "🐛 Bug Hunt 11: Auflösung\n\nLaut: weighted_mean() gibt es nicht. Error: could not find function \"weighted_mean\". In Base R heißt sie weighted.mean(). Eine erfundene Funktion ist der harmloseste Fehler, denn R meldet sie sofort.\n\n\n\nStill: Mit weighted.mean() läuft der Code, aber Berlin, Bremen und Hamburg bekommen NA. Die Einwohnerzahlen fehlen bei den Stadtstaaten (Teil 1, Schulden-Datensatz). Kein Fehler, keine Warnung.\n\n\n\n\nInhaltlich: Eine Quote teilt Arbeitslose durch Erwerbspersonen, nicht durch Einwohner. Mit Einwohnern als Gewicht kommt z.B. für Hessen 5,37 % heraus, die Landesquote ist 5,12 %. Richtig: sum(total_alo) / sum(erw + total_alo) * 100.\n\n\n\n\nBehauptung: Auch richtig berechnet ist das nicht die BA-Quote. Unsere Erwerbstätigen zählen am Arbeitsort, die Arbeitslosen am Wohnort (Bug Hunt 6).\n\n\nJe später ein Fehler auffällt, desto gefährlicher ist er. Die KI hat bei allen vier Punkten gleich überzeugt geklungen."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#risiken-und-sicherheitsnetz",
+    "href": "slides/VL_KI_und_Projekte.html#risiken-und-sicherheitsnetz",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Risiken und Sicherheitsnetz",
+    "text": "Risiken und Sicherheitsnetz\n\n\nRisiken\n\nHalluzinationen: erfundene Funktionen, Argumente, Pakete, Quellen\nFremde Werkzeuge: Code mit Paketen, die Sie nicht kennen (z.B. data.table), können Sie nicht prüfen\nVersionen: Die KI kennt oft ältere Paketversionen\nFlache Texte: KI-Interpretationen klingen gut und sagen wenig\n\n\nSicherheitsnetz\n\nHilfe aufrufen: ?weighted.mean\nErgebnis gegen einen bekannten Wert prüfen\nAlternative Lösung anfordern und vergleichen\nInterpretation selbst schreiben, dann von der KI prüfen lassen: “Welche Aussagen sind durch die Ergebnisse nicht gedeckt?”\n\n\n\nTexte direkt aus der KI zu kopieren lohnt sich nicht: Ihnen fehlt die Tiefe, und das sieht man in der Bewertung."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#drei-rollen-im-team",
+    "href": "slides/VL_KI_und_Projekte.html#drei-rollen-im-team",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Drei Rollen im Team",
+    "text": "Drei Rollen im Team\n\n\nKoordinator:in (einmal pro Projekt)\n\nZeitplan, Aufgabenverteilung, Treffen\nKommunikationskanal festlegen\nSorgt dafür, dass alle alle Aufgaben erklären können\nKontakt zu Tutor:in und Dozent\n\n\nVerantwortliche:r (pro Aufgabe)\n\nBearbeitet die Aufgabe\nSaubere Grafiken und Tabellen\nKurze, präzise Antworten\n\n\nKontrolleur:in (pro Aufgabe)\n\nCode gegenchecken\nGrafiken, Tabellen und Text auf Fehler und Konsistenz prüfen\nKürzen, Rechtschreibung\n\n\n\n\nJede:r ist bei einem Drittel der Aufgaben verantwortlich und kontrolliert andere. Der Kontrolleur ist Ihr Bug Hunter.\n\n\n\n\n\n\n\nDie Rollen zu Projektbeginn im GitHub-Repository festhalten (z.B. in README.md). Bei Problemen können Sie darauf verweisen. Details: Team-Guidelines."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#regeln-vom-ersten-tag-an",
+    "href": "slides/VL_KI_und_Projekte.html#regeln-vom-ersten-tag-an",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Regeln vom ersten Tag an",
+    "text": "Regeln vom ersten Tag an\n\nErwartungen klären: Welche Note wollen wir? Wer hat wann Zeit?\nKlare Deadlines innerhalb des Teams, nicht nur die Abgabe\nKurze, regelmäßige Check-ins (max. 10 Minuten): Was ist fertig, was hängt?\nVorbereitet erscheinen: Fragen und Probleme vorher notieren\nDokumentieren: Wer macht was bis wann (Repository, Protokoll)\nStärken nutzen, Wissen teilen, unterschiedliche Perspektiven wertschätzen\n\n\n\nWelche eine Regel würden Sie in Ihrem nächsten Team als Erstes festlegen?"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#zwei-typen-die-jedes-team-kennt",
+    "href": "slides/VL_KI_und_Projekte.html#zwei-typen-die-jedes-team-kennt",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Zwei Typen, die jedes Team kennt",
+    "text": "Zwei Typen, die jedes Team kennt\n\n\n\n\n\n\n\n\n\nFree-Rider\nCouch Potato\n\n\n\n\nAuftreten\nselbstsicher, viele Ausreden\nfreundlich, wirkt motiviert\n\n\nBeitrag\nkaum, unfertig oder falsch\nwenig, unzuverlässig\n\n\nBei Kritik\nschiebt die Schuld auf andere\nlenkt ein, testet aber Grenzen\n\n\nSteuerbar?\nschwer\nmit klaren Absprachen gut\n\n\n\n\nFolgen für das Team: unfaire Arbeitsverteilung, Stress, schlechtere Ergebnisse, und die Note teilen trotzdem alle."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#fall-1-jack",
+    "href": "slides/VL_KI_und_Projekte.html#fall-1-jack",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Fall 1: Jack",
+    "text": "Fall 1: Jack\n\n\nJack …\n\nfindet nie Zeit für Treffen,\nantwortet nicht auf Nachrichten,\nliefert Unfertiges oder Falsches,\nist immer “zu beschäftigt”,\nwirkt selbstsicher und gibt anderen die Schuld.\n\nZwei Tage vor der Abgabe fehlt seine Aufgabe noch komplett.\n\n\nWas tun Sie? Und was haben Sie vermutlich vorher falsch gemacht?"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#absorbieren-oder-spiegeln",
+    "href": "slides/VL_KI_und_Projekte.html#absorbieren-oder-spiegeln",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Absorbieren oder spiegeln?",
+    "text": "Absorbieren oder spiegeln?\n\n\nWas Gruppen oft tun: absorbieren\n\nDie anderen erledigen Jacks Teil, um die Deadline zu halten\nJack profitiert und lernt nichts\nDie Gruppe trainiert ihn ungewollt zum Free-Rider. Im nächsten Team macht er es wieder so.\n\n\n\nWas die Gruppe tun sollte: spiegeln\n\nDas Problem an Jack zurückgeben: Er trägt die Folgen\nKlare Grenzen, früh und konsequent\nErwartungen ausdrücklich formulieren\nBeiträge dokumentieren"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-de-eskalationsgespräch-suchen",
+    "href": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-de-eskalationsgespräch-suchen",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Wenn es nicht besser wird: De-Eskalationsgespräch suchen",
+    "text": "Wenn es nicht besser wird: De-Eskalationsgespräch suchen\n\nIm Team ansprechen, früh und sachlich: konkretes Verhalten, konkrete Erwartung, konkrete Frist\nDokumentieren: Absprachen, Nachrichten, Commits im Repository\nÜbungsleiter und Dozent per Mail einschalten, spätestens 1,5 Wochen nach Projektbeginn: Was ist passiert, was hat das Team schon unternommen?\nLetzte Konsequenz: Das Team streicht die Person von der Abgabe. Sie bekommt für dieses Projekt keine Punkte.\n\n\nSchritt 4 geht nur, wenn Schritt 3 rechtzeitig war. Zwei Tage vor der Abgabe ist es dafür zu spät, wie bei Jack.\n\nDer ganze Ablauf steht im De-Eskalationsmechanismus der Team-Guidelines."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#fall-2-henry",
+    "href": "slides/VL_KI_und_Projekte.html#fall-2-henry",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Fall 2: Henry",
+    "text": "Fall 2: Henry\n\n\nHenry …\n\nist nett und immer gut gelaunt,\nsagt bei jedem Treffen “mache ich”,\nliefert dann die Hälfte, eine Woche zu spät,\ntestet, wie weit er gehen kann.\n\n\n\nIst Henry ein Free-Rider? Was würde bei ihm helfen?\n\n\n\n\nHenry ist eine Couch Potato: Mit klaren Absprachen und konsequentem Nachfragen lässt er sich gut führen\nKonkrete Aufgabe, konkrete Frist, kurzer Check-in zur Halbzeit\nWas bei ihm nicht hilft: seine Arbeit stillschweigend übernehmen"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#warum-fällt-es-so-schwer-grenzen-zu-setzen",
+    "href": "slides/VL_KI_und_Projekte.html#warum-fällt-es-so-schwer-grenzen-zu-setzen",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Warum fällt es so schwer, Grenzen zu setzen?",
+    "text": "Warum fällt es so schwer, Grenzen zu setzen?\n\n\nWas uns zögern lässt\n\nViele vermeiden Konflikte\nAngst, unfreundlich oder unfair zu wirken\nAngst, nicht ernst genommen zu werden\n\n\nWas Free-Riding möglich macht\n\nSie übernehmen Verantwortung für andere\nSie wollen um jeden Preis vermeiden, dass das Team scheitert\nSie werten minimale Beiträge als “Fortschritt”\nSie machen die Arbeit anderer mit\nSie scheuen sich, Aufgaben zu delegieren\n\n\n\n\nGrenzen setzen ist lernbar, und Sie werden es im Beruf ständig brauchen. Ein Teamprojekt im Studium ist der günstigste Ort, um es zu üben."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#jetzt-sie-wie-sagen-sie-es-jack",
+    "href": "slides/VL_KI_und_Projekte.html#jetzt-sie-wie-sagen-sie-es-jack",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "✍️ Jetzt Sie: Wie sagen Sie es Jack?",
+    "text": "✍️ Jetzt Sie: Wie sagen Sie es Jack?\n\n3 Minuten, zu zweit: Schreiben Sie Jack eine kurze Nachricht in den Team-Chat. Seine Aufgabe ist seit zwei Tagen überfällig. Sachlich, konkret, mit Frist.\n\n\n\n\n\n\n\n\n\n\n“Hi Jack, Aufgabe 3 war für Montag vereinbart und fehlt noch. Wir brauchen sie bis Donnerstag 18 Uhr im Repository, damit Lea sie vor der Abgabe kontrollieren kann. Klappt das? Wenn nicht, sag bis morgen Bescheid, dann besprechen wir das mit unserem Tutor.”\n\n\n\nKonkret (was, bis wann, warum), keine Vorwürfe, nächster Schritt angekündigt."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#was-sie-mitnehmen-sollten",
+    "href": "slides/VL_KI_und_Projekte.html#was-sie-mitnehmen-sollten",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Was Sie mitnehmen sollten",
+    "text": "Was Sie mitnehmen sollten\n\nFree-Rider und Couch Potatoes gibt es überall, im Studium wie im Job\nCouch Potatoes lassen sich oft führen; Free-Rider sind schwierig und manchmal manipulativ\nÄndern kann nur die Person selbst ihr Verhalten. Sie können aber verhindern, dass es sich lohnt.\n\n\nFür Ihr Team heißt das:\n\nKlare Erwartungen und Grenzen, transparent kommuniziert\nTeammitglieder in die Verantwortung nehmen\nIhre eigene Zeit und Energie schützen\nKonflikte sachlich ansprechen, früh statt spät"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#peer-review-reports",
+    "href": "slides/VL_KI_und_Projekte.html#peer-review-reports",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Peer-Review Reports",
+    "text": "Peer-Review Reports\n\nJede:r bekommt anonym (double blind) die Ausarbeitung einer anderen Gruppe\nAufbau (Unterüberschriften der Vorlage bitte beibehalten):\n\nZusammenfassung: Was ist die Hauptaussage?\nPositive Aspekte: drei Punkte, die besonders gut gelungen sind\nVerbesserungspotenzial: drei Punkte, mit konkreten Vorschlägen\nReflexion: Was hätten Sie in Ihrer eigenen Arbeit besser machen können?\n\nUmfang: ½ bis 1 Seite Fließtext, kritisch und konstruktiv, nicht beleidigend\nVorleistung für die Klausur: Mindestens einer Ihrer Reports muss auf Platz 2 oder besser landen\n\n\n\n\n\n\n\nGuidelines für Review Reports, mit Fragen, an denen Sie sich entlanghangeln können."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#welcher-satz-hilft-dem-team",
+    "href": "slides/VL_KI_und_Projekte.html#welcher-satz-hilft-dem-team",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Welcher Satz hilft dem Team?",
+    "text": "Welcher Satz hilft dem Team?\n\nOrdnen Sie die drei Sätze aus Review Reports: Welcher ist am hilfreichsten, welcher am spezifischsten?\n\nA “Die Grafiken sind insgesamt sehr schön und übersichtlich gestaltet.”\nB “In Aufgabe 4 fehlt der Karte eine Legendenüberschrift, und die Klasse über 10 % ist grau. Vermutlich fehlt in cut() die obere Grenze Inf. Mit einer lückenlosen Einteilung wäre die Kernaussage (Ruhrgebiet) sofort sichtbar.”\nC “Alles super, ich hätte nichts anders gemacht.”\n\n\nB nennt die Stelle, den Fehler, die vermutliche Ursache und eine Lösung. A ist nett, aber das Team lernt nichts. C zeigt, dass die Arbeit nicht gelesen wurde."
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#gruppenfeedback-reports-bewerten",
+    "href": "slides/VL_KI_und_Projekte.html#gruppenfeedback-reports-bewerten",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Gruppenfeedback: Reports bewerten",
+    "text": "Gruppenfeedback: Reports bewerten\nJedes Teammitglied bewertet die drei erhaltenen Reports (Guidelines zum Gruppenfeedback):\n\n\n\n\n\n\n\n\nKriterium\nSkala\nLeitfrage\n\n\n\n\nHilfreich\n1–5\nKönnen wir die Kritik im nächsten Projekt nutzen?\n\n\nSpezifisch\n1–5\nWurde unsere Arbeit gelesen und verstanden? Werden konkrete Stellen genannt?\n\n\nRanking\n1–3\nWelcher Report hat uns am meisten gebracht?\n\n\n\n\n\nZiel: inhaltliche, methodische und stilistische Rückmeldung\nFeedback aktiv nutzen: im Team besprechen und ins nächste Projekt einarbeiten"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#bis-zum-kick-off",
+    "href": "slides/VL_KI_und_Projekte.html#bis-zum-kick-off",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Bis zum Kick-off",
+    "text": "Bis zum Kick-off\n\nEinladung zum GitHub-Repository annehmen (innerhalb von 7 Tagen)\nSafe Exam Browser installieren und testen, Probeklausur am Freitag, 20. November\nDie Leitlinien zur Projektabgabe und die Team-Guidelines lesen\nMail am Freitag lesen: Gruppe, Tutorium, Kick-off-Termin\nIm Kick-off: Rollen verteilen und im Repository festhalten\n\n\n\nSie sind als Team für Ihre Abgabe verantwortlich, mit und ohne KI. Viel Erfolg in den Projekten!"
   }
 ]
