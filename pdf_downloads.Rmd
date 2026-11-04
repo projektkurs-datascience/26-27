@@ -28,4 +28,5 @@ Hier finden Sie Folien als PDFs zum Download:
 - [Einführungsveranstaltung](slides/intro_projektkurs_data-science.pdf)
 - [Case-Study Teil 1](slides/VL_case-study-Teil1.pdf)
 - [Case-Study Teil 2](slides/VL_case-study-Teil2.pdf)
+- [Wahrscheinlichkeit und Konfidenzintervalle](slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.pdf)
 - [KI und Projekte](slides/VL_KI_und_Projekte.pdf)

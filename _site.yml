@@ -17,11 +17,11 @@ navbar:
   - text: RTutor-Problem-Sets
     menu:
       - text: "Problem Set 1"
-        href: https://github.com/projektkurs-datascience/24-25/tree/main/problem-sets/ps1
+        href: https://github.com/projektkurs-datascience/26-27/tree/main/problem-sets/ps1
       - text: "Problem Set 2"
-        href: https://github.com/projektkurs-datascience/24-25/tree/main/problem-sets/ps2
+        href: https://github.com/projektkurs-datascience/26-27/tree/main/problem-sets/ps2
       - text: "Problem Set 3"
-        href: https://github.com/projektkurs-datascience/24-25/tree/main/problem-sets/ps3
+        href: https://github.com/projektkurs-datascience/26-27/tree/main/problem-sets/ps3
   - text: Tutorials
     icon: fa-users
     menu:

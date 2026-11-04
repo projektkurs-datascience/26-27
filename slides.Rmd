@@ -52,7 +52,7 @@ knitr::include_url("slides/Vorteile_Git-und-Github.html")
 
 - Happy Git with R: http://happygitwithr.com/
 
-- Try Git tutorial: https://try.github.io/levels/1/challenges/1
+- Try Git tutorial: https://docs.github.com/en/get-started/start-your-journey
 
 - Introduction to Data Science: https://rafalab.github.io/dsbook/git.html (Kapitel 39)
 
@@ -128,7 +128,6 @@ knitr::include_url("slides/Visualisierung-Guidelines.html")
 ```
 
 - Diese Vorlesungseinheit orientiert sich an einem Vortrag von [Karl Broman](http://kbroman.org/) mit dem Titel: ["Creating effective figures and tables"](https://www.biostat.wisc.edu/~kbroman/presentations/graphs2017.pdf), 
-- Weiterhin sind die Vorlesungsfolien von Peter Aldhous eingearbeitet worden: [Introduction to Data Visualization course](http://paldhous.github.io/ucb/2016/dataviz/index.html) 
 
 - Wie auch das Buch [Introduction to Data Science](https://rafalab.github.io/dsbook/) (Kapitel 10)
 
@@ -179,7 +178,13 @@ knitr::include_url("docs/slides/VL_case-study-Teil1.html")
 knitr::include_url("docs/slides/VL_case-study-Teil2.html")
 ```
 
-### 04: KI und Projekte 
+### 04: Wahrscheinlichkeit und Konfidenzintervalle
+
+```{r}
+knitr::include_url("docs/slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html")
+```
+
+### 05: KI und Projekte 
 
 ```{r}
 knitr::include_url("docs/slides/VL_KI_und_Projekte.html")

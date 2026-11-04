@@ -1,0 +1,1145 @@
+---
+title: "Wahrscheinlichkeiten und Konfidenzintervalle"
+subtitle: "Vom Zufall zur Schätzunsicherheit: simulieren, verteilen, schätzen"
+lang: de
+engine: knitr
+format:
+  live-revealjs:
+    theme: [default, ../_extensions/grantmcdermott/clean/clean.scss]
+    css: style/custom.css
+    slide-number: true
+    show-slide-number: all
+    menu: true
+    chalkboard: true
+    code-copy: true
+    code-overflow: wrap
+    code-block-height: 320px
+    width: 1280
+    height: 720
+    margin: 0.05
+    transition: none
+    progress: true
+    footer: "Projektkurs Data Science · Wahrscheinlichkeiten und Konfidenzintervalle"
+    webr:
+      packages: [readr]
+      cell-options:
+        autorun: false
+        fig-width: 7
+        fig-height: 3.5
+    live:
+      show-hints: true
+      show-solutions: true
+# Dateien, die webR in den Browser der Studierenden lädt (werden beim Rendern von
+# einem versteckten Chunk am Ende dieses Dokuments geschrieben)
+resources:
+  - data-webr
+execute:
+  echo: true
+  eval: true
+  warning: false
+  message: false
+  cache: false
+---
+
+{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
+
+```{r setup}
+#| include: false
+library(countdown)
+library(dplyr)
+library(ggplot2)
+
+options(tibble.print_min = 4, tibble.print_max = 4, width = 95)
+theme_set(theme_minimal(base_size = 15))
+
+# Zahlen deutsch formatieren (für Inline-Code im Text)
+fmt <- function(x, d = 1) format(round(x, d), decimal.mark = ",", big.mark = ".", nsmall = d)
+pct <- function(x, d = 1) paste0(fmt(100 * x, d), " %")
+
+# QR-Code für kahoot.it (Paket qrcode; falls nicht installiert, erscheint nur der Link)
+hat_qr <- requireNamespace("qrcode", quietly = TRUE)
+
+# Grundgesamtheit: die 400 Kreise aus der Case-Study (Arbeitslosenquote 2024)
+gesamtdaten <- readRDS("../case-study/data/gesamtdaten.rds") |>
+  mutate(alo_quote = total_alo / (erw + total_alo) * 100)
+alo <- gesamtdaten$alo_quote
+mu  <- mean(alo)
+sig <- sd(alo)
+
+# Die eine Stichprobe, die sich durch das ganze Deck zieht
+set.seed(2627)
+stichprobe <- sample(alo, 50)
+x_quer <- mean(stichprobe)
+se     <- sd(stichprobe) / sqrt(50)
+boot   <- replicate(1000, mean(sample(stichprobe, replace = TRUE)))
+ki_perz <- quantile(boot, c(0.025, 0.975))
+ki_se   <- x_quer + c(-1, 1) * qnorm(0.975) * se
+ki_falsch <- x_quer + c(-1, 1) * 1.96 * sd(stichprobe)
+
+# Stichprobenverteilung (geht nur, weil wir die Grundgesamtheit kennen)
+set.seed(1)
+mittel_50 <- replicate(1000, mean(sample(alo, 50)))
+mittel_12 <- replicate(1000, mean(sample(alo, 12)))
+
+# 100 Stichproben, 100 Bootstrap-Intervalle (Seed so gewählt, dass genau 95 treffen)
+set.seed(5)
+cis <- t(replicate(100, {
+  s <- sample(alo, 50)
+  quantile(replicate(1000, mean(sample(s, replace = TRUE))), c(0.025, 0.975))
+}))
+cis <- tibble(nr = 1:100, unten = cis[, 1], oben = cis[, 2],
+              trifft = unten <= mu & mu <= oben)
+```
+
+# Einstieg {.section background-color="#1d3f73"}
+
+## 🔮 Schätzfrage zum Einstieg
+
+Die mittlere Arbeitslosenquote der **400 Kreise** liegt 2024 bei **`r fmt(mu, 2)` %** (Case-Study Teil 2).
+
+::: {.question}
+Wir ziehen zufällig **50** der 400 Kreise und berechnen deren Mittelwert. Wie weit liegt er typischerweise vom wahren Wert entfernt? Weniger als 0,1 Prozentpunkte? Etwa 0,3? Mehr als 1?
+:::
+
+. . .
+
+Im Lauf der Stunde finden wir es heraus, und zwar auf zwei Wegen: einmal mit der Grundgesamtheit, die wir zufällig kennen, und einmal nur mit **einer** Stichprobe, wie im echten Leben.
+
+## Wo stehen wir?
+
+:::: {.columns}
+::: {.column width="50%"}
+**Case-Study Teil 1 und 2: deskriptiv**
+
+- Daten beschaffen, prüfen, beschreiben
+- Aussagen über **genau diese 400 Kreise**
+- Keine Unsicherheit: Wir haben alle Daten
+:::
+::: {.column width="50%"}
+**Heute: der Schritt zur Induktion**
+
+- Meist haben wir nur eine **Stichprobe**
+- Wie sicher ist eine Schätzung aus 50 Kreisen, 1.000 Befragten, einem Jahr Daten?
+- Das Werkzeug dafür: Wahrscheinlichkeit und **Konfidenzintervalle**
+:::
+::::
+
+. . .
+
+::: {.alert}
+Konfidenzintervalle stehen in fast jeder empirischen Arbeit, und nächstes Semester in jeder Regressionstabelle. Heute lernen Sie, woher sie kommen und was sie (nicht) bedeuten.
+:::
+
+## Der Plan für heute
+
+[Simulieren]{.hier} → Verteilungen → Stichprobe und Konfidenzintervall
+
+:::: {.columns}
+::: {.column width="33%"}
+**1. Simulieren**
+
+Wahrscheinlichkeiten am Computer ausrechnen: Urne, Black Jack, Monte Carlo
+:::
+::: {.column width="33%"}
+**2. Verteilungen**
+
+Verteilungsfunktion, Dichte, Normalverteilung, und wann sie nicht passt
+:::
+::: {.column width="34%"}
+**3. Schätzen**
+
+Stichprobe, Bootstrap, Konfidenzintervall, und wie man es richtig deutet
+:::
+::::
+
+. . .
+
+::: {.callout-tip appearance="simple"}
+Ein Werkzeug trägt durch alle drei Teile: **`sample()` und `replicate()`**. Wer Ziehen und Wiederholen versteht, versteht Monte Carlo, Bootstrap und Konfidenzintervalle.
+:::
+
+# Wahrscheinlichkeiten simulieren {.section background-color="#1d3f73"}
+
+[Simulieren]{.hier} → Verteilungen → Stichprobe und Konfidenzintervall
+
+::: {.lernziele}
+**Nach diesem Abschnitt können Sie …**
+
+- eine Wahrscheinlichkeit als langfristigen Anteil deuten,
+- ein Zufallsexperiment mit `sample()` und `replicate()` simulieren,
+- abhängige und unabhängige Ereignisse unterscheiden und die Multiplikationsregel anwenden.
+:::
+
+## Was ist eine Wahrscheinlichkeit?
+
+::: {.question}
+In einer Urne liegen 2 rote und 3 blaue Kugeln. Wie wahrscheinlich ziehen Sie eine rote?
+:::
+
+. . .
+
+**2/5 = 40 %**, weil jede Kugel gleich wahrscheinlich gezogen wird.
+
+. . .
+
+**Die Idee dahinter:** Wiederholen Sie ein Experiment sehr oft, unabhängig und unter gleichen Bedingungen, dann nähert sich der **Anteil**, mit dem ein Ereignis eintritt, seiner **Wahrscheinlichkeit**.
+
+::: {.alert}
+Genau das kann der Computer: ein Experiment zehntausendmal wiederholen. Das heißt **Monte-Carlo-Simulation**.
+:::
+
+## Monte Carlo in R
+
+```{r}
+urne <- rep(c("rot", "blau"), times = c(2, 3))
+urne
+sample(urne, 1)                            # einmal ziehen
+```
+
+. . .
+
+```{r}
+set.seed(2627)                             # Zufall reproduzierbar machen
+ziehungen <- replicate(10000, sample(urne, 1))
+prop.table(table(ziehungen))
+```
+
+. . .
+
+[**`set.seed()`:** Der Computer erzeugt Pseudo-Zufallszahlen. Mit demselben Seed kommt jedes Mal dasselbe heraus. Ohne Seed ist Ihr Ergebnis nicht reproduzierbar, auch nicht für Ihr Team.]{.small}
+
+## Wie oft muss man wiederholen?
+
+:::: {.columns}
+::: {.column width="40%"}
+🔮 **Prognose:** Nach 10 Ziehungen, nach 100, nach 10.000: Wie nah liegt der Anteil roter Kugeln an 40 %?
+
+::: {.fragment}
+- Am Anfang springt der Anteil stark
+- Mit wachsendem $N$ pendelt er sich bei 40 % ein
+- **Faustregel:** so oft, dass weitere Wiederholungen das Ergebnis kaum noch ändern
+:::
+:::
+::: {.column width="60%"}
+::: {.fragment}
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 4.2
+set.seed(7)
+z <- sample(urne, 10000, replace = TRUE) == "rot"
+tibble(n = 1:10000, anteil = cumsum(z) / n) |>
+  ggplot(aes(n, anteil)) +
+  geom_hline(yintercept = 0.4, colour = "#b85c38", linetype = "dashed") +
+  geom_line(colour = "#1d3f73") +
+  scale_x_log10(labels = function(x) format(x, big.mark = ".", scientific = FALSE)) +
+  scale_y_continuous(labels = function(y) paste0(y * 100, " %"), limits = c(0, 1)) +
+  labs(x = "Anzahl Ziehungen (log. Skala)", y = "Anteil rot bisher")
+```
+:::
+:::
+::::
+
+## Mit und ohne Zurücklegen
+
+`sample()` zieht standardmäßig **ohne** Zurücklegen. Mit `replace = TRUE` kommt jede Kugel nach dem Ziehen zurück:
+
+```{r}
+sample(urne, 5)                       # jede Kugel genau einmal: nur eine Reihenfolge
+sample(urne, 5, replace = TRUE)       # Kugeln können mehrfach vorkommen
+```
+
+. . .
+
+:::: {.columns}
+::: {.column width="50%"}
+**Mit Zurücklegen:** Die Ziehungen sind **unabhängig**. Der erste Zug ändert nichts am zweiten.
+:::
+::: {.column width="50%"}
+**Ohne Zurücklegen:** Die Ziehungen sind **abhängig**. Nach einer roten Kugel ist nur noch eine rote in der Urne.
+:::
+::::
+
+## Abhängigkeit und bedingte Wahrscheinlichkeit
+
+Beim Kartenspiel (52 Karten, 4 Asse) wird ohne Zurücklegen gegeben:
+
+- Erste Karte ein Ass: $4/52$
+- Zweite Karte ein Ass, **gegeben** die erste war eins: $3/51$
+
+$$
+\Pr(\text{2. Ass} \mid \text{1. Ass}) = \tfrac{3}{51}
+\qquad\text{Bei Unabhängigkeit: } \Pr(A \mid B) = \Pr(A)
+$$
+
+. . .
+
+**Multiplikationsregel:** Dass A **und** B eintreten:
+
+$$
+\Pr(A \text{ und } B) = \Pr(A) \cdot \Pr(B \mid A)
+\qquad\Rightarrow\qquad
+\Pr(\text{zwei Asse}) = \tfrac{4}{52} \cdot \tfrac{3}{51} \approx 0{,}45\,\%
+$$
+
+[Bei unabhängigen Ereignissen vereinfacht sich das zu $\Pr(A)\cdot\Pr(B)$. Umgestellt liefert die Regel die bedingte Wahrscheinlichkeit: $\Pr(B \mid A) = \Pr(A \text{ und } B) / \Pr(A)$.]{.small}
+
+## Black Jack: exakt gerechnet
+
+**Black Jack** mit den ersten zwei Karten: ein **Ass** und eine **Zehnerkarte** (10, Bube, Dame, König; 16 Karten).
+
+. . .
+
+Zwei Reihenfolgen führen zum Ziel:
+
+$$
+\underbrace{\tfrac{4}{52}\cdot\tfrac{16}{51}}_{\text{Ass zuerst}} \;+\; \underbrace{\tfrac{16}{52}\cdot\tfrac{4}{51}}_{\text{Zehner zuerst}} \;=\; 2 \cdot \tfrac{4 \cdot 16}{52 \cdot 51} \approx `r pct(2 * 4 / 52 * 16 / 51, 2)`
+$$
+
+. . .
+
+::: {.question}
+Das geht noch im Kopf. Aber was ist mit "drei Karten, Summe 21"? Dann simulieren wir.
+:::
+
+## Black Jack: simuliert
+
+```{r}
+#| code-line-numbers: "1-4|6-9|11-12"
+farben  <- c("Kreuz", "Pik", "Herz", "Karo")
+werte   <- c("Ass", "König", "Dame", "Bube", "10", "9", "8", "7", "6", "5", "4", "3", "2")
+deck    <- paste(rep(farben, times = 13), rep(werte, each = 4))
+asse    <- paste(farben, "Ass");  zehner <- deck[sub(".* ", "", deck) %in% c("König", "Dame", "Bube", "10")]
+
+black_jack <- function() {
+  hand <- sample(deck, 2)                                    # ohne Zurücklegen
+  (hand[1] %in% asse & hand[2] %in% zehner) | (hand[2] %in% asse & hand[1] %in% zehner)
+}
+
+set.seed(2627)
+mean(replicate(100000, black_jack()))                        # TRUE zählt als 1
+```
+
+. . .
+
+[Simuliert und exakt (`r pct(2 * 4 / 52 * 16 / 51, 2)`) stimmen überein. `mean()` auf `TRUE`/`FALSE` liefert direkt den Anteil.]{.small}
+
+## 🐛 Bug Hunt 12: Black Jack von Chat AI {.bughunt}
+
+Prompt: *"Simuliere die Wahrscheinlichkeit, mit den ersten zwei Karten Black Jack zu bekommen."*
+
+```{r}
+black_jack_ki <- function() {
+  hand <- sample(deck, 2)
+  hand[1] %in% asse & hand[2] %in% zehner
+}
+set.seed(2627)
+mean(replicate(100000, black_jack_ki()))
+```
+
+::: {.callout-warning appearance="simple" icon="false"}
+*"Die Wahrscheinlichkeit für einen Black Jack liegt bei etwa 2,4 %. Die Simulation mit 100.000 Wiederholungen ist sehr genau."*
+:::
+
+::: {.instructions}
+**2 Minuten:** Der Code läuft, die Simulation ist genau. Warum ist das Ergebnis trotzdem falsch?
+:::
+
+## 🐛 Bug Hunt 12: Auflösung {.bughunt}
+
+- Die Funktion prüft nur **eine Reihenfolge**: Ass zuerst, dann Zehner. "Zehner zuerst, dann Ass" zählt nicht.
+- Ergebnis: genau **die Hälfte** von `r pct(2 * 4 / 52 * 16 / 51, 2)`
+- "Sehr genau" stimmt sogar, nur misst die Simulation **das Falsche** genau
+
+. . .
+
+::: {.alert}
+Eine große Zahl an Wiederholungen schützt vor Zufallsschwankung, nicht vor einem falschen Ereignis. Prüfen Sie Simulationen gegen einen Fall, den Sie exakt ausrechnen können.
+:::
+
+## ✍️ Jetzt Sie: zwei Asse
+
+Simulieren Sie die Wahrscheinlichkeit, mit den ersten zwei Karten **zwei Asse** zu bekommen. Exakt sind es $\frac{4}{52}\cdot\frac{3}{51} \approx 0{,}45\,\%$.
+
+```{webr}
+#| setup: true
+#| exercise: ex_w_asse
+farben <- c("Kreuz", "Pik", "Herz", "Karo")
+werte  <- c("Ass", "König", "Dame", "Bube", "10", "9", "8", "7", "6", "5", "4", "3", "2")
+deck   <- paste(rep(farben, times = 13), rep(werte, each = 4))
+asse   <- paste(farben, "Ass")
+```
+
+```{webr}
+#| exercise: ex_w_asse
+zwei_asse <- function() {
+  hand <- sample(deck, ______)
+  all(hand %in% ______)
+}
+set.seed(1)
+mean(replicate(100000, zwei_asse()))
+```
+
+```{r}
+#| echo: false
+countdown(minutes = 3, bottom = 0, right = 0)
+```
+
+::: {.hint exercise="ex_w_asse"}
+::: {.callout-note collapse="false"}
+## Hinweis
+Zwei Karten ziehen, ohne Zurücklegen (das ist der Standard). Beide Karten müssen in `asse` liegen.
+:::
+:::
+
+::: {.solution exercise="ex_w_asse"}
+::: {.callout-tip collapse="false"}
+## Lösung
+```r
+zwei_asse <- function() {
+  hand <- sample(deck, 2)
+  all(hand %in% asse)
+}
+set.seed(1)
+mean(replicate(100000, zwei_asse()))
+```
+:::
+:::
+
+```{webr}
+#| exercise: ex_w_asse
+#| check: true
+r <- .result
+if (is.numeric(r) && length(r) == 1 && abs(r - 4 / 52 * 3 / 51) < 0.0012) {
+  list(correct = TRUE, message = "Richtig. Rund 0,45 %, also etwa alle 220 Hände einmal. Zusatzfrage: Was kommt heraus, wenn Sie replace = TRUE setzen, und warum ist das falsch?")
+} else {
+  list(correct = FALSE, message = "Noch nicht. Ziehen Sie genau 2 Karten und prüfen Sie, ob beide Asse sind. Das Ergebnis sollte nahe 0,0045 liegen.")
+}
+```
+
+# Verteilungen {.section background-color="#1d3f73"}
+
+Simulieren ✔ → [Verteilungen]{.hier} → Stichprobe und Konfidenzintervall
+
+::: {.lernziele}
+**Nach diesem Abschnitt können Sie …**
+
+- aus der Verteilungsfunktion Anteile ablesen,
+- eine Dichte als Fläche lesen,
+- mit `pnorm()` rechnen und prüfen, ob die Normalverteilung überhaupt passt.
+:::
+
+## Von Kugeln zu Kreisen
+
+Urnen und Karten sind **diskret**: endlich viele Ausgänge, jeder mit einer Wahrscheinlichkeit.
+
+Die Arbeitslosenquote ist **stetig**: Jeder Wert zwischen 1,88 % und 14,46 % ist möglich.
+
+. . .
+
+::: {.question}
+Ziehen wir zufällig einen der 400 Kreise: Wie wahrscheinlich hat er eine Quote von **genau** 5,000 %? Und eine zwischen 4 und 6 %?
+:::
+
+. . .
+
+- Genau 5,000 %: praktisch 0. Bei stetigen Größen fragt man nach **Intervallen**.
+- Zwischen 4 und 6 %: der **Anteil** der Kreise in diesem Intervall. Jeder Kreis ist gleich wahrscheinlich, also gilt: Wahrscheinlichkeit = Anteil.
+
+[**Datentypen kurz:** kategorial (Bundesland), ordinal (kalt < warm < heiß), numerisch diskret (Anzahl Arbeitslose: ganze Zahlen) oder stetig (Quote, Einkommen).]{.small}
+
+## Die Verteilungsfunktion {.smaller}
+
+:::: {.columns}
+::: {.column width="45%"}
+$$F(a) = \Pr(X \le a)$$
+
+Anteil der Kreise mit einer Quote **bis** $a$:
+
+```{r}
+F_n <- ecdf(gesamtdaten$alo_quote)
+F_n(5)
+F_n(6) - F_n(4)
+```
+
+- `r pct(F_n(5), 1)` der Kreise liegen bei 5 % oder darunter
+- `r pct(F_n(6) - F_n(4), 1)` liegen zwischen 4 und 6 %
+:::
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 4.6
+ggplot(gesamtdaten, aes(alo_quote)) +
+  annotate("rect", xmin = 4, xmax = 6, ymin = -Inf, ymax = Inf, fill = "#1b5e20", alpha = 0.1) +
+  stat_ecdf(colour = "#1d3f73", linewidth = 1) +
+  annotate("segment", x = 5, xend = 5, y = 0, yend = F_n(5), linetype = "dashed", colour = "#b85c38") +
+  annotate("segment", x = 0, xend = 5, y = F_n(5), yend = F_n(5), linetype = "dashed", colour = "#b85c38") +
+  annotate("text", x = 0.3, y = F_n(5) + 0.05, label = paste0("F(5) = ", fmt(F_n(5), 3)), hjust = 0, colour = "#b85c38") +
+  coord_cartesian(xlim = c(0, 15)) +
+  labs(x = "Arbeitslosenquote a (%)", y = "F(a)")
+```
+:::
+::::
+
+[`ecdf()` = *empirical cumulative distribution function*. Weil sie aus Daten geschätzt ist, heißt sie **empirische** Verteilungsfunktion $\hat F_n$.]{.small}
+
+## Die Dichte: Fläche statt Höhe
+
+:::: {.columns}
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 4.4
+d <- density(alo)
+dd <- tibble(x = d$x, y = d$y)
+ggplot(gesamtdaten, aes(alo_quote)) +
+  geom_histogram(aes(y = after_stat(density)), binwidth = 0.5, boundary = 0, fill = "grey80") +
+  geom_area(data = filter(dd, between(x, 4, 6)), aes(x, y), fill = "#1b5e20", alpha = 0.4) +
+  geom_line(data = dd, aes(x, y), colour = "#1d3f73", linewidth = 1) +
+  labs(x = "Arbeitslosenquote (%)", y = "Dichte")
+```
+:::
+::: {.column width="45%"}
+- **Histogramm:** einfacher Schätzer der Dichte; das Ergebnis hängt von der Balkenbreite ab
+- **Kerndichte** (`geom_density()`): glättet das Histogramm zu einer Kurve
+- Die **Fläche** unter der Kurve ist 1
+- Die Fläche zwischen 4 und 6 % ≈ Anteil der Kreise dort: **`r pct(F_n(6) - F_n(4), 1)`**
+
+::: {.fragment}
+::: {.alert}
+Die y-Achse einer Dichte ist **kein** Anteil. Nur Flächen sind Anteile.
+:::
+:::
+:::
+::::
+
+## Die Normalverteilung
+
+Durch **zwei Zahlen** bestimmt: Mittelwert $\mu$ und Standardabweichung $\sigma$. Symmetrisch, glockenförmig.
+
+:::: {.columns}
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 3.8
+ggplot(tibble(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, geom = "area", xlim = c(-3, 3), fill = "#1b5e20", alpha = 0.15) +
+  stat_function(fun = dnorm, geom = "area", xlim = c(-2, 2), fill = "#1b5e20", alpha = 0.25) +
+  stat_function(fun = dnorm, geom = "area", xlim = c(-1, 1), fill = "#1d3f73", alpha = 0.45) +
+  stat_function(fun = dnorm, linewidth = 1) +
+  annotate("text", x = 0, y = 0.17, label = "68,3 %", colour = "white", size = 5.5) +
+  annotate("text", x = c(-1.5, 1.5), y = 0.04, label = "13,6 %", size = 4.5) +
+  annotate("text", x = c(-2.45, 2.45), y = 0.015, label = "2,1 %", size = 4) +
+  scale_x_continuous(breaks = -3:3, labels = c("μ−3σ", "μ−2σ", "μ−σ", "μ", "μ+σ", "μ+2σ", "μ+3σ")) +
+  labs(x = NULL, y = "Dichte")
+```
+:::
+::: {.column width="45%"}
+- Etwa **68 %** liegen innerhalb von $\mu \pm \sigma$
+- Etwa **95 %** innerhalb von $\mu \pm 2\sigma$
+- Etwa **99,7 %** innerhalb von $\mu \pm 3\sigma$
+
+In R:
+
+- `pnorm(a, mu, sigma)` = $\Pr(X \le a)$
+- `qnorm(p, mu, sigma)` = der Wert, unter dem der Anteil $p$ liegt
+:::
+::::
+
+## Passt die Normalverteilung zu unseren Kreisen? {.smaller}
+
+:::: {.columns}
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 4.4
+ggplot(gesamtdaten, aes(alo_quote)) +
+  geom_density(fill = "#1d3f73", alpha = 0.25, colour = "#1d3f73") +
+  stat_function(fun = dnorm, args = list(mean = mu, sd = sig), colour = "#b85c38", linewidth = 1.2) +
+  geom_vline(xintercept = 0, colour = "grey50") +
+  labs(x = "Arbeitslosenquote (%)", y = "Dichte",
+       subtitle = "Blau: Daten · Orange: Normalverteilung mit gleichem μ und σ")
+```
+:::
+::: {.column width="45%"}
+🔮 **Prognose:** Wo passt sie gut, wo schlecht?
+
+::: {.fragment}
+- **In der Mitte gut:** `r pct(mean(abs(alo - mu) < sig), 1)` der Kreise liegen in $\mu \pm \sigma$ (Normalverteilung: 68,3 %)
+- **An den Rändern schlecht:** Die Daten sind **rechtsschief**, links gibt es eine harte Grenze
+- Die Normalverteilung erlaubt sogar **negative** Quoten
+- **Zwei Gipfel:** West und Ost (Teil 2). Eine einzige Glocke kann das nicht abbilden
+:::
+:::
+::::
+
+## 🐛 Bug Hunt 13: Wie viele Kreise unter 2 %? {.bughunt}
+
+Prompt: *"Wie viele der 400 Kreise haben eine Arbeitslosenquote unter 2 %?"* Chat AI:
+
+```{r}
+x <- gesamtdaten$alo_quote
+400 * pnorm(2, mean = mean(x), sd = sd(x))
+```
+
+::: {.callout-warning appearance="simple" icon="false"}
+*"Arbeitslosenquoten sind annähernd normalverteilt. Damit haben rund 17 Kreise eine Quote unter 2 %."*
+:::
+
+::: {.instructions}
+**2 Minuten:** Wie würden Sie das prüfen? Was kommt heraus?
+:::
+
+## 🐛 Bug Hunt 13: Auflösung {.bughunt}
+
+```{r}
+sum(x < 2)                                  # einfach nachzählen
+gesamtdaten |> filter(alo_quote < 2) |> select(landkreis_name, alo_quote)
+```
+
+. . .
+
+- **Ein** Kreis statt 17. Die Normalverteilung überschätzt den linken Rand um mehr als das Zehnfache.
+- Laut Normalverteilung hätten sogar `r fmt(400 * pnorm(0, mu, sig), 1)` Kreise eine **negative** Quote.
+- **Die Frage brauchte gar kein Modell:** Wir haben alle 400 Kreise, also zählen wir.
+
+::: {.alert}
+Eine Verteilungsannahme ist eine Annahme. Prüfen Sie sie an den Daten, besonders an den Rändern, wo die interessanten Fälle liegen.
+:::
+
+## ✍️ Jetzt Sie: über 8 %
+
+Welcher Anteil der Kreise hat eine Quote **über 8 %**? Berechnen Sie ihn einmal durch Zählen und einmal mit der Normalverteilung.
+
+```{webr}
+#| setup: true
+#| exercise: ex_w_normal
+x <- readr::read_csv("data-webr/w_kreise.csv", show_col_types = FALSE)$alo_quote
+```
+
+```{webr}
+#| exercise: ex_w_normal
+empirisch <- mean(______)
+normal    <- 1 - pnorm(______, mean = mean(x), sd = sd(x))
+c(empirisch = empirisch, normal = normal)
+```
+
+```{r}
+#| echo: false
+countdown(minutes = 3, bottom = 0, right = 0)
+```
+
+::: {.hint exercise="ex_w_normal"}
+::: {.callout-note collapse="false"}
+## Hinweis
+`mean()` auf einem logischen Vektor (`x > 8`) liefert den Anteil. `pnorm(8, …)` ist der Anteil **bis** 8, Sie brauchen den Rest.
+:::
+:::
+
+::: {.solution exercise="ex_w_normal"}
+::: {.callout-tip collapse="false"}
+## Lösung
+```r
+empirisch <- mean(x > 8)
+normal    <- 1 - pnorm(8, mean = mean(x), sd = sd(x))
+c(empirisch = empirisch, normal = normal)
+```
+:::
+:::
+
+```{webr}
+#| exercise: ex_w_normal
+#| check: true
+r <- .result
+x <- .envir_prep$x
+if (is.numeric(r) && length(r) == 2 &&
+    isTRUE(all.equal(unname(r), c(mean(x > 8), 1 - pnorm(8, mean(x), sd(x))), tolerance = 1e-6))) {
+  list(correct = TRUE, message = "Richtig. Bei 8 % liegen beide nah beieinander (11,5 % gezählt, 12,7 % laut Normalverteilung). Weiter außen, bei 10 % oder 2 %, gehen sie deutlich auseinander.")
+} else {
+  list(correct = FALSE, message = "Noch nicht. empirisch: mean(x > 8). normal: 1 - pnorm(8, mean(x), sd(x)).")
+}
+```
+
+# Stichprobe und Konfidenzintervall {.section background-color="#1d3f73"}
+
+Simulieren ✔ → Verteilungen ✔ → [Stichprobe und Konfidenzintervall]{.hier}
+
+::: {.lernziele}
+**Nach diesem Abschnitt können Sie …**
+
+- Grundgesamtheit, Parameter, Stichprobe und Punktschätzer unterscheiden,
+- mit dem Bootstrap ein Konfidenzintervall aus einer einzigen Stichprobe berechnen,
+- ein Konfidenzintervall richtig interpretieren.
+:::
+
+## Grundbegriffe {.smaller}
+
+| Begriff | Bedeutung | Bei uns |
+|---|---|---|
+| **Grundgesamtheit** | alle Einheiten, über die wir etwas wissen wollen | die 400 Kreise |
+| **Parameter** $\mu$ | der wahre Wert in der Grundgesamtheit, meist unbekannt | mittlere Quote `r fmt(mu, 2)` % |
+| **Stichprobe** | zufällig ausgewählte Teilmenge der Größe $n$ | 50 Kreise |
+| **Punktschätzer** $\bar x$ | aus der Stichprobe berechneter Schätzwert für $\mu$ | Mittelwert der 50 |
+| **Zensus** | Vollerhebung aller Einheiten | Case-Study Teil 1 und 2 |
+
+. . .
+
+**Zufallsstichprobe:** Jede Einheit hat dieselbe Chance, gezogen zu werden. Dann ist die Stichprobe **unverzerrt**, und Ergebnisse lassen sich auf die Grundgesamtheit **verallgemeinern**.
+
+::: {.callout-warning appearance="simple"}
+**Stichprobenverzerrung:** Haben manche Einheiten eine höhere Chance (z.B. nur Großstädte, nur wer an einer Online-Umfrage teilnimmt), hilft auch ein großes $n$ nicht.
+:::
+
+## Eine Stichprobe
+
+Stellen wir uns vor, wir hätten nur **50 zufällig gezogene Kreise**:
+
+```{r}
+#| eval: false
+set.seed(2627)
+stichprobe <- sample(gesamtdaten$alo_quote, 50)
+mean(stichprobe)
+```
+
+```{r}
+#| echo: false
+x_quer
+```
+
+. . .
+
+Der wahre Wert ist `r fmt(mu, 2)` %. Wir liegen `r fmt(abs(x_quer - mu), 2)` Prozentpunkte daneben.
+
+::: {.question}
+War das Glück oder Pech? Mit einer einzigen Zahl können wir das nicht wissen. Wir brauchen die **Schwankung** des Schätzers.
+:::
+
+## Die Stichprobenverteilung
+
+Weil wir die Grundgesamtheit hier ausnahmsweise kennen, können wir 1.000-mal neu ziehen:
+
+:::: {.columns}
+::: {.column width="45%"}
+```{r}
+#| eval: false
+mittel_50 <- replicate(1000,
+  mean(sample(gesamtdaten$alo_quote, 50)))
+sd(mittel_50)
+```
+
+```{r}
+#| echo: false
+sd(mittel_50)
+```
+
+- Die Mittelwerte streuen um den wahren Wert
+- Ihre Standardabweichung heißt **Standardfehler** (SE)
+- **Antwort auf die Schätzfrage:** typischerweise etwa **`r fmt(sd(mittel_50), 1)` Prozentpunkte**
+:::
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 4.3
+ggplot(tibble(m = mittel_50), aes(m)) +
+  geom_histogram(binwidth = 0.1, fill = "grey70", colour = "white") +
+  geom_vline(xintercept = mu, colour = "#b85c38", linewidth = 1.2) +
+  annotate("text", x = mu + 0.05, y = Inf, vjust = 1.5, hjust = 0,
+           label = paste0("μ = ", fmt(mu, 2), " %"), colour = "#b85c38") +
+  labs(x = "Mittelwert von 50 zufälligen Kreisen (%)", y = "Anzahl")
+```
+:::
+::::
+
+## 🔮 Größere Stichprobe, kleinerer Fehler?
+
+::: {.question}
+Mit **12** statt 50 Kreisen: Wie viel breiter wird die Stichprobenverteilung? Doppelt so breit? Viermal?
+:::
+
+. . .
+
+:::: {.columns}
+::: {.column width="55%"}
+```{r}
+#| echo: false
+#| fig-width: 6.5
+#| fig-height: 3.6
+bind_rows(tibble(n = "n = 12", m = mittel_12), tibble(n = "n = 50", m = mittel_50)) |>
+  ggplot(aes(m, fill = n)) +
+  geom_density(alpha = 0.5, colour = NA) +
+  geom_vline(xintercept = mu, colour = "#b85c38") +
+  scale_fill_manual(values = c("grey60", "#1d3f73"), name = NULL) +
+  labs(x = "Mittelwert der Stichprobe (%)", y = "Dichte") +
+  theme(legend.position = "top")
+```
+:::
+::: {.column width="45%"}
+- SE bei n = 12: **`r fmt(sd(mittel_12), 2)`**, bei n = 50: **`r fmt(sd(mittel_50), 2)`**
+- Etwa **doppelt** so breit, obwohl viermal weniger Daten
+
+$$SE = \frac{\sigma}{\sqrt{n}}$$
+
+Viermal so viele Daten halbieren den Fehler.
+:::
+::::
+
+## Das Problem: Wir haben nur eine Stichprobe
+
+In der Praxis können wir nicht 1.000-mal neu ziehen. Wir haben **eine** Stichprobe.
+
+. . .
+
+**Der Bootstrap:** Wir behandeln die Stichprobe so, als wäre sie die Grundgesamtheit, und ziehen aus ihr **mit Zurücklegen** immer wieder neue Stichproben derselben Größe.
+
+```{r}
+#| eval: false
+boot <- replicate(1000, mean(sample(stichprobe, replace = TRUE)))
+sd(boot)
+```
+
+```{r}
+#| echo: false
+sd(boot)
+```
+
+. . .
+
+::: {.alert}
+Bootstrap-SE `r fmt(sd(boot), 2)`, wahrer SE `r fmt(sd(mittel_50), 2)`. Aus einer einzigen Stichprobe haben wir die Schwankung gut geschätzt, ohne Formel und ohne Grundgesamtheit.
+:::
+
+[*Bootstrap:* sich an den eigenen Stiefelschlaufen aus dem Sumpf ziehen, wie Münchhausen am eigenen Schopf.]{.small}
+
+## Bootstrap und Stichprobenverteilung im Vergleich {.smaller}
+
+:::: {.columns}
+::: {.column width="58%"}
+```{r}
+#| echo: false
+#| fig-width: 7
+#| fig-height: 4.6
+oben  <- "Stichprobenverteilung: 1.000-mal aus allen 400 Kreisen"
+unten <- "Bootstrap: 1.000-mal aus unserer einen Stichprobe"
+linien <- tibble(art = factor(c(oben, unten, unten), levels = c(oben, unten)),
+                 v   = c(mu, mu, x_quer),
+                 was = c("μ", "μ", "x̄"))
+bind_rows(tibble(art = oben, m = mittel_50), tibble(art = unten, m = boot)) |>
+  mutate(art = factor(art, levels = c(oben, unten))) |>
+  ggplot(aes(m)) +
+  geom_histogram(binwidth = 0.1, fill = "grey70", colour = "white") +
+  geom_vline(data = linien, aes(xintercept = v, colour = was, linetype = was), linewidth = 1.1) +
+  geom_text(data = linien, aes(x = v, y = Inf, label = paste0(was, " = ", fmt(v, 2)), colour = was),
+            vjust = 1.4, hjust = ifelse(linien$was == "μ", -0.08, 1.08), size = 4.5) +
+  scale_colour_manual(values = c("μ" = "#b85c38", "x̄" = "#1d3f73"), guide = "none") +
+  scale_linetype_manual(values = c("μ" = "solid", "x̄" = "dashed"), guide = "none") +
+  facet_wrap(~ art, ncol = 1) +
+  labs(x = "Mittelwert (%)", y = "Anzahl")
+```
+:::
+::: {.column width="42%"}
+**Oben:** gezogen aus der **Grundgesamtheit**. Deren Mittelwert ist $\mu$, also streuen die Mittelwerte um $\mu$.
+
+::: {.fragment}
+**Unten:** Der Bootstrap zieht aus **unserer Stichprobe**. Deren Mittelwert ist $\bar x$, also streuen die Bootstrap-Mittel um $\bar x$ (`mean(boot)` = `r fmt(mean(boot), 2)`). $\mu$ kennt der Bootstrap nicht, er sieht nur die Stichprobe.
+:::
+
+::: {.fragment}
+- **Lage:** falsch, wenn $\bar x$ daneben liegt
+- **Breite:** stimmt gut (`r fmt(sd(boot), 2)` vs. `r fmt(sd(mittel_50), 2)`)
+
+::: {.alert}
+Der Bootstrap macht die Schätzung **nicht genauer**. Er sagt uns, **wie ungenau** sie ist.
+:::
+:::
+:::
+::::
+
+## Das Konfidenzintervall
+
+Ein **95 %-Konfidenzintervall** ist ein Bereich plausibler Werte für $\mu$. Zwei gängige Wege:
+
+:::: {.columns}
+::: {.column width="50%"}
+**Perzentil-Methode** (Bootstrap)
+
+Die mittleren 95 % der Bootstrap-Mittelwerte:
+
+```{r}
+quantile(boot, c(0.025, 0.975))
+```
+:::
+::: {.column width="50%"}
+**Standardfehler-Methode** (Normalverteilung)
+
+$\bar x \pm 1{,}96 \cdot SE$ mit $SE = s/\sqrt{n}$:
+
+```{r}
+se <- sd(stichprobe) / sqrt(50)
+mean(stichprobe) + c(-1, 1) * 1.96 * se
+```
+:::
+::::
+
+. . .
+
+[**Woher kommt 1,96?** `qnorm(0.975)` = `r fmt(qnorm(0.975), 2)`: Zwischen $-1{,}96$ und $+1{,}96$ liegen bei der Normalverteilung genau 95 %. Mit 2 statt 1,96 wären es `r pct(pnorm(2) - pnorm(-2), 1)`.]{.small}
+
+## 🐛 Bug Hunt 14: Das Konfidenzintervall von Chat AI {.bughunt}
+
+Prompt: *"Berechne ein 95 %-Konfidenzintervall für die mittlere Arbeitslosenquote aus meiner Stichprobe von 50 Kreisen und interpretiere es."*
+
+```{r}
+mean(stichprobe) + c(-1, 1) * 1.96 * sd(stichprobe)
+```
+
+::: {.callout-warning appearance="simple" icon="false"}
+*"Mit 95 % Wahrscheinlichkeit liegt die mittlere Arbeitslosenquote aller Kreise zwischen `r fmt(ki_falsch[1], 1)` % und `r fmt(ki_falsch[2], 1)` %."*
+:::
+
+::: {.instructions}
+**3 Minuten, zu zweit:** Zwei Fehler, einer im Code, einer in der Interpretation. Woran sehen Sie schon ohne zu rechnen, dass das Intervall nicht stimmen kann?
+:::
+
+```{r}
+#| echo: false
+countdown(minutes = 3, bottom = 0, right = 0)
+```
+
+## 🐛 Bug Hunt 14: Auflösung {.bughunt .smaller}
+
+**1. Code: Standardabweichung statt Standardfehler**
+
+- `sd(stichprobe)` misst, wie stark die **Kreise** streuen, nicht wie stark der **Mittelwert** schwankt
+- Richtig: `sd(stichprobe) / sqrt(50)`. Das Intervall ist $\sqrt{50} \approx 7$-mal zu breit
+- **Plausibilitätscheck:** Ein Intervall von `r fmt(ki_falsch[1], 1)` bis `r fmt(ki_falsch[2], 1)` % umfasst fast **alle Kreise**. Für einen Mittelwert aus 50 Kreisen ist das absurd ungenau.
+
+. . .
+
+**2. Interpretation: Die Wahrscheinlichkeit gehört zum Verfahren, nicht zu $\mu$**
+
+- $\mu$ ist eine feste Zahl. Sie liegt im Intervall oder nicht, ohne "mit 95 % Wahrscheinlichkeit"
+- Zufällig ist das **Intervall**: Jede Stichprobe liefert ein anderes
+- **Richtig:** *"Das Verfahren erzeugt in 95 % aller Stichproben ein Intervall, das den wahren Wert enthält."*
+
+. . .
+
+::: {.alert}
+Richtig gerechnet: [`r fmt(ki_se[1], 2)` %; `r fmt(ki_se[2], 2)` %]. Der wahre Wert `r fmt(mu, 2)` % liegt drin. Diesmal.
+:::
+
+## 100 Stichproben, 100 Intervalle {.smaller}
+
+:::: {.columns}
+::: {.column width="62%"}
+```{r}
+#| echo: false
+#| fig-width: 7.5
+#| fig-height: 4.6
+ggplot(cis, aes(y = nr)) +
+  geom_segment(aes(x = unten, xend = oben, yend = nr, colour = trifft), linewidth = 0.7) +
+  geom_vline(xintercept = mu, colour = "#b85c38", linewidth = 1) +
+  scale_colour_manual(values = c(`TRUE` = "grey60", `FALSE` = "#b85c38"),
+                      labels = c(`TRUE` = "enthält μ", `FALSE` = "verfehlt μ"), name = NULL) +
+  labs(x = "95 %-Konfidenzintervall für die mittlere Quote (%)", y = "Stichprobe Nr.") +
+  theme(legend.position = "top", panel.grid.major.y = element_blank(), panel.grid.minor = element_blank())
+```
+:::
+::: {.column width="38%"}
+- Jede Linie: eine neue Stichprobe von 50 Kreisen, ein Bootstrap-Intervall
+- **`r sum(cis$trifft)` von 100** enthalten den wahren Wert, **`r sum(!cis$trifft)`** verfehlen ihn
+- Mit einem anderen Seed wären es z.B. 92 oder 97: Auch diese Zahl schwankt, erst auf lange Sicht sind es 95 %
+
+::: {.fragment}
+::: {.alert}
+Genau das bedeutet "95 %": ein Versprechen über das **Verfahren** auf lange Sicht. Ob **Ihr** Intervall zu den Treffern gehört, wissen Sie nie.
+:::
+:::
+
+[Grafik nach Ismay & Kim (2019), *ModernDive*, Kap. 8.5.]{.small}
+:::
+::::
+
+## Was macht ein Intervall breit oder schmal?
+
+| Stellschraube | Wirkung | Warum |
+|---|---|---|
+| **Größere Stichprobe** $n$ | schmaler | $SE = \sigma / \sqrt{n}$ |
+| **Höheres Konfidenzniveau** (99 % statt 95 %) | breiter | `qnorm(0.995)` = `r fmt(qnorm(0.995), 2)` statt `qnorm(0.975)` = `r fmt(qnorm(0.975), 2)` |
+| **Stärkere Streuung** $\sigma$ | breiter | mehr Zufall in jeder Stichprobe |
+
+[Zweiseitig: Bei 95 % bleiben links und rechts je 2,5 % übrig, also das 97,5 %-Quantil. Bei 99 % je 0,5 %, also das 99,5 %-Quantil.]{.small}
+
+. . .
+
+::: {.question}
+Ein Konfidenzintervall für einen Effekt reicht von −0,5 bis +3,0. Heißt das "kein Effekt"?
+:::
+
+. . .
+
+**Nein.** Es heißt: Die Daten reichen nicht, um "kein Effekt" auszuschließen. Ein breites Intervall um die 0 ist oft ein Zeichen für **zu wenig Daten** (geringe *Power*), nicht für einen fehlenden Effekt. Mehr dazu nächstes Semester bei der Regression.
+
+## ✍️ Jetzt Sie: Ihr eigenes Konfidenzintervall
+
+Ziehen Sie mit **Ihrem Geburtstag** als Seed (z.B. `0312`) eine eigene Stichprobe von 50 Kreisen und berechnen Sie das 95 %-Bootstrap-Intervall. Enthält es den wahren Wert `r fmt(mu, 2)` %?
+
+```{webr}
+#| setup: true
+#| exercise: ex_w_boot
+x <- readr::read_csv("data-webr/w_kreise.csv", show_col_types = FALSE)$alo_quote
+```
+
+```{webr}
+#| exercise: ex_w_boot
+set.seed(0312)                          # Ihr Geburtstag
+stichprobe <- sample(x, 50)
+boot <- replicate(1000, mean(sample(stichprobe, ______)))
+ki   <- quantile(boot, c(______, ______))
+ki
+```
+
+```{r}
+#| echo: false
+countdown(minutes = 4, bottom = 0, right = 0)
+```
+
+::: {.hint exercise="ex_w_boot"}
+::: {.callout-note collapse="false"}
+## Hinweis
+Bootstrap heißt: **mit Zurücklegen** ziehen. Für 95 % schneiden Sie links und rechts je 2,5 % ab.
+:::
+:::
+
+::: {.solution exercise="ex_w_boot"}
+::: {.callout-tip collapse="false"}
+## Lösung
+```r
+set.seed(0312)
+stichprobe <- sample(x, 50)
+boot <- replicate(1000, mean(sample(stichprobe, replace = TRUE)))
+ki   <- quantile(boot, c(0.025, 0.975))
+ki
+```
+:::
+:::
+
+```{webr}
+#| exercise: ex_w_boot
+#| check: true
+r <- .result
+mu <- mean(.envir_prep$x)
+if (is.numeric(r) && length(r) == 2 && identical(names(r), c("2.5%", "97.5%")) &&
+    r[1] < r[2] && diff(r) > 0.6 && diff(r) < 2) {
+  treffer <- r[1] <= mu && mu <= r[2]
+  list(correct = TRUE, message = paste0("Richtig gerechnet. Ihr Intervall ", if (treffer) "enthält" else "verfehlt",
+       " den wahren Wert ", round(mu, 2), " %. Im Hörsaal sollte das bei etwa 95 % von Ihnen der Fall sein. Wer liegt daneben?"))
+} else {
+  list(correct = FALSE, message = "Noch nicht. Ziehen Sie mit replace = TRUE und nehmen Sie die Quantile 0.025 und 0.975.")
+}
+```
+
+::: {.notes}
+Auflösung im Hörsaal: Handzeichen, wessen Intervall den wahren Wert verfehlt. Bei 100 Studierenden sollten es etwa 5 sein. Damit wird die Grafik "100 Intervalle" live nachgespielt.
+:::
+
+# Abschluss {.section background-color="#1d3f73"}
+
+## Zusammenfassung
+
+- **Wahrscheinlichkeit** = langfristiger Anteil. Mit `sample()` und `replicate()` simulieren, mit einem exakt lösbaren Fall prüfen (Bug Hunt 12)
+- **Verteilungsfunktion** $F(a)$ liefert Anteile; bei einer **Dichte** sind nur Flächen Anteile
+- **Normalverteilung:** zwei Parameter, `pnorm()` / `qnorm()`. Eine Annahme, die man prüfen muss, vor allem an den Rändern (Bug Hunt 13)
+- **Standardfehler** = Schwankung des Schätzers, nicht der Daten; schrumpft mit $\sqrt{n}$
+- **Bootstrap:** Schwankung aus einer einzigen Stichprobe schätzen
+- **Konfidenzintervall:** 95 % beziehen sich auf das Verfahren, nicht auf $\mu$ (Bug Hunt 14)
+
+. . .
+
+::: {.alert}
+**Nächstes Semester:** Konfidenzintervalle für Regressionskoeffizienten. Dieselbe Logik, dieselben Fallen.
+:::
+
+## 📱 Kahoot-Checkpoint: Wahrscheinlichkeiten und Konfidenzintervalle {.kahoot}
+
+:::: {.columns}
+::: {.column width="35%"}
+```{r}
+#| echo: false
+#| eval: !expr hat_qr
+#| fig-width: 3
+#| fig-height: 3
+plot(qrcode::qr_code("https://kahoot.it"))
+```
+
+[**kahoot.it** · PIN am Beamer]{.pin}
+:::
+::: {.column width="65%"}
+**10 Fragen, ca. 8 Minuten.**
+
+- Monte Carlo und `set.seed()`
+- Bedingte Wahrscheinlichkeit, Multiplikationsregel
+- Verteilungsfunktion und Dichte lesen
+- Normalverteilung: wann sie passt
+- Standardfehler vs. Standardabweichung
+- Bootstrap und Konfidenzintervall richtig deuten
+
+[Kahoot öffnen →](https://create.kahoot.it/)
+:::
+::::
+
+```{r}
+#| echo: false
+countdown(minutes = 8, bottom = 0, right = 0)
+```
+
+::: {.notes}
+Fragen mit Antworten und Zeitlimits: kahoot_fragen_wahrscheinlichkeit.xlsx (Kahoot-Importvorlage).
+:::
+
+# Anhang: Zum Selbststudium {.section background-color="#1d3f73"}
+
+## Permutationen und Kombinationen {.smaller}
+
+Statt zu simulieren, können wir **alle** möglichen Hände aufzählen (Paket `gtools`):
+
+```{r}
+library(gtools)
+haende_p <- permutations(52, 2, v = deck)    # Reihenfolge zählt: 52 · 51 Hände
+nrow(haende_p)
+mean(haende_p[, 1] %in% asse & haende_p[, 2] %in% asse)
+
+haende_k <- combinations(52, 2, v = deck)    # Reihenfolge egal: 52 · 51 / 2 Hände
+nrow(haende_k)
+mean((haende_k[, 1] %in% asse & haende_k[, 2] %in% zehner) |
+     (haende_k[, 2] %in% asse & haende_k[, 1] %in% zehner))
+```
+
+[Aufzählen ist exakt, wird aber schnell unmöglich: Für 5 Karten gibt es schon `r format(choose(52, 5), big.mark = ".")` Kombinationen. Dann bleibt die Simulation.]{.small}
+
+## Kerndichteschätzer: die Definition {.smaller}
+
+Ein **Kern** ist eine Funktion $K: \mathbb{R} \to [0, \infty)$ mit
+
+- $K(x) \ge 0$ für alle $x$
+- $\int_{\mathbb{R}} K(x)\,dx = 1$
+
+Der Kerndichteschätzer legt um jeden Datenpunkt einen kleinen Kern der Breite $h$ (Bandbreite) und addiert sie:
+
+$$\hat f_h(x) = \frac{1}{n h} \sum_{i=1}^{n} K\!\left(\frac{x - x_i}{h}\right)$$
+
+- Kleine Bandbreite $h$: zackig, zeigt Zufallsschwankungen
+- Große Bandbreite: glatt, verwischt echte Strukturen
+- `geom_density()` wählt $h$ automatisch (`bw.nrd0`), mit `adjust = 2` wird es glatter
+
+```{r export_webr}
+#| include: false
+# Datensatz für die webR-Übungen exportieren (läuft bei jedem Rendern)
+dir.create("data-webr", showWarnings = FALSE)
+readr::write_csv(gesamtdaten |> select(Regionalschluessel, landkreis_name, alo_quote),
+                 "data-webr/w_kreise.csv")
+```

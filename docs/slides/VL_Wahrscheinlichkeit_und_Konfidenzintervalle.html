@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="de"><head>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.42">
+
+  <title>Projektkurs Data Science &amp; Business Analytics 26/27 – Wahrscheinlichkeiten und Konfidenzintervalle</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-26d1322d010005ed0087edda9af35346.css">
+  <link rel="stylesheet" href="style/custom.css">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+  <link href="../site_libs/countdown-0.6.0/countdown.css" rel="stylesheet">
+  <script src="../site_libs/countdown-0.6.0/countdown.js"></script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Wahrscheinlichkeiten und Konfidenzintervalle</h1>
+  <p class="subtitle">Vom Zufall zur Schätzunsicherheit: simulieren, verteilen, schätzen</p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section>
+<section id="einstieg" class="title-slide slide level1 section center" data-background-color="#1d3f73">
+<h1>Einstieg</h1>
+
+</section>
+<section id="schätzfrage-zum-einstieg" class="slide level2">
+<h2>🔮 Schätzfrage zum Einstieg</h2>
+<p>Die mittlere Arbeitslosenquote der <strong>400 Kreise</strong> liegt 2024 bei <strong>5,61 %</strong> (Case-Study Teil 2).</p>
+<div class="question">
+<p>Wir ziehen zufällig <strong>50</strong> der 400 Kreise und berechnen deren Mittelwert. Wie weit liegt er typischerweise vom wahren Wert entfernt? Weniger als 0,1 Prozentpunkte? Etwa 0,3? Mehr als 1?</p>
+</div>
+<div class="fragment">
+<p>Im Lauf der Stunde finden wir es heraus, und zwar auf zwei Wegen: einmal mit der Grundgesamtheit, die wir zufällig kennen, und einmal nur mit <strong>einer</strong> Stichprobe, wie im echten Leben.</p>
+</div>
+</section>
+<section id="wo-stehen-wir" class="slide level2">
+<h2>Wo stehen wir?</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Case-Study Teil 1 und 2: deskriptiv</strong></p>
+<ul>
+<li>Daten beschaffen, prüfen, beschreiben</li>
+<li>Aussagen über <strong>genau diese 400 Kreise</strong></li>
+<li>Keine Unsicherheit: Wir haben alle Daten</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>Heute: der Schritt zur Induktion</strong></p>
+<ul>
+<li>Meist haben wir nur eine <strong>Stichprobe</strong></li>
+<li>Wie sicher ist eine Schätzung aus 50 Kreisen, 1.000 Befragten, einem Jahr Daten?</li>
+<li>Das Werkzeug dafür: Wahrscheinlichkeit und <strong>Konfidenzintervalle</strong></li>
+</ul>
+</div></div>
+<div class="fragment">
+<div class="alert">
+<p>Konfidenzintervalle stehen in fast jeder empirischen Arbeit, und nächstes Semester in jeder Regressionstabelle. Heute lernen Sie, woher sie kommen und was sie (nicht) bedeuten.</p>
+</div>
+</div>
+</section>
+<section id="der-plan-für-heute" class="slide level2">
+<h2>Der Plan für heute</h2>
+<p><span class="hier">Simulieren</span> → Verteilungen → Stichprobe und Konfidenzintervall</p>
+<div class="columns">
+<div class="column" style="width:33%;">
+<p><strong>1. Simulieren</strong></p>
+<p>Wahrscheinlichkeiten am Computer ausrechnen: Urne, Black Jack, Monte Carlo</p>
+</div><div class="column" style="width:33%;">
+<p><strong>2. Verteilungen</strong></p>
+<p>Verteilungsfunktion, Dichte, Normalverteilung, und wann sie nicht passt</p>
+</div><div class="column" style="width:34%;">
+<p><strong>3. Schätzen</strong></p>
+<p>Stichprobe, Bootstrap, Konfidenzintervall, und wie man es richtig deutet</p>
+</div></div>
+<div class="fragment">
+<div class="callout callout-tip callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>Ein Werkzeug trägt durch alle drei Teile: <strong><code>sample()</code> und <code>replicate()</code></strong>. Wer Ziehen und Wiederholen versteht, versteht Monte Carlo, Bootstrap und Konfidenzintervalle.</p>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="wahrscheinlichkeiten-simulieren" class="title-slide slide level1 section center" data-background-color="#1d3f73">
+<h1>Wahrscheinlichkeiten simulieren</h1>
+<p><span class="hier">Simulieren</span> → Verteilungen → Stichprobe und Konfidenzintervall</p>
+<div class="lernziele">
+<p><strong>Nach diesem Abschnitt können Sie …</strong></p>
+<ul>
+<li>eine Wahrscheinlichkeit als langfristigen Anteil deuten,</li>
+<li>ein Zufallsexperiment mit <code>sample()</code> und <code>replicate()</code> simulieren,</li>
+<li>abhängige und unabhängige Ereignisse unterscheiden und die Multiplikationsregel anwenden.</li>
+</ul>
+</div>
+</section>
+<section id="was-ist-eine-wahrscheinlichkeit" class="slide level2">
+<h2>Was ist eine Wahrscheinlichkeit?</h2>
+<div class="question">
+<p>In einer Urne liegen 2 rote und 3 blaue Kugeln. Wie wahrscheinlich ziehen Sie eine rote?</p>
+</div>
+<div class="fragment">
+<p><strong>2/5 = 40 %</strong>, weil jede Kugel gleich wahrscheinlich gezogen wird.</p>
+</div>
+<div class="fragment">
+<p><strong>Die Idee dahinter:</strong> Wiederholen Sie ein Experiment sehr oft, unabhängig und unter gleichen Bedingungen, dann nähert sich der <strong>Anteil</strong>, mit dem ein Ereignis eintritt, seiner <strong>Wahrscheinlichkeit</strong>.</p>
+<div class="alert">
+<p>Genau das kann der Computer: ein Experiment zehntausendmal wiederholen. Das heißt <strong>Monte-Carlo-Simulation</strong>.</p>
+</div>
+</div>
+</section>
+<section id="monte-carlo-in-r" class="slide level2">
+<h2>Monte Carlo in R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>urne <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"rot"</span>, <span class="st">"blau"</span>), <span class="at">times =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb1-2"><a></a>urne</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "rot"  "rot"  "blau" "blau" "blau"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">sample</span>(urne, <span class="dv">1</span>)                            <span class="co"># einmal ziehen</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "blau"</code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="fu">set.seed</span>(<span class="dv">2627</span>)                             <span class="co"># Zufall reproduzierbar machen</span></span>
+<span id="cb5-2"><a></a>ziehungen <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">sample</span>(urne, <span class="dv">1</span>))</span>
+<span id="cb5-3"><a></a><span class="fu">prop.table</span>(<span class="fu">table</span>(ziehungen))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ziehungen
+  blau    rot 
+0.6047 0.3953 </code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><span class="small"><strong><code>set.seed()</code>:</strong> Der Computer erzeugt Pseudo-Zufallszahlen. Mit demselben Seed kommt jedes Mal dasselbe heraus. Ohne Seed ist Ihr Ergebnis nicht reproduzierbar, auch nicht für Ihr Team.</span></p>
+</div>
+</section>
+<section id="wie-oft-muss-man-wiederholen" class="slide level2">
+<h2>Wie oft muss man wiederholen?</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p>🔮 <strong>Prognose:</strong> Nach 10 Ziehungen, nach 100, nach 10.000: Wie nah liegt der Anteil roter Kugeln an 40 %?</p>
+<div class="fragment">
+<ul>
+<li>Am Anfang springt der Anteil stark</li>
+<li>Mit wachsendem <span class="math inline">\(N\)</span> pendelt er sich bei 40 % ein</li>
+<li><strong>Faustregel:</strong> so oft, dass weitere Wiederholungen das Ergebnis kaum noch ändern</li>
+</ul>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="fragment">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-4-1.png" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="mit-und-ohne-zurücklegen" class="slide level2">
+<h2>Mit und ohne Zurücklegen</h2>
+<p><code>sample()</code> zieht standardmäßig <strong>ohne</strong> Zurücklegen. Mit <code>replace = TRUE</code> kommt jede Kugel nach dem Ziehen zurück:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="fu">sample</span>(urne, <span class="dv">5</span>)                       <span class="co"># jede Kugel genau einmal: nur eine Reihenfolge</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "blau" "rot"  "blau" "rot"  "blau"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a><span class="fu">sample</span>(urne, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)       <span class="co"># Kugeln können mehrfach vorkommen</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "blau" "blau" "blau" "rot"  "rot" </code></pre>
+</div>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Mit Zurücklegen:</strong> Die Ziehungen sind <strong>unabhängig</strong>. Der erste Zug ändert nichts am zweiten.</p>
+</div><div class="column" style="width:50%;">
+<p><strong>Ohne Zurücklegen:</strong> Die Ziehungen sind <strong>abhängig</strong>. Nach einer roten Kugel ist nur noch eine rote in der Urne.</p>
+</div></div>
+</div>
+</section>
+<section id="abhängigkeit-und-bedingte-wahrscheinlichkeit" class="slide level2">
+<h2>Abhängigkeit und bedingte Wahrscheinlichkeit</h2>
+<p>Beim Kartenspiel (52 Karten, 4 Asse) wird ohne Zurücklegen gegeben:</p>
+<ul>
+<li>Erste Karte ein Ass: <span class="math inline">\(4/52\)</span></li>
+<li>Zweite Karte ein Ass, <strong>gegeben</strong> die erste war eins: <span class="math inline">\(3/51\)</span></li>
+</ul>
+<p><span class="math display">\[
+\Pr(\text{2. Ass} \mid \text{1. Ass}) = \tfrac{3}{51}
+\qquad\text{Bei Unabhängigkeit: } \Pr(A \mid B) = \Pr(A)
+\]</span></p>
+<div class="fragment">
+<p><strong>Multiplikationsregel:</strong> Dass A <strong>und</strong> B eintreten:</p>
+<p><span class="math display">\[
+\Pr(A \text{ und } B) = \Pr(A) \cdot \Pr(B \mid A)
+\qquad\Rightarrow\qquad
+\Pr(\text{zwei Asse}) = \tfrac{4}{52} \cdot \tfrac{3}{51} \approx 0{,}45\,\%
+\]</span></p>
+<p><span class="small">Bei unabhängigen Ereignissen vereinfacht sich das zu <span class="math inline">\(\Pr(A)\cdot\Pr(B)\)</span>. Umgestellt liefert die Regel die bedingte Wahrscheinlichkeit: <span class="math inline">\(\Pr(B \mid A) = \Pr(A \text{ und } B) / \Pr(A)\)</span>.</span></p>
+</div>
+</section>
+<section id="black-jack-exakt-gerechnet" class="slide level2">
+<h2>Black Jack: exakt gerechnet</h2>
+<p><strong>Black Jack</strong> mit den ersten zwei Karten: ein <strong>Ass</strong> und eine <strong>Zehnerkarte</strong> (10, Bube, Dame, König; 16 Karten).</p>
+<div class="fragment">
+<p>Zwei Reihenfolgen führen zum Ziel:</p>
+<p><span class="math display">\[
+\underbrace{\tfrac{4}{52}\cdot\tfrac{16}{51}}_{\text{Ass zuerst}} \;+\; \underbrace{\tfrac{16}{52}\cdot\tfrac{4}{51}}_{\text{Zehner zuerst}} \;=\; 2 \cdot \tfrac{4 \cdot 16}{52 \cdot 51} \approx 4,83 %
+\]</span></p>
+</div>
+<div class="fragment">
+<div class="question">
+<p>Das geht noch im Kopf. Aber was ist mit “drei Karten, Summe 21”? Dann simulieren wir.</p>
+</div>
+</div>
+</section>
+<section id="black-jack-simuliert" class="slide level2">
+<h2>Black Jack: simuliert</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="1-4|6-9|11-12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>farben  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Kreuz"</span>, <span class="st">"Pik"</span>, <span class="st">"Herz"</span>, <span class="st">"Karo"</span>)</span>
+<span id="cb11-2"><a></a>werte   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Ass"</span>, <span class="st">"König"</span>, <span class="st">"Dame"</span>, <span class="st">"Bube"</span>, <span class="st">"10"</span>, <span class="st">"9"</span>, <span class="st">"8"</span>, <span class="st">"7"</span>, <span class="st">"6"</span>, <span class="st">"5"</span>, <span class="st">"4"</span>, <span class="st">"3"</span>, <span class="st">"2"</span>)</span>
+<span id="cb11-3"><a></a>deck    <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">rep</span>(farben, <span class="at">times =</span> <span class="dv">13</span>), <span class="fu">rep</span>(werte, <span class="at">each =</span> <span class="dv">4</span>))</span>
+<span id="cb11-4"><a></a>asse    <span class="ot">&lt;-</span> <span class="fu">paste</span>(farben, <span class="st">"Ass"</span>);  zehner <span class="ot">&lt;-</span> deck[<span class="fu">sub</span>(<span class="st">".* "</span>, <span class="st">""</span>, deck) <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"König"</span>, <span class="st">"Dame"</span>, <span class="st">"Bube"</span>, <span class="st">"10"</span>)]</span>
+<span id="cb11-5"><a></a></span>
+<span id="cb11-6"><a></a>black_jack <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb11-7"><a></a>  hand <span class="ot">&lt;-</span> <span class="fu">sample</span>(deck, <span class="dv">2</span>)                                    <span class="co"># ohne Zurücklegen</span></span>
+<span id="cb11-8"><a></a>  (hand[<span class="dv">1</span>] <span class="sc">%in%</span> asse <span class="sc">&amp;</span> hand[<span class="dv">2</span>] <span class="sc">%in%</span> zehner) <span class="sc">|</span> (hand[<span class="dv">2</span>] <span class="sc">%in%</span> asse <span class="sc">&amp;</span> hand[<span class="dv">1</span>] <span class="sc">%in%</span> zehner)</span>
+<span id="cb11-9"><a></a>}</span>
+<span id="cb11-10"><a></a></span>
+<span id="cb11-11"><a></a><span class="fu">set.seed</span>(<span class="dv">2627</span>)</span>
+<span id="cb11-12"><a></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">100000</span>, <span class="fu">black_jack</span>()))                        <span class="co"># TRUE zählt als 1</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04882</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p><span class="small">Simuliert und exakt (4,83 %) stimmen überein. <code>mean()</code> auf <code>TRUE</code>/<code>FALSE</code> liefert direkt den Anteil.</span></p>
+</div>
+</section>
+<section id="bug-hunt-12-black-jack-von-chat-ai" class="slide level2 bughunt">
+<h2>🐛 Bug Hunt 12: Black Jack von Chat AI</h2>
+<p>Prompt: <em>“Simuliere die Wahrscheinlichkeit, mit den ersten zwei Karten Black Jack zu bekommen.”</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>black_jack_ki <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb13-2"><a></a>  hand <span class="ot">&lt;-</span> <span class="fu">sample</span>(deck, <span class="dv">2</span>)</span>
+<span id="cb13-3"><a></a>  hand[<span class="dv">1</span>] <span class="sc">%in%</span> asse <span class="sc">&amp;</span> hand[<span class="dv">2</span>] <span class="sc">%in%</span> zehner</span>
+<span id="cb13-4"><a></a>}</span>
+<span id="cb13-5"><a></a><span class="fu">set.seed</span>(<span class="dv">2627</span>)</span>
+<span id="cb13-6"><a></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">100000</span>, <span class="fu">black_jack_ki</span>()))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.02427</code></pre>
+</div>
+</div>
+<div class="callout callout-warning no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><em>“Die Wahrscheinlichkeit für einen Black Jack liegt bei etwa 2,4 %. Die Simulation mit 100.000 Wiederholungen ist sehr genau.”</em></p>
+</div>
+</div>
+</div>
+<div class="instructions">
+<p><strong>2 Minuten:</strong> Der Code läuft, die Simulation ist genau. Warum ist das Ergebnis trotzdem falsch?</p>
+</div>
+</section>
+<section id="bug-hunt-12-auflösung" class="slide level2 bughunt">
+<h2>🐛 Bug Hunt 12: Auflösung</h2>
+<ul>
+<li>Die Funktion prüft nur <strong>eine Reihenfolge</strong>: Ass zuerst, dann Zehner. “Zehner zuerst, dann Ass” zählt nicht.</li>
+<li>Ergebnis: genau <strong>die Hälfte</strong> von 4,83 %</li>
+<li>“Sehr genau” stimmt sogar, nur misst die Simulation <strong>das Falsche</strong> genau</li>
+</ul>
+<div class="fragment">
+<div class="alert">
+<p>Eine große Zahl an Wiederholungen schützt vor Zufallsschwankung, nicht vor einem falschen Ereignis. Prüfen Sie Simulationen gegen einen Fall, den Sie exakt ausrechnen können.</p>
+</div>
+</div>
+</section>
+<section id="jetzt-sie-zwei-asse" class="slide level2">
+<h2>✍️ Jetzt Sie: zwei Asse</h2>
+<p>Simulieren Sie die Wahrscheinlichkeit, mit den ersten zwei Karten <strong>zwei Asse</strong> zu bekommen. Exakt sind es <span class="math inline">\(\frac{4}{52}\cdot\frac{3}{51} \approx 0{,}45\,\%\)</span>.</p>
+<div class="cell" data-setup="true" data-exercise="ex_w_asse">
+<script type="exercise-setup-ex_w_asse-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3dfYXNzZSIsImZpZy1oZWlnaHQiOiIzLjUiLCJmaWctd2lkdGgiOiI3Iiwic2V0dXAiOnRydWV9LCJjb2RlIjoiZmFyYmVuIDwtIGMoXCJLcmV1elwiLCBcIlBpa1wiLCBcIkhlcnpcIiwgXCJLYXJvXCIpXG53ZXJ0ZSAgPC0gYyhcIkFzc1wiLCBcIkvDtm5pZ1wiLCBcIkRhbWVcIiwgXCJCdWJlXCIsIFwiMTBcIiwgXCI5XCIsIFwiOFwiLCBcIjdcIiwgXCI2XCIsIFwiNVwiLCBcIjRcIiwgXCIzXCIsIFwiMlwiKVxuZGVjayAgIDwtIHBhc3RlKHJlcChmYXJiZW4sIHRpbWVzID0gMTMpLCByZXAod2VydGUsIGVhY2ggPSA0KSlcbmFzc2UgICA8LSBwYXN0ZShmYXJiZW4sIFwiQXNzXCIpIn0=
+</script>
+</div>
+<div class="cell" data-exercise="ex_w_asse">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3dfYXNzZSIsImZpZy1oZWlnaHQiOiIzLjUiLCJmaWctd2lkdGgiOiI3In0sImNvZGUiOiJ6d2VpX2Fzc2UgPC0gZnVuY3Rpb24oKSB7XG4gIGhhbmQgPC0gc2FtcGxlKGRlY2ssIF9fX19fXylcbiAgYWxsKGhhbmQgJWluJSBfX19fX18pXG59XG5zZXQuc2VlZCgxKVxubWVhbihyZXBsaWNhdGUoMTAwMDAwLCB6d2VpX2Fzc2UoKSkpIn0=
+</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<countdown-timer class="countdown" id="timer_f1e14aa6" minutes="3" seconds="0" update-every="1" tabindex="0" style="right:0;bottom:0;"></countdown-timer>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_w_asse">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hinweis</strong></p>
+</div>
+<div class="callout-content">
+<p>Zwei Karten ziehen, ohne Zurücklegen (das ist der Standard). Beide Karten müssen in <code>asse</code> liegen.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_w_asse">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Lösung</strong></p>
+</div>
+<div class="callout-content">
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>zwei_asse <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb15-2"><a></a>  hand <span class="ot">&lt;-</span> <span class="fu">sample</span>(deck, <span class="dv">2</span>)</span>
+<span id="cb15-3"><a></a>  <span class="fu">all</span>(hand <span class="sc">%in%</span> asse)</span>
+<span id="cb15-4"><a></a>}</span>
+<span id="cb15-5"><a></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb15-6"><a></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">100000</span>, <span class="fu">zwei_asse</span>()))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell" data-exercise="ex_w_asse" data-check="true">
+<script type="exercise-check-ex_w_asse-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJjaGVjayI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOiJleF93X2Fzc2UiLCJmaWctaGVpZ2h0IjoiMy41IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiciA8LSAucmVzdWx0XG5pZiAoaXMubnVtZXJpYyhyKSAmJiBsZW5ndGgocikgPT0gMSAmJiBhYnMociAtIDQgLyA1MiAqIDMgLyA1MSkgPCAwLjAwMTIpIHtcbiAgbGlzdChjb3JyZWN0ID0gVFJVRSwgbWVzc2FnZSA9IFwiUmljaHRpZy4gUnVuZCAwLDQ1ICUsIGFsc28gZXR3YSBhbGxlIDIyMCBIw6RuZGUgZWlubWFsLiBadXNhdHpmcmFnZTogV2FzIGtvbW10IGhlcmF1cywgd2VubiBTaWUgcmVwbGFjZSA9IFRSVUUgc2V0emVuLCB1bmQgd2FydW0gaXN0IGRhcyBmYWxzY2g/XCIpXG59IGVsc2Uge1xuICBsaXN0KGNvcnJlY3QgPSBGQUxTRSwgbWVzc2FnZSA9IFwiTm9jaCBuaWNodC4gWmllaGVuIFNpZSBnZW5hdSAyIEthcnRlbiB1bmQgcHLDvGZlbiBTaWUsIG9iIGJlaWRlIEFzc2Ugc2luZC4gRGFzIEVyZ2VibmlzIHNvbGx0ZSBuYWhlIDAsMDA0NSBsaWVnZW4uXCIpXG59In0=
+</script>
+</div>
+</section></section>
+<section>
+<section id="verteilungen" class="title-slide slide level1 section center" data-background-color="#1d3f73">
+<h1>Verteilungen</h1>
+<p>Simulieren ✔ → <span class="hier">Verteilungen</span> → Stichprobe und Konfidenzintervall</p>
+<div class="lernziele">
+<p><strong>Nach diesem Abschnitt können Sie …</strong></p>
+<ul>
+<li>aus der Verteilungsfunktion Anteile ablesen,</li>
+<li>eine Dichte als Fläche lesen,</li>
+<li>mit <code>pnorm()</code> rechnen und prüfen, ob die Normalverteilung überhaupt passt.</li>
+</ul>
+</div>
+</section>
+<section id="von-kugeln-zu-kreisen" class="slide level2">
+<h2>Von Kugeln zu Kreisen</h2>
+<p>Urnen und Karten sind <strong>diskret</strong>: endlich viele Ausgänge, jeder mit einer Wahrscheinlichkeit.</p>
+<p>Die Arbeitslosenquote ist <strong>stetig</strong>: Jeder Wert zwischen 1,88 % und 14,46 % ist möglich.</p>
+<div class="fragment">
+<div class="question">
+<p>Ziehen wir zufällig einen der 400 Kreise: Wie wahrscheinlich hat er eine Quote von <strong>genau</strong> 5,000 %? Und eine zwischen 4 und 6 %?</p>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li>Genau 5,000 %: praktisch 0. Bei stetigen Größen fragt man nach <strong>Intervallen</strong>.</li>
+<li>Zwischen 4 und 6 %: der <strong>Anteil</strong> der Kreise in diesem Intervall. Jeder Kreis ist gleich wahrscheinlich, also gilt: Wahrscheinlichkeit = Anteil.</li>
+</ul>
+<p><span class="small"><strong>Datentypen kurz:</strong> kategorial (Bundesland), ordinal (kalt &lt; warm &lt; heiß), numerisch diskret (Anzahl Arbeitslose: ganze Zahlen) oder stetig (Quote, Einkommen).</span></p>
+</div>
+</section>
+<section id="die-verteilungsfunktion" class="slide level2 smaller">
+<h2>Die Verteilungsfunktion</h2>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p><span class="math display">\[F(a) = \Pr(X \le a)\]</span></p>
+<p>Anteil der Kreise mit einer Quote <strong>bis</strong> <span class="math inline">\(a\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a>F_n <span class="ot">&lt;-</span> <span class="fu">ecdf</span>(gesamtdaten<span class="sc">$</span>alo_quote)</span>
+<span id="cb16-2"><a></a><span class="fu">F_n</span>(<span class="dv">5</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.445</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="fu">F_n</span>(<span class="dv">6</span>) <span class="sc">-</span> <span class="fu">F_n</span>(<span class="dv">4</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.335</code></pre>
+</div>
+</div>
+<ul>
+<li>44,5 % der Kreise liegen bei 5 % oder darunter</li>
+<li>33,5 % liegen zwischen 4 und 6 %</li>
+</ul>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-13-1.png" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+<p><span class="small"><code>ecdf()</code> = <em>empirical cumulative distribution function</em>. Weil sie aus Daten geschätzt ist, heißt sie <strong>empirische</strong> Verteilungsfunktion <span class="math inline">\(\hat F_n\)</span>.</span></p>
+</section>
+<section id="die-dichte-fläche-statt-höhe" class="slide level2">
+<h2>Die Dichte: Fläche statt Höhe</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-14-1.png" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<ul>
+<li><strong>Histogramm:</strong> einfacher Schätzer der Dichte; das Ergebnis hängt von der Balkenbreite ab</li>
+<li><strong>Kerndichte</strong> (<code>geom_density()</code>): glättet das Histogramm zu einer Kurve</li>
+<li>Die <strong>Fläche</strong> unter der Kurve ist 1</li>
+<li>Die Fläche zwischen 4 und 6 % ≈ Anteil der Kreise dort: <strong>33,5 %</strong></li>
+</ul>
+<div class="fragment">
+<div class="alert">
+<p>Die y-Achse einer Dichte ist <strong>kein</strong> Anteil. Nur Flächen sind Anteile.</p>
+</div>
+</div>
+</div></div>
+</section>
+<section id="die-normalverteilung" class="slide level2">
+<h2>Die Normalverteilung</h2>
+<p>Durch <strong>zwei Zahlen</strong> bestimmt: Mittelwert <span class="math inline">\(\mu\)</span> und Standardabweichung <span class="math inline">\(\sigma\)</span>. Symmetrisch, glockenförmig.</p>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-15-1.png" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<ul>
+<li>Etwa <strong>68 %</strong> liegen innerhalb von <span class="math inline">\(\mu \pm \sigma\)</span></li>
+<li>Etwa <strong>95 %</strong> innerhalb von <span class="math inline">\(\mu \pm 2\sigma\)</span></li>
+<li>Etwa <strong>99,7 %</strong> innerhalb von <span class="math inline">\(\mu \pm 3\sigma\)</span></li>
+</ul>
+<p>In R:</p>
+<ul>
+<li><code>pnorm(a, mu, sigma)</code> = <span class="math inline">\(\Pr(X \le a)\)</span></li>
+<li><code>qnorm(p, mu, sigma)</code> = der Wert, unter dem der Anteil <span class="math inline">\(p\)</span> liegt</li>
+</ul>
+</div></div>
+</section>
+<section id="passt-die-normalverteilung-zu-unseren-kreisen" class="slide level2 smaller">
+<h2>Passt die Normalverteilung zu unseren Kreisen?</h2>
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-16-1.png" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<p>🔮 <strong>Prognose:</strong> Wo passt sie gut, wo schlecht?</p>
+<div class="fragment">
+<ul>
+<li><strong>In der Mitte gut:</strong> 68,2 % der Kreise liegen in <span class="math inline">\(\mu \pm \sigma\)</span> (Normalverteilung: 68,3 %)</li>
+<li><strong>An den Rändern schlecht:</strong> Die Daten sind <strong>rechtsschief</strong>, links gibt es eine harte Grenze</li>
+<li>Die Normalverteilung erlaubt sogar <strong>negative</strong> Quoten</li>
+<li><strong>Zwei Gipfel:</strong> West und Ost (Teil 2). Eine einzige Glocke kann das nicht abbilden</li>
+</ul>
+</div>
+</div></div>
+</section>
+<section id="bug-hunt-13-wie-viele-kreise-unter-2" class="slide level2 bughunt">
+<h2>🐛 Bug Hunt 13: Wie viele Kreise unter 2 %?</h2>
+<p>Prompt: <em>“Wie viele der 400 Kreise haben eine Arbeitslosenquote unter 2 %?”</em> Chat AI:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>x <span class="ot">&lt;-</span> gesamtdaten<span class="sc">$</span>alo_quote</span>
+<span id="cb20-2"><a></a><span class="dv">400</span> <span class="sc">*</span> <span class="fu">pnorm</span>(<span class="dv">2</span>, <span class="at">mean =</span> <span class="fu">mean</span>(x), <span class="at">sd =</span> <span class="fu">sd</span>(x))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 16.87626</code></pre>
+</div>
+</div>
+<div class="callout callout-warning no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><em>“Arbeitslosenquoten sind annähernd normalverteilt. Damit haben rund 17 Kreise eine Quote unter 2 %.”</em></p>
+</div>
+</div>
+</div>
+<div class="instructions">
+<p><strong>2 Minuten:</strong> Wie würden Sie das prüfen? Was kommt heraus?</p>
+</div>
+</section>
+<section id="bug-hunt-13-auflösung" class="slide level2 bughunt">
+<h2>🐛 Bug Hunt 13: Auflösung</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="fu">sum</span>(x <span class="sc">&lt;</span> <span class="dv">2</span>)                                  <span class="co"># einfach nachzählen</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a>gesamtdaten <span class="sc">|&gt;</span> <span class="fu">filter</span>(alo_quote <span class="sc">&lt;</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> <span class="fu">select</span>(landkreis_name, alo_quote)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  landkreis_name alo_quote
+  &lt;chr&gt;              &lt;dbl&gt;
+1 München             1.88</code></pre>
+</div>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Ein</strong> Kreis statt 17. Die Normalverteilung überschätzt den linken Rand um mehr als das Zehnfache.</li>
+<li>Laut Normalverteilung hätten sogar 1,5 Kreise eine <strong>negative</strong> Quote.</li>
+<li><strong>Die Frage brauchte gar kein Modell:</strong> Wir haben alle 400 Kreise, also zählen wir.</li>
+</ul>
+<div class="alert">
+<p>Eine Verteilungsannahme ist eine Annahme. Prüfen Sie sie an den Daten, besonders an den Rändern, wo die interessanten Fälle liegen.</p>
+</div>
+</div>
+</section>
+<section id="jetzt-sie-über-8" class="slide level2">
+<h2>✍️ Jetzt Sie: über 8 %</h2>
+<p>Welcher Anteil der Kreise hat eine Quote <strong>über 8 %</strong>? Berechnen Sie ihn einmal durch Zählen und einmal mit der Normalverteilung.</p>
+<div class="cell" data-setup="true" data-exercise="ex_w_normal">
+<script type="exercise-setup-ex_w_normal-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3dfbm9ybWFsIiwiZmlnLWhlaWdodCI6IjMuNSIsImZpZy13aWR0aCI6IjciLCJzZXR1cCI6dHJ1ZX0sImNvZGUiOiJ4IDwtIHJlYWRyOjpyZWFkX2NzdihcImRhdGEtd2Vici93X2tyZWlzZS5jc3ZcIiwgc2hvd19jb2xfdHlwZXMgPSBGQUxTRSkkYWxvX3F1b3RlIn0=
+</script>
+</div>
+<div class="cell" data-exercise="ex_w_normal">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3dfbm9ybWFsIiwiZmlnLWhlaWdodCI6IjMuNSIsImZpZy13aWR0aCI6IjcifSwiY29kZSI6ImVtcGlyaXNjaCA8LSBtZWFuKF9fX19fXylcbm5vcm1hbCAgICA8LSAxIC0gcG5vcm0oX19fX19fLCBtZWFuID0gbWVhbih4KSwgc2QgPSBzZCh4KSlcbmMoZW1waXJpc2NoID0gZW1waXJpc2NoLCBub3JtYWwgPSBub3JtYWwpIn0=
+</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<countdown-timer class="countdown" id="timer_f64c353e" minutes="3" seconds="0" update-every="1" tabindex="0" style="right:0;bottom:0;"></countdown-timer>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_w_normal">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hinweis</strong></p>
+</div>
+<div class="callout-content">
+<p><code>mean()</code> auf einem logischen Vektor (<code>x &gt; 8</code>) liefert den Anteil. <code>pnorm(8, …)</code> ist der Anteil <strong>bis</strong> 8, Sie brauchen den Rest.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_w_normal">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Lösung</strong></p>
+</div>
+<div class="callout-content">
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a>empirisch <span class="ot">&lt;-</span> <span class="fu">mean</span>(x <span class="sc">&gt;</span> <span class="dv">8</span>)</span>
+<span id="cb26-2"><a></a>normal    <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="dv">8</span>, <span class="at">mean =</span> <span class="fu">mean</span>(x), <span class="at">sd =</span> <span class="fu">sd</span>(x))</span>
+<span id="cb26-3"><a></a><span class="fu">c</span>(<span class="at">empirisch =</span> empirisch, <span class="at">normal =</span> normal)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell" data-exercise="ex_w_normal" data-check="true">
+<script type="exercise-check-ex_w_normal-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJjaGVjayI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOiJleF93X25vcm1hbCIsImZpZy1oZWlnaHQiOiIzLjUiLCJmaWctd2lkdGgiOiI3In0sImNvZGUiOiJyIDwtIC5yZXN1bHRcbnggPC0gLmVudmlyX3ByZXAkeFxuaWYgKGlzLm51bWVyaWMocikgJiYgbGVuZ3RoKHIpID09IDIgJiZcbiAgICBpc1RSVUUoYWxsLmVxdWFsKHVubmFtZShyKSwgYyhtZWFuKHggPiA4KSwgMSAtIHBub3JtKDgsIG1lYW4oeCksIHNkKHgpKSksIHRvbGVyYW5jZSA9IDFlLTYpKSkge1xuICBsaXN0KGNvcnJlY3QgPSBUUlVFLCBtZXNzYWdlID0gXCJSaWNodGlnLiBCZWkgOCAlIGxpZWdlbiBiZWlkZSBuYWggYmVpZWluYW5kZXIgKDExLDUgJSBnZXrDpGhsdCwgMTIsNyAlIGxhdXQgTm9ybWFsdmVydGVpbHVuZykuIFdlaXRlciBhdcOfZW4sIGJlaSAxMCAlIG9kZXIgMiAlLCBnZWhlbiBzaWUgZGV1dGxpY2ggYXVzZWluYW5kZXIuXCIpXG59IGVsc2Uge1xuICBsaXN0KGNvcnJlY3QgPSBGQUxTRSwgbWVzc2FnZSA9IFwiTm9jaCBuaWNodC4gZW1waXJpc2NoOiBtZWFuKHggPiA4KS4gbm9ybWFsOiAxIC0gcG5vcm0oOCwgbWVhbih4KSwgc2QoeCkpLlwiKVxufSJ9
+</script>
+</div>
+</section></section>
+<section>
+<section id="stichprobe-und-konfidenzintervall" class="title-slide slide level1 section center" data-background-color="#1d3f73">
+<h1>Stichprobe und Konfidenzintervall</h1>
+<p>Simulieren ✔ → Verteilungen ✔ → <span class="hier">Stichprobe und Konfidenzintervall</span></p>
+<div class="lernziele">
+<p><strong>Nach diesem Abschnitt können Sie …</strong></p>
+<ul>
+<li>Grundgesamtheit, Parameter, Stichprobe und Punktschätzer unterscheiden,</li>
+<li>mit dem Bootstrap ein Konfidenzintervall aus einer einzigen Stichprobe berechnen,</li>
+<li>ein Konfidenzintervall richtig interpretieren.</li>
+</ul>
+</div>
+</section>
+<section id="grundbegriffe" class="slide level2 smaller">
+<h2>Grundbegriffe</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Begriff</th>
+<th>Bedeutung</th>
+<th>Bei uns</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Grundgesamtheit</strong></td>
+<td>alle Einheiten, über die wir etwas wissen wollen</td>
+<td>die 400 Kreise</td>
+</tr>
+<tr class="even">
+<td><strong>Parameter</strong> <span class="math inline">\(\mu\)</span></td>
+<td>der wahre Wert in der Grundgesamtheit, meist unbekannt</td>
+<td>mittlere Quote 5,61 %</td>
+</tr>
+<tr class="odd">
+<td><strong>Stichprobe</strong></td>
+<td>zufällig ausgewählte Teilmenge der Größe <span class="math inline">\(n\)</span></td>
+<td>50 Kreise</td>
+</tr>
+<tr class="even">
+<td><strong>Punktschätzer</strong> <span class="math inline">\(\bar x\)</span></td>
+<td>aus der Stichprobe berechneter Schätzwert für <span class="math inline">\(\mu\)</span></td>
+<td>Mittelwert der 50</td>
+</tr>
+<tr class="odd">
+<td><strong>Zensus</strong></td>
+<td>Vollerhebung aller Einheiten</td>
+<td>Case-Study Teil 1 und 2</td>
+</tr>
+</tbody>
+</table>
+<div class="fragment">
+<p><strong>Zufallsstichprobe:</strong> Jede Einheit hat dieselbe Chance, gezogen zu werden. Dann ist die Stichprobe <strong>unverzerrt</strong>, und Ergebnisse lassen sich auf die Grundgesamtheit <strong>verallgemeinern</strong>.</p>
+<div class="callout callout-warning callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p><strong>Stichprobenverzerrung:</strong> Haben manche Einheiten eine höhere Chance (z.B. nur Großstädte, nur wer an einer Online-Umfrage teilnimmt), hilft auch ein großes <span class="math inline">\(n\)</span> nicht.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="eine-stichprobe" class="slide level2">
+<h2>Eine Stichprobe</h2>
+<p>Stellen wir uns vor, wir hätten nur <strong>50 zufällig gezogene Kreise</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a><span class="fu">set.seed</span>(<span class="dv">2627</span>)</span>
+<span id="cb27-2"><a></a>stichprobe <span class="ot">&lt;-</span> <span class="fu">sample</span>(gesamtdaten<span class="sc">$</span>alo_quote, <span class="dv">50</span>)</span>
+<span id="cb27-3"><a></a><span class="fu">mean</span>(stichprobe)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.384455</code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>Der wahre Wert ist 5,61 %. Wir liegen 0,23 Prozentpunkte daneben.</p>
+<div class="question">
+<p>War das Glück oder Pech? Mit einer einzigen Zahl können wir das nicht wissen. Wir brauchen die <strong>Schwankung</strong> des Schätzers.</p>
+</div>
+</div>
+</section>
+<section id="die-stichprobenverteilung" class="slide level2">
+<h2>Die Stichprobenverteilung</h2>
+<p>Weil wir die Grundgesamtheit hier ausnahmsweise kennen, können wir 1.000-mal neu ziehen:</p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a>mittel_50 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>,</span>
+<span id="cb29-2"><a></a>  <span class="fu">mean</span>(<span class="fu">sample</span>(gesamtdaten<span class="sc">$</span>alo_quote, <span class="dv">50</span>)))</span>
+<span id="cb29-3"><a></a><span class="fu">sd</span>(mittel_50)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2831495</code></pre>
+</div>
+</div>
+<ul>
+<li>Die Mittelwerte streuen um den wahren Wert</li>
+<li>Ihre Standardabweichung heißt <strong>Standardfehler</strong> (SE)</li>
+<li><strong>Antwort auf die Schätzfrage:</strong> typischerweise etwa <strong>0,3 Prozentpunkte</strong></li>
+</ul>
+</div><div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-27-1.png" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="größere-stichprobe-kleinerer-fehler" class="slide level2">
+<h2>🔮 Größere Stichprobe, kleinerer Fehler?</h2>
+<div class="question">
+<p>Mit <strong>12</strong> statt 50 Kreisen: Wie viel breiter wird die Stichprobenverteilung? Doppelt so breit? Viermal?</p>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column" style="width:55%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-28-1.png" width="624"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:45%;">
+<ul>
+<li>SE bei n = 12: <strong>0,56</strong>, bei n = 50: <strong>0,28</strong></li>
+<li>Etwa <strong>doppelt</strong> so breit, obwohl viermal weniger Daten</li>
+</ul>
+<p><span class="math display">\[SE = \frac{\sigma}{\sqrt{n}}\]</span></p>
+<p>Viermal so viele Daten halbieren den Fehler.</p>
+</div></div>
+</div>
+</section>
+<section id="das-problem-wir-haben-nur-eine-stichprobe" class="slide level2">
+<h2>Das Problem: Wir haben nur eine Stichprobe</h2>
+<p>In der Praxis können wir nicht 1.000-mal neu ziehen. Wir haben <strong>eine</strong> Stichprobe.</p>
+<div class="fragment">
+<p><strong>Der Bootstrap:</strong> Wir behandeln die Stichprobe so, als wäre sie die Grundgesamtheit, und ziehen aus ihr <strong>mit Zurücklegen</strong> immer wieder neue Stichproben derselben Größe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a>boot <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(stichprobe, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb31-2"><a></a><span class="fu">sd</span>(boot)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2469458</code></pre>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="alert">
+<p>Bootstrap-SE 0,25, wahrer SE 0,28. Aus einer einzigen Stichprobe haben wir die Schwankung gut geschätzt, ohne Formel und ohne Grundgesamtheit.</p>
+</div>
+<p><span class="small"><em>Bootstrap:</em> sich an den eigenen Stiefelschlaufen aus dem Sumpf ziehen, wie Münchhausen am eigenen Schopf.</span></p>
+</div>
+</section>
+<section id="bootstrap-und-stichprobenverteilung-im-vergleich" class="slide level2 smaller">
+<h2>Bootstrap und Stichprobenverteilung im Vergleich</h2>
+<div class="columns">
+<div class="column" style="width:58%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-31-1.png" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:42%;">
+<p><strong>Oben:</strong> gezogen aus der <strong>Grundgesamtheit</strong>. Deren Mittelwert ist <span class="math inline">\(\mu\)</span>, also streuen die Mittelwerte um <span class="math inline">\(\mu\)</span>.</p>
+<div class="fragment">
+<p><strong>Unten:</strong> Der Bootstrap zieht aus <strong>unserer Stichprobe</strong>. Deren Mittelwert ist <span class="math inline">\(\bar x\)</span>, also streuen die Bootstrap-Mittel um <span class="math inline">\(\bar x\)</span> (<code>mean(boot)</code> = 5,36). <span class="math inline">\(\mu\)</span> kennt der Bootstrap nicht, er sieht nur die Stichprobe.</p>
+</div>
+<div class="fragment">
+<ul>
+<li><strong>Lage:</strong> falsch, wenn <span class="math inline">\(\bar x\)</span> daneben liegt</li>
+<li><strong>Breite:</strong> stimmt gut (0,25 vs.&nbsp;0,28)</li>
+</ul>
+<div class="alert">
+<p>Der Bootstrap macht die Schätzung <strong>nicht genauer</strong>. Er sagt uns, <strong>wie ungenau</strong> sie ist.</p>
+</div>
+</div>
+</div></div>
+</section>
+<section id="das-konfidenzintervall" class="slide level2">
+<h2>Das Konfidenzintervall</h2>
+<p>Ein <strong>95 %-Konfidenzintervall</strong> ist ein Bereich plausibler Werte für <span class="math inline">\(\mu\)</span>. Zwei gängige Wege:</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Perzentil-Methode</strong> (Bootstrap)</p>
+<p>Die mittleren 95 % der Bootstrap-Mittelwerte:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a><span class="fu">quantile</span>(boot, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    2.5%    97.5% 
+4.902974 5.842596 </code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong>Standardfehler-Methode</strong> (Normalverteilung)</p>
+<p><span class="math inline">\(\bar x \pm 1{,}96 \cdot SE\)</span> mit <span class="math inline">\(SE = s/\sqrt{n}\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>se <span class="ot">&lt;-</span> <span class="fu">sd</span>(stichprobe) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">50</span>)</span>
+<span id="cb35-2"><a></a><span class="fu">mean</span>(stichprobe) <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.893000 5.875911</code></pre>
+</div>
+</div>
+</div></div>
+<div class="fragment">
+<p><span class="small"><strong>Woher kommt 1,96?</strong> <code>qnorm(0.975)</code> = 1,96: Zwischen <span class="math inline">\(-1{,}96\)</span> und <span class="math inline">\(+1{,}96\)</span> liegen bei der Normalverteilung genau 95 %. Mit 2 statt 1,96 wären es 95,4 %.</span></p>
+</div>
+</section>
+<section id="bug-hunt-14-das-konfidenzintervall-von-chat-ai" class="slide level2 bughunt">
+<h2>🐛 Bug Hunt 14: Das Konfidenzintervall von Chat AI</h2>
+<p>Prompt: <em>“Berechne ein 95 %-Konfidenzintervall für die mittlere Arbeitslosenquote aus meiner Stichprobe von 50 Kreisen und interpretiere es.”</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a><span class="fu">mean</span>(stichprobe) <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">sd</span>(stichprobe)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.909342 8.859569</code></pre>
+</div>
+</div>
+<div class="callout callout-warning no-icon callout-style-simple">
+<div class="callout-body">
+<div class="callout-content">
+<p><em>“Mit 95 % Wahrscheinlichkeit liegt die mittlere Arbeitslosenquote aller Kreise zwischen 1,9 % und 8,9 %.”</em></p>
+</div>
+</div>
+</div>
+<div class="instructions">
+<p><strong>3 Minuten, zu zweit:</strong> Zwei Fehler, einer im Code, einer in der Interpretation. Woran sehen Sie schon ohne zu rechnen, dass das Intervall nicht stimmen kann?</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<countdown-timer class="countdown" id="timer_839d6da9" minutes="3" seconds="0" update-every="1" tabindex="0" style="right:0;bottom:0;"></countdown-timer>
+</div>
+</div>
+</section>
+<section id="bug-hunt-14-auflösung" class="slide level2 bughunt smaller">
+<h2>🐛 Bug Hunt 14: Auflösung</h2>
+<p><strong>1. Code: Standardabweichung statt Standardfehler</strong></p>
+<ul>
+<li><code>sd(stichprobe)</code> misst, wie stark die <strong>Kreise</strong> streuen, nicht wie stark der <strong>Mittelwert</strong> schwankt</li>
+<li>Richtig: <code>sd(stichprobe) / sqrt(50)</code>. Das Intervall ist <span class="math inline">\(\sqrt{50} \approx 7\)</span>-mal zu breit</li>
+<li><strong>Plausibilitätscheck:</strong> Ein Intervall von 1,9 bis 8,9 % umfasst fast <strong>alle Kreise</strong>. Für einen Mittelwert aus 50 Kreisen ist das absurd ungenau.</li>
+</ul>
+<div class="fragment">
+<p><strong>2. Interpretation: Die Wahrscheinlichkeit gehört zum Verfahren, nicht zu <span class="math inline">\(\mu\)</span></strong></p>
+<ul>
+<li><span class="math inline">\(\mu\)</span> ist eine feste Zahl. Sie liegt im Intervall oder nicht, ohne “mit 95 % Wahrscheinlichkeit”</li>
+<li>Zufällig ist das <strong>Intervall</strong>: Jede Stichprobe liefert ein anderes</li>
+<li><strong>Richtig:</strong> <em>“Das Verfahren erzeugt in 95 % aller Stichproben ein Intervall, das den wahren Wert enthält.”</em></li>
+</ul>
+</div>
+<div class="fragment">
+<div class="alert">
+<p>Richtig gerechnet: [4,89 %; 5,88 %]. Der wahre Wert 5,61 % liegt drin. Diesmal.</p>
+</div>
+</div>
+</section>
+<section id="stichproben-100-intervalle" class="slide level2 smaller">
+<h2>100 Stichproben, 100 Intervalle</h2>
+<div class="columns">
+<div class="column" style="width:62%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-36-1.png" width="720"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:38%;">
+<ul>
+<li>Jede Linie: eine neue Stichprobe von 50 Kreisen, ein Bootstrap-Intervall</li>
+<li><strong>95 von 100</strong> enthalten den wahren Wert, <strong>5</strong> verfehlen ihn</li>
+<li>Mit einem anderen Seed wären es z.B. 92 oder 97: Auch diese Zahl schwankt, erst auf lange Sicht sind es 95 %</li>
+</ul>
+<div class="fragment">
+<div class="alert">
+<p>Genau das bedeutet “95 %”: ein Versprechen über das <strong>Verfahren</strong> auf lange Sicht. Ob <strong>Ihr</strong> Intervall zu den Treffern gehört, wissen Sie nie.</p>
+</div>
+</div>
+<p><span class="small">Grafik nach Ismay &amp; Kim (2019), <em>ModernDive</em>, Kap. 8.5.</span></p>
+</div></div>
+</section>
+<section id="was-macht-ein-intervall-breit-oder-schmal" class="slide level2">
+<h2>Was macht ein Intervall breit oder schmal?</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stellschraube</th>
+<th>Wirkung</th>
+<th>Warum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Größere Stichprobe</strong> <span class="math inline">\(n\)</span></td>
+<td>schmaler</td>
+<td><span class="math inline">\(SE = \sigma / \sqrt{n}\)</span></td>
+</tr>
+<tr class="even">
+<td><strong>Höheres Konfidenzniveau</strong> (99 % statt 95 %)</td>
+<td>breiter</td>
+<td><code>qnorm(0.995)</code> = 2,58 statt <code>qnorm(0.975)</code> = 1,96</td>
+</tr>
+<tr class="odd">
+<td><strong>Stärkere Streuung</strong> <span class="math inline">\(\sigma\)</span></td>
+<td>breiter</td>
+<td>mehr Zufall in jeder Stichprobe</td>
+</tr>
+</tbody>
+</table>
+<p><span class="small">Zweiseitig: Bei 95 % bleiben links und rechts je 2,5 % übrig, also das 97,5 %-Quantil. Bei 99 % je 0,5 %, also das 99,5 %-Quantil.</span></p>
+<div class="fragment">
+<div class="question">
+<p>Ein Konfidenzintervall für einen Effekt reicht von −0,5 bis +3,0. Heißt das “kein Effekt”?</p>
+</div>
+</div>
+<div class="fragment">
+<p><strong>Nein.</strong> Es heißt: Die Daten reichen nicht, um “kein Effekt” auszuschließen. Ein breites Intervall um die 0 ist oft ein Zeichen für <strong>zu wenig Daten</strong> (geringe <em>Power</em>), nicht für einen fehlenden Effekt. Mehr dazu nächstes Semester bei der Regression.</p>
+</div>
+</section>
+<section id="jetzt-sie-ihr-eigenes-konfidenzintervall" class="slide level2">
+<h2>✍️ Jetzt Sie: Ihr eigenes Konfidenzintervall</h2>
+<p>Ziehen Sie mit <strong>Ihrem Geburtstag</strong> als Seed (z.B. <code>0312</code>) eine eigene Stichprobe von 50 Kreisen und berechnen Sie das 95 %-Bootstrap-Intervall. Enthält es den wahren Wert 5,61 %?</p>
+<div class="cell" data-setup="true" data-exercise="ex_w_boot">
+<script type="exercise-setup-ex_w_boot-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3dfYm9vdCIsImZpZy1oZWlnaHQiOiIzLjUiLCJmaWctd2lkdGgiOiI3Iiwic2V0dXAiOnRydWV9LCJjb2RlIjoieCA8LSByZWFkcjo6cmVhZF9jc3YoXCJkYXRhLXdlYnIvd19rcmVpc2UuY3N2XCIsIHNob3dfY29sX3R5cGVzID0gRkFMU0UpJGFsb19xdW90ZSJ9
+</script>
+</div>
+<div class="cell" data-exercise="ex_w_boot">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImV4X3dfYm9vdCIsImZpZy1oZWlnaHQiOiIzLjUiLCJmaWctd2lkdGgiOiI3In0sImNvZGUiOiJzZXQuc2VlZCgwMzEyKSAgICAgICAgICAgICAgICAgICAgICAgICAgIyBJaHIgR2VidXJ0c3RhZ1xuc3RpY2hwcm9iZSA8LSBzYW1wbGUoeCwgNTApXG5ib290IDwtIHJlcGxpY2F0ZSgxMDAwLCBtZWFuKHNhbXBsZShzdGljaHByb2JlLCBfX19fX18pKSlcbmtpICAgPC0gcXVhbnRpbGUoYm9vdCwgYyhfX19fX18sIF9fX19fXykpXG5raSJ9
+</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<countdown-timer class="countdown" id="timer_4d3663ed" minutes="4" seconds="0" update-every="1" tabindex="0" style="right:0;bottom:0;"></countdown-timer>
+</div>
+</div>
+<div class="hint webr-ojs-exercise exercise-hint d-none" data-exercise="ex_w_boot">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hinweis</strong></p>
+</div>
+<div class="callout-content">
+<p>Bootstrap heißt: <strong>mit Zurücklegen</strong> ziehen. Für 95 % schneiden Sie links und rechts je 2,5 % ab.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="webr-ojs-exercise exercise-solution d-none" data-exercise="ex_w_boot">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Lösung</strong></p>
+</div>
+<div class="callout-content">
+<div class="sourceCode" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a><span class="fu">set.seed</span>(<span class="dv">0312</span>)</span>
+<span id="cb39-2"><a></a>stichprobe <span class="ot">&lt;-</span> <span class="fu">sample</span>(x, <span class="dv">50</span>)</span>
+<span id="cb39-3"><a></a>boot <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(stichprobe, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb39-4"><a></a>ki   <span class="ot">&lt;-</span> <span class="fu">quantile</span>(boot, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb39-5"><a></a>ki</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell" data-exercise="ex_w_boot" data-check="true">
+<script type="exercise-check-ex_w_boot-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJjaGVjayI6dHJ1ZSwiZWRpdCI6dHJ1ZSwiZXZhbCI6dHJ1ZSwiZXhlcmNpc2UiOiJleF93X2Jvb3QiLCJmaWctaGVpZ2h0IjoiMy41IiwiZmlnLXdpZHRoIjoiNyJ9LCJjb2RlIjoiciA8LSAucmVzdWx0XG5tdSA8LSBtZWFuKC5lbnZpcl9wcmVwJHgpXG5pZiAoaXMubnVtZXJpYyhyKSAmJiBsZW5ndGgocikgPT0gMiAmJiBpZGVudGljYWwobmFtZXMociksIGMoXCIyLjUlXCIsIFwiOTcuNSVcIikpICYmXG4gICAgclsxXSA8IHJbMl0gJiYgZGlmZihyKSA+IDAuNiAmJiBkaWZmKHIpIDwgMikge1xuICB0cmVmZmVyIDwtIHJbMV0gPD0gbXUgJiYgbXUgPD0gclsyXVxuICBsaXN0KGNvcnJlY3QgPSBUUlVFLCBtZXNzYWdlID0gcGFzdGUwKFwiUmljaHRpZyBnZXJlY2huZXQuIElociBJbnRlcnZhbGwgXCIsIGlmICh0cmVmZmVyKSBcImVudGjDpGx0XCIgZWxzZSBcInZlcmZlaGx0XCIsXG4gICAgICAgXCIgZGVuIHdhaHJlbiBXZXJ0IFwiLCByb3VuZChtdSwgMiksIFwiICUuIEltIEjDtnJzYWFsIHNvbGx0ZSBkYXMgYmVpIGV0d2EgOTUgJSB2b24gSWhuZW4gZGVyIEZhbGwgc2Vpbi4gV2VyIGxpZWd0IGRhbmViZW4/XCIpKVxufSBlbHNlIHtcbiAgbGlzdChjb3JyZWN0ID0gRkFMU0UsIG1lc3NhZ2UgPSBcIk5vY2ggbmljaHQuIFppZWhlbiBTaWUgbWl0IHJlcGxhY2UgPSBUUlVFIHVuZCBuZWhtZW4gU2llIGRpZSBRdWFudGlsZSAwLjAyNSB1bmQgMC45NzUuXCIpXG59In0=
+</script>
+</div>
+<aside class="notes">
+<p>Auflösung im Hörsaal: Handzeichen, wessen Intervall den wahren Wert verfehlt. Bei 100 Studierenden sollten es etwa 5 sein. Damit wird die Grafik “100 Intervalle” live nachgespielt.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="abschluss" class="title-slide slide level1 section center" data-background-color="#1d3f73">
+<h1>Abschluss</h1>
+
+</section>
+<section id="zusammenfassung" class="slide level2">
+<h2>Zusammenfassung</h2>
+<ul>
+<li><strong>Wahrscheinlichkeit</strong> = langfristiger Anteil. Mit <code>sample()</code> und <code>replicate()</code> simulieren, mit einem exakt lösbaren Fall prüfen (Bug Hunt 12)</li>
+<li><strong>Verteilungsfunktion</strong> <span class="math inline">\(F(a)\)</span> liefert Anteile; bei einer <strong>Dichte</strong> sind nur Flächen Anteile</li>
+<li><strong>Normalverteilung:</strong> zwei Parameter, <code>pnorm()</code> / <code>qnorm()</code>. Eine Annahme, die man prüfen muss, vor allem an den Rändern (Bug Hunt 13)</li>
+<li><strong>Standardfehler</strong> = Schwankung des Schätzers, nicht der Daten; schrumpft mit <span class="math inline">\(\sqrt{n}\)</span></li>
+<li><strong>Bootstrap:</strong> Schwankung aus einer einzigen Stichprobe schätzen</li>
+<li><strong>Konfidenzintervall:</strong> 95 % beziehen sich auf das Verfahren, nicht auf <span class="math inline">\(\mu\)</span> (Bug Hunt 14)</li>
+</ul>
+<div class="fragment">
+<div class="alert">
+<p><strong>Nächstes Semester:</strong> Konfidenzintervalle für Regressionskoeffizienten. Dieselbe Logik, dieselben Fallen.</p>
+</div>
+</div>
+</section>
+<section id="kahoot-checkpoint-wahrscheinlichkeiten-und-konfidenzintervalle" class="slide level2 kahoot">
+<h2>📱 Kahoot-Checkpoint: Wahrscheinlichkeiten und Konfidenzintervalle</h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="VL_Wahrscheinlichkeit_und_Konfidenzintervalle_files/figure-revealjs/unnamed-chunk-41-1.png" width="288"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="pin"><strong>kahoot.it</strong> · PIN am Beamer</span></p>
+</div><div class="column" style="width:65%;">
+<p><strong>10 Fragen, ca. 8 Minuten.</strong></p>
+<ul>
+<li>Monte Carlo und <code>set.seed()</code></li>
+<li>Bedingte Wahrscheinlichkeit, Multiplikationsregel</li>
+<li>Verteilungsfunktion und Dichte lesen</li>
+<li>Normalverteilung: wann sie passt</li>
+<li>Standardfehler vs.&nbsp;Standardabweichung</li>
+<li>Bootstrap und Konfidenzintervall richtig deuten</li>
+</ul>
+<p><a href="https://create.kahoot.it/">Kahoot öffnen →</a></p>
+</div></div>
+<div class="cell">
+<div class="cell-output-display">
+<countdown-timer class="countdown" id="timer_833903d8" minutes="8" seconds="0" update-every="1" tabindex="0" style="right:0;bottom:0;"></countdown-timer>
+</div>
+</div>
+<aside class="notes">
+<p>Fragen mit Antworten und Zeitlimits: kahoot_fragen_wahrscheinlichkeit.xlsx (Kahoot-Importvorlage).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="anhang-zum-selbststudium" class="title-slide slide level1 section center" data-background-color="#1d3f73">
+<h1>Anhang: Zum Selbststudium</h1>
+
+</section>
+<section id="permutationen-und-kombinationen" class="slide level2 smaller">
+<h2>Permutationen und Kombinationen</h2>
+<p>Statt zu simulieren, können wir <strong>alle</strong> möglichen Hände aufzählen (Paket <code>gtools</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a><span class="fu">library</span>(gtools)</span>
+<span id="cb40-2"><a></a>haende_p <span class="ot">&lt;-</span> <span class="fu">permutations</span>(<span class="dv">52</span>, <span class="dv">2</span>, <span class="at">v =</span> deck)    <span class="co"># Reihenfolge zählt: 52 · 51 Hände</span></span>
+<span id="cb40-3"><a></a><span class="fu">nrow</span>(haende_p)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2652</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a><span class="fu">mean</span>(haende_p[, <span class="dv">1</span>] <span class="sc">%in%</span> asse <span class="sc">&amp;</span> haende_p[, <span class="dv">2</span>] <span class="sc">%in%</span> asse)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.004524887</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a>haende_k <span class="ot">&lt;-</span> <span class="fu">combinations</span>(<span class="dv">52</span>, <span class="dv">2</span>, <span class="at">v =</span> deck)    <span class="co"># Reihenfolge egal: 52 · 51 / 2 Hände</span></span>
+<span id="cb44-2"><a></a><span class="fu">nrow</span>(haende_k)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1326</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a><span class="fu">mean</span>((haende_k[, <span class="dv">1</span>] <span class="sc">%in%</span> asse <span class="sc">&amp;</span> haende_k[, <span class="dv">2</span>] <span class="sc">%in%</span> zehner) <span class="sc">|</span></span>
+<span id="cb46-2"><a></a>     (haende_k[, <span class="dv">2</span>] <span class="sc">%in%</span> asse <span class="sc">&amp;</span> haende_k[, <span class="dv">1</span>] <span class="sc">%in%</span> zehner))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04826546</code></pre>
+</div>
+</div>
+<p><span class="small">Aufzählen ist exakt, wird aber schnell unmöglich: Für 5 Karten gibt es schon 2.598.960 Kombinationen. Dann bleibt die Simulation.</span></p>
+</section>
+<section id="kerndichteschätzer-die-definition" class="slide level2 smaller">
+<h2>Kerndichteschätzer: die Definition</h2>
+<p>Ein <strong>Kern</strong> ist eine Funktion <span class="math inline">\(K: \mathbb{R} \to [0, \infty)\)</span> mit</p>
+<ul>
+<li><span class="math inline">\(K(x) \ge 0\)</span> für alle <span class="math inline">\(x\)</span></li>
+<li><span class="math inline">\(\int_{\mathbb{R}} K(x)\,dx = 1\)</span></li>
+</ul>
+<p>Der Kerndichteschätzer legt um jeden Datenpunkt einen kleinen Kern der Breite <span class="math inline">\(h\)</span> (Bandbreite) und addiert sie:</p>
+<p><span class="math display">\[\hat f_h(x) = \frac{1}{n h} \sum_{i=1}^{n} K\!\left(\frac{x - x_i}{h}\right)\]</span></p>
+<ul>
+<li>Kleine Bandbreite <span class="math inline">\(h\)</span>: zackig, zeigt Zufallsschwankungen</li>
+<li>Große Bandbreite: glatt, verwischt echte Strukturen</li>
+<li><code>geom_density()</code> wählt <span class="math inline">\(h\)</span> automatisch (<code>bw.nrd0</code>), mit <code>adjust = 2</code> wird es glatter</li>
+</ul>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC42LjAvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsInJlYWRyIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC04IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV84O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzggPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici04LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBleGVyY2lzZSBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKFxuICAgIHtcbiAgICAgIGlkOiBcIndlYnItOC1jb250ZW50c1wiLFxuICAgICAgZW52aXI6IGBleGVyY2lzZS1lbnYtJHtibG9jay5hdHRyLmV4ZXJjaXNlfWAsXG4gICAgICBlcnJvcjogZmFsc2UsXG4gICAgICBjYXB0aW9uOiAnRXhlcmNpc2UnLFxuICAgIH0sXG4gICAgYmxvY2suYXR0clxuICApO1xuXG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxudmlld29mIF93ZWJyX3ZhbHVlXzggPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzgsIHt9KTtcbl93ZWJyX2ZlZWRiYWNrXzggPSB7XG4gIGNvbnN0IHsgV2ViUkdyYWRlciB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3QgZW1wdHlGZWVkYmFjayA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RpdicpO1xuXG4gIGNvbnN0IGdyYWRlciA9IG5ldyBXZWJSR3JhZGVyKF93ZWJyX3ZhbHVlXzguZXZhbHVhdG9yKTtcbiAgY29uc3QgZmVlZGJhY2sgPSBhd2FpdCBncmFkZXIuZ3JhZGVFeGVyY2lzZSgpO1xuICBpZiAoIWZlZWRiYWNrKSByZXR1cm4gZW1wdHlGZWVkYmFjaztcbiAgcmV0dXJuIGZlZWRiYWNrO1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici01IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTUtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV4ZXJjaXNlIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oXG4gICAge1xuICAgICAgaWQ6IFwid2Vici01LWNvbnRlbnRzXCIsXG4gICAgICBlbnZpcjogYGV4ZXJjaXNlLWVudi0ke2Jsb2NrLmF0dHIuZXhlcmNpc2V9YCxcbiAgICAgIGVycm9yOiBmYWxzZSxcbiAgICAgIGNhcHRpb246ICdFeGVyY2lzZScsXG4gICAgfSxcbiAgICBibG9jay5hdHRyXG4gICk7XG5cbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG52aWV3b2YgX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuX3dlYnJfZmVlZGJhY2tfNSA9IHtcbiAgY29uc3QgeyBXZWJSR3JhZGVyIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBlbXB0eUZlZWRiYWNrID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7XG5cbiAgY29uc3QgZ3JhZGVyID0gbmV3IFdlYlJHcmFkZXIoX3dlYnJfdmFsdWVfNS5ldmFsdWF0b3IpO1xuICBjb25zdCBmZWVkYmFjayA9IGF3YWl0IGdyYWRlci5ncmFkZUV4ZXJjaXNlKCk7XG4gIGlmICghZmVlZGJhY2spIHJldHVybiBlbXB0eUZlZWRiYWNrO1xuICByZXR1cm4gZmVlZGJhY2s7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXhlcmNpc2UgY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbihcbiAgICB7XG4gICAgICBpZDogXCJ3ZWJyLTItY29udGVudHNcIixcbiAgICAgIGVudmlyOiBgZXhlcmNpc2UtZW52LSR7YmxvY2suYXR0ci5leGVyY2lzZX1gLFxuICAgICAgZXJyb3I6IGZhbHNlLFxuICAgICAgY2FwdGlvbjogJ0V4ZXJjaXNlJyxcbiAgICB9LFxuICAgIGJsb2NrLmF0dHJcbiAgKTtcblxuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbnZpZXdvZiBfd2Vicl92YWx1ZV8yID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8yLCB7fSk7XG5fd2Vicl9mZWVkYmFja18yID0ge1xuICBjb25zdCB7IFdlYlJHcmFkZXIgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IGVtcHR5RmVlZGJhY2sgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdkaXYnKTtcblxuICBjb25zdCBncmFkZXIgPSBuZXcgV2ViUkdyYWRlcihfd2Vicl92YWx1ZV8yLmV2YWx1YXRvcik7XG4gIGNvbnN0IGZlZWRiYWNrID0gYXdhaXQgZ3JhZGVyLmdyYWRlRXhlcmNpc2UoKTtcbiAgaWYgKCFmZWVkYmFjaykgcmV0dXJuIGVtcHR5RmVlZGJhY2s7XG4gIHJldHVybiBmZWVkYmFjaztcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICBjb25zdCBhbmFseXNpcyA9IGF3YWl0IHdlYlIuRlMuYW5hbHl6ZVBhdGgocGF0aCk7XG4gICAgICAgIGlmICghYW5hbHlzaXMuZXhpc3RzKSB7XG4gICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yOiBcIiR7ZS5tZXNzYWdlfVwiLmApO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIn1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyJkYXRhLXdlYnIvdDJfYWxvX2xrLmNzdiIsImRhdGEtd2Vici90Ml9iaXBfbGsuY3N2IiwiZGF0YS13ZWJyL2VpbndvaG5lcl93aWRlLmNzdiIsImRhdGEtd2Vici90Ml9idWxhX3RhYmVsbGUuY3N2IiwiZGF0YS13ZWJyL3QyX2dlc2FtdGRhdGVuLmNzdiIsImRhdGEtd2Vici9iaXBfbG9uZ19say5jc3YiLCJkYXRhLXdlYnIvdDJfYmlwXzIwMjQuY3N2IiwiZGF0YS13ZWJyL2NoZWNrX2Fsb19idW5kZXNsYW5kLmNzdiIsImRhdGEtd2Vici9hbG9fcm9oLmNzdiIsImRhdGEtd2Vici9zY2h1bGRlbl9nZW1laW5kZW4uY3N2IiwiZGF0YS13ZWJyL2RhdGFfYWxvLmNzdiIsImRhdGEtd2Vici9laW53b2huZXJfbG9uZ19say5jc3YiLCJkYXRhLXdlYnIvd19rcmVpc2UuY3N2IiwiZGF0YS13ZWJyL3NjaHVsZGVuX2J3LmNzdiJd
+</script>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>Projektkurs Data Science · Wahrscheinlichkeiten und Konfidenzintervalle</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1280,
+
+        height: 720,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 5.0e-2,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../slides";
+    window._ojs.paths.runtimeToRoot = "../..";
+    window._ojs.paths.docToRoot = "..";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Kopiert");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Kopiert");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
