@@ -984,7 +984,7 @@
     "href": "slides/VL_case-study-Teil2.html#vom-tibble-zur-tabelle",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Vom Tibble zur Tabelle",
-    "text": "Vom Tibble zur Tabelle\n\n\n\nbula_data |&gt;\n  arrange(mean_alo) |&gt;\n  kbl(col.names = c(\"Bundesland\", \"Mittelwert\", \"SD\", \"Median\"),\n      digits = 2) |&gt;\n  kable_styling(font_size = 14) |&gt;\n  kable_paper(full_width = FALSE) |&gt;\n  row_spec(c(8, 9, 10, 12, 13), bold = TRUE, color = \"white\", background = \"#BBBBBB\") |&gt;\n  add_header_above(c(\" \" = 1, \"Arbeitslosenquote\" = 3)) |&gt;\n  footnote(general = \"Die ostdeutschen Bundesländer sind grau hinterlegt.\",\n           general_title = \"Bitte beachten: \")\n\n\n\n\n\nFunktion\nmacht …\n\n\n\n\nkbl()\nTibble → HTML-Tabelle, Spaltennamen, Rundung\n\n\nkable_styling()\nSchriftgröße, Layout\n\n\nrow_spec()\neinzelne Zeilen hervorheben\n\n\nadd_header_above()\nÜberschrift über mehrere Spalten\n\n\nfootnote()\nFußnote\n\n\n\n\nDas Ergebnis sehen Sie auf der nächsten Folie.\n\nNur die Funktionen erklären. Die Tabelle selbst kommt auf der nächsten Folie als Bug Hunt 7."
+    "text": "Vom Tibble zur Tabelle\n\n\n\nbula_data |&gt;\n  arrange(mean_alo) |&gt;\n  kbl(col.names = c(\"Bundesland\", \"Mittelwert\", \"SD\", \"Median\"),\n      digits = 2, format.args = list(decimal.mark = \",\")) |&gt;\n  kable_styling(font_size = 14) |&gt;\n  kable_paper(full_width = FALSE) |&gt;\n  row_spec(c(8, 9, 10, 12, 13), bold = TRUE, color = \"white\", background = \"#BBBBBB\") |&gt;\n  add_header_above(c(\" \" = 1, \"Arbeitslosenquote\" = 3)) |&gt;\n  footnote(general = \"Die ostdeutschen Bundesländer sind grau hinterlegt.\",\n           general_title = \"Bitte beachten: \")\n\n\n\n\n\nFunktion\nmacht …\n\n\n\n\nkbl()\nTibble → HTML-Tabelle, Spaltennamen, Rundung\n\n\nkable_styling()\nSchriftgröße, Layout\n\n\nrow_spec()\neinzelne Zeilen hervorheben\n\n\nadd_header_above()\nÜberschrift über mehrere Spalten\n\n\nfootnote()\nFußnote\n\n\n\n\nDas Ergebnis sehen Sie auf der nächsten Folie.\n\nNur die Funktionen erklären. Die Tabelle selbst kommt auf der nächsten Folie als Bug Hunt 7."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#bug-hunt-3-was-stimmt-nicht",
@@ -1012,7 +1012,7 @@
     "href": "slides/VL_case-study-Teil2.html#die-korrigierte-tabelle",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Die korrigierte Tabelle",
-    "text": "Die korrigierte Tabelle\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArbeitslosenquote\n\n\n\nBundesland\nMittelwert\nSD\nMedian\n\n\n\n\nBayern\n3.60\n0.80\n3.51\n\n\nBaden-Württemberg\n4.10\n0.83\n4.12\n\n\nHessen\n5.50\n1.28\n5.61\n\n\nRheinland-Pfalz\n5.84\n1.52\n5.68\n\n\nSchleswig-Holstein\n5.98\n0.80\n6.12\n\n\nHamburg\n6.11\nNA\n6.11\n\n\nNiedersachsen\n6.18\n1.77\n6.37\n\n\nSaarland\n6.33\n1.85\n5.89\n\n\nSachsen\n6.47\n0.88\n6.27\n\n\nThüringen\n6.68\n1.64\n6.12\n\n\nBrandenburg\n7.06\n1.63\n7.19\n\n\nNordrhein-Westfalen\n7.36\n2.33\n6.94\n\n\nMecklenburg-Vorpommern\n7.94\n1.20\n8.26\n\n\nSachsen-Anhalt\n8.09\n1.48\n7.89\n\n\nBerlin\n8.47\nNA\n8.47\n\n\nBremen\n10.24\n3.56\n10.24\n\n\n\nBitte beachten: \n\n\n\n\n\n Berlin und Hamburg bestehen aus nur einem Kreis, daher keine SD.\n\n\n\n\n\n1 Die ostdeutschen Bundesländer sind grau hinterlegt.\n\n\n\n\n\n\n\n\n\n\n\n\n\nWas ist hier eine Beobachtung? Und was lernen wir aus der Tabelle?\n\n\n\nSüden: Bayern und Baden-Württemberg im Mittel um 4 % oder darunter, mit geringer Streuung\nAlle ostdeutschen Länder über 6,4 %\n\n\n\n\nAber: NRW (7,4 %) liegt im Ost-Bereich und hat die höchste Streuung der Flächenländer (2,33): Ruhrgebiet vs. Münsterland\nMedian meist nahe am Mittelwert\n\n\n\n\nBeobachtung: ein Bundesland (aggregiert aus Landkreisen). Bremen steht ganz unten. Das leitet über zu Bug Hunt 4 aus Teil 1."
+    "text": "Die korrigierte Tabelle\n\n\n\n\n\n \n\n\nArbeitslosenquote\n\n  \n    Bundesland \n    Mittelwert \n    SD \n    Median \n  \n \n\n  \n    Bayern \n    3,60 \n    0,80 \n    3,51 \n  \n  \n    Baden-Württemberg \n    4,10 \n    0,83 \n    4,12 \n  \n  \n    Hessen \n    5,50 \n    1,28 \n    5,61 \n  \n  \n    Rheinland-Pfalz \n    5,84 \n    1,52 \n    5,68 \n  \n  \n    Schleswig-Holstein \n    5,98 \n    0,80 \n    6,12 \n  \n  \n    Hamburg \n    6,11 \n    NA \n    6,11 \n  \n  \n    Niedersachsen \n    6,18 \n    1,77 \n    6,37 \n  \n  \n    Saarland \n    6,33 \n    1,85 \n    5,89 \n  \n  \n    Sachsen \n    6,47 \n    0,88 \n    6,27 \n  \n  \n    Thüringen \n    6,68 \n    1,64 \n    6,12 \n  \n  \n    Brandenburg \n    7,06 \n    1,63 \n    7,19 \n  \n  \n    Nordrhein-Westfalen \n    7,36 \n    2,33 \n    6,94 \n  \n  \n    Mecklenburg-Vorpommern \n    7,94 \n    1,20 \n    8,26 \n  \n  \n    Sachsen-Anhalt \n    8,09 \n    1,48 \n    7,89 \n  \n  \n    Berlin \n    8,47 \n    NA \n    8,47 \n  \n  \n    Bremen \n    10,24 \n    3,56 \n    10,24 \n  \n\n\nBitte beachten: \n\n Berlin und Hamburg bestehen aus nur einem Kreis, daher keine SD.\n\n1 Die ostdeutschen Bundesländer sind grau hinterlegt.\n\n\n\n\n\n\n\nWas ist hier eine Beobachtung? Und was lernen wir aus der Tabelle?\n\n\n\nSüden: Bayern und Baden-Württemberg im Mittel um 4 % oder darunter, mit geringer Streuung\nAlle ostdeutschen Länder über 6,4 %\n\n\n\n\nAber: NRW (7,4 %) liegt im Ost-Bereich und hat die höchste Streuung der Flächenländer (2,33): Ruhrgebiet vs. Münsterland\nMedian meist nahe am Mittelwert\n\n\n\n\nBeobachtung: ein Bundesland (aggregiert aus Landkreisen). Bremen steht ganz unten. Das leitet über zu Bug Hunt 4 aus Teil 1."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#bug-hunt-4-ist-zurück",
@@ -1047,7 +1047,7 @@
     "href": "slides/VL_case-study-Teil2.html#ost-und-west-im-vergleich",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Ost und West im Vergleich",
-    "text": "Ost und West im Vergleich\n\nost_west &lt;- gesamtdaten |&gt;\n  group_by(ost_name) |&gt;\n  summarise(mean = mean(alo_quote), sd = sd(alo_quote),\n            min  = min(alo_quote),  p25 = quantile(alo_quote, 0.25),\n            median = median(alo_quote), p75 = quantile(alo_quote, 0.75),\n            max  = max(alo_quote), n = n())\nost_west |&gt;\n  kbl(col.names = c(\"\", \"Mittelwert\", \"SD\", \"Min.\", \"P25\", \"Median\", \"P75\", \"Max.\", \"n\"), digits = 2,\n      format.args = list(decimal.mark = \",\")) |&gt;\n  kable_styling(font_size = 16) |&gt;\n  add_header_above(c(\" \" = 1, \"Arbeitslosenquote der Landkreise\" = 7, \" \" = 1)) |&gt;\n  footnote(general = \"Berlin ist Westdeutschland zugeordnet.\", general_title = \"Bitte beachten: \")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nArbeitslosenquote der Landkreise\n\n\n\n\n\nMittelwert\nSD\nMin.\nP25\nMedian\nP75\nMax.\nn\n\n\n\n\nOstdeutschland\n7,13\n1,55\n4,17\n6,03\n7,02\n8,00\n11,61\n75\n\n\nWestdeutschland\n5,26\n2,05\n1,88\n3,67\n4,73\n6,45\n14,46\n325\n\n\n\nBitte beachten: \n\n\n\n\n\n\n\n\n\n\n Berlin ist Westdeutschland zugeordnet.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n3 Min., zu zweit: Beschreiben Sie die Tabelle in drei Sätzen, einer davon mit einem Quantil."
+    "text": "Ost und West im Vergleich\n\nost_west &lt;- gesamtdaten |&gt;\n  group_by(ost_name) |&gt;\n  summarise(mean = mean(alo_quote), sd = sd(alo_quote),\n            min  = min(alo_quote),  p25 = quantile(alo_quote, 0.25),\n            median = median(alo_quote), p75 = quantile(alo_quote, 0.75),\n            max  = max(alo_quote), n = n())\nost_west |&gt;\n  kbl(col.names = c(\"\", \"Mittelwert\", \"SD\", \"Min.\", \"P25\", \"Median\", \"P75\", \"Max.\", \"n\"), digits = 2,\n      format.args = list(decimal.mark = \",\")) |&gt;\n  kable_styling(font_size = 16) |&gt;\n  add_header_above(c(\" \" = 1, \"Arbeitslosenquote der Landkreise\" = 7, \" \" = 1)) |&gt;\n  footnote(general = \"Berlin ist Westdeutschland zugeordnet.\", general_title = \"Bitte beachten: \")\n\n\n \n\n\nArbeitslosenquote der Landkreise\n\n\n  \n     \n    Mittelwert \n    SD \n    Min. \n    P25 \n    Median \n    P75 \n    Max. \n    n \n  \n \n\n  \n    Ostdeutschland \n    7,13 \n    1,55 \n    4,17 \n    6,03 \n    7,02 \n    8,00 \n    11,61 \n    75 \n  \n  \n    Westdeutschland \n    5,26 \n    2,05 \n    1,88 \n    3,67 \n    4,73 \n    6,45 \n    14,46 \n    325 \n  \n\n\nBitte beachten: \n\n Berlin ist Westdeutschland zugeordnet.\n\n\n\n\n\n\n3 Min., zu zweit: Beschreiben Sie die Tabelle in drei Sätzen, einer davon mit einem Quantil."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#ost-und-west-beschrieben",
@@ -1061,7 +1061,7 @@
     "href": "slides/VL_case-study-Teil2.html#arbeitslosigkeit-bip-und-schulden-je-bundesland",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Arbeitslosigkeit, BIP und Schulden je Bundesland",
-    "text": "Arbeitslosigkeit, BIP und Schulden je Bundesland\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMittel und Streuung über die Landkreise\n\n\n\n\n\nArbeitslosenquote (%)\n\n\nBIP pro Kopf (€)\n\n\nSchulden pro Kopf (€)\n\n\n\nBundesland\nMittel\nSD\nMittel\nSD\nMittel\nSD\n\n\n\n\nBayern\n3,60\n0,80\n55.133\n24.310\n2.422\n1.761\n\n\nBaden-Württemberg\n4,10\n0,83\n55.750\n18.616\n3.461\n2.721\n\n\nHessen\n5,50\n1,28\n52.582\n22.246\n4.329\n3.815\n\n\nRheinland-Pfalz\n5,84\n1,52\n43.915\n15.810\n2.666\n2.586\n\n\nSchleswig-Holstein\n5,98\n0,80\n43.454\n10.333\n3.530\n1.474\n\n\nNiedersachsen\n6,18\n1,77\n46.411\n26.052\n2.757\n1.890\n\n\nSaarland\n6,33\n1,85\n38.998\n9.228\n5.136\n1.124\n\n\nSachsen\n6,47\n0,88\n38.130\n7.508\n2.556\n1.179\n\n\nThüringen\n6,68\n1,64\n35.495\n7.258\n2.827\n637\n\n\nBrandenburg\n7,06\n1,63\n40.426\n9.206\n2.457\n1.313\n\n\nNordrhein-Westfalen\n7,36\n2,33\n45.915\n14.358\n4.846\n2.613\n\n\nMecklenburg-Vorpommern\n7,94\n1,20\n39.548\n8.745\n4.393\n2.267\n\n\nSachsen-Anhalt\n8,09\n1,48\n36.335\n5.195\n3.121\n1.730\n\n\n\nBitte beachten: \n\n\n\n\n\n\n\n\n Ohne Stadtstaaten (keine Schuldendaten). Ostdeutsche Bundesländer grau hinterlegt.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWas lernen wir aus dieser Tabelle? Und warum steht oben “über die Landkreise”?"
+    "text": "Arbeitslosigkeit, BIP und Schulden je Bundesland\n\n\n\n \n\n\nMittel und Streuung über die Landkreise\n\n\n\nArbeitslosenquote (%)\nBIP pro Kopf (€)\nSchulden pro Kopf (€)\n\n  \n    Bundesland \n    Mittel \n    SD \n    Mittel \n    SD \n    Mittel \n    SD \n  \n \n\n  \n    Bayern \n    3,60 \n    0,80 \n    55.133 \n    24.310 \n    2.422 \n    1.761 \n  \n  \n    Baden-Württemberg \n    4,10 \n    0,83 \n    55.750 \n    18.616 \n    3.461 \n    2.721 \n  \n  \n    Hessen \n    5,50 \n    1,28 \n    52.582 \n    22.246 \n    4.329 \n    3.815 \n  \n  \n    Rheinland-Pfalz \n    5,84 \n    1,52 \n    43.915 \n    15.810 \n    2.666 \n    2.586 \n  \n  \n    Schleswig-Holstein \n    5,98 \n    0,80 \n    43.454 \n    10.333 \n    3.530 \n    1.474 \n  \n  \n    Niedersachsen \n    6,18 \n    1,77 \n    46.411 \n    26.052 \n    2.757 \n    1.890 \n  \n  \n    Saarland \n    6,33 \n    1,85 \n    38.998 \n    9.228 \n    5.136 \n    1.124 \n  \n  \n    Sachsen \n    6,47 \n    0,88 \n    38.130 \n    7.508 \n    2.556 \n    1.179 \n  \n  \n    Thüringen \n    6,68 \n    1,64 \n    35.495 \n    7.258 \n    2.827 \n    637 \n  \n  \n    Brandenburg \n    7,06 \n    1,63 \n    40.426 \n    9.206 \n    2.457 \n    1.313 \n  \n  \n    Nordrhein-Westfalen \n    7,36 \n    2,33 \n    45.915 \n    14.358 \n    4.846 \n    2.613 \n  \n  \n    Mecklenburg-Vorpommern \n    7,94 \n    1,20 \n    39.548 \n    8.745 \n    4.393 \n    2.267 \n  \n  \n    Sachsen-Anhalt \n    8,09 \n    1,48 \n    36.335 \n    5.195 \n    3.121 \n    1.730 \n  \n\n\nBitte beachten: \n\n Ohne Stadtstaaten (keine Schuldendaten). Ostdeutsche Bundesländer grau hinterlegt.\n\n\n\n\n\n\nWas lernen wir aus dieser Tabelle? Und warum steht oben “über die Landkreise”?"
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#arbeitslosenquote-bip-und-schulden-beschrieben",
@@ -1180,7 +1180,7 @@
     "href": "slides/VL_case-study-Teil2.html#die-verteilung-2024-histogramm",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Die Verteilung 2024: Histogramm",
-    "text": "Die Verteilung 2024: Histogramm\n\nGrafikCode\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ngesamtdaten |&gt;\n  filter(bip_pro_kopf &lt; 1e5) |&gt;\n  ggplot(aes(x = bip_pro_kopf / 1000)) +\n  geom_histogram(binwidth = 1, boundary = 0) +              # 1 Balken = 1.000 €\n  geom_vline(data = mittel_ow, aes(xintercept = mittel / 1000)) +\n  geom_vline(data = mittel_ow, aes(xintercept = median / 1000), linetype = \"dashed\") +\n  facet_wrap(~ ost_name, ncol = 1, scales = \"free_y\")\n\n\n\n\n\nOstdeutschland: schmalere Verteilung, Mittelwert und Median näher beieinander als im Westen. Westdeutschland: lange rechte Flanke (Wolfsburg, Ingolstadt, München, Frankfurt), Mittelwert deutlich über dem Median. Wichtig ist die Caption: Was abgeschnitten wird, muss dranstehen."
+    "text": "Die Verteilung 2024: Histogramm\n\nGrafikCode\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmittel_ow &lt;- gesamtdaten |&gt;                                 # je eine Zeile für Ost und West\n  group_by(ost_name) |&gt;\n  summarise(mittel = mean(bip_pro_kopf), median = median(bip_pro_kopf))\n\ngesamtdaten |&gt;\n  filter(bip_pro_kopf &lt; 1e5) |&gt;\n  ggplot(aes(x = bip_pro_kopf / 1000)) +\n  geom_histogram(binwidth = 1, boundary = 0) +              # 1 Balken = 1.000 €\n  geom_vline(data = mittel_ow, aes(xintercept = mittel / 1000)) +\n  geom_vline(data = mittel_ow, aes(xintercept = median / 1000), linetype = \"dashed\") +\n  facet_wrap(~ ost_name, ncol = 1, scales = \"free_y\")\n\n\n\n\n\nOstdeutschland: schmalere Verteilung, Mittelwert und Median näher beieinander als im Westen. Westdeutschland: lange rechte Flanke (Wolfsburg, Ingolstadt, München, Frankfurt), Mittelwert deutlich über dem Median. Wichtig ist die Caption: Was abgeschnitten wird, muss dranstehen."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#die-verteilung-2024-beschrieben",
@@ -1194,7 +1194,7 @@
     "href": "slides/VL_case-study-Teil2.html#interaktiv-mit-plotly",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Interaktiv mit plotly",
-    "text": "Interaktiv mit plotly\nWer ist der Ausreißer? Mit der Maus über einen Punkt fahren:\n\np_interaktiv &lt;- gesamtdaten |&gt;\n  ggplot(aes(x = ost_name, y = alo_quote)) +\n  geom_jitter(aes(text = paste0(landkreis_name, \" (\", bundesland_name, \"): \", round(alo_quote, 1), \" %\")),\n              width = 0.25, height = 0, alpha = 0.6, colour = \"grey40\") +\n  geom_boxplot(alpha = 0, outlier.shape = NA, width = 0.5) +\n  labs(x = NULL, y = \"Arbeitslosenquote (%)\") + theme_minimal()\nggplotly(p_interaktiv, tooltip = \"text\")\n\n\n\n\n\nFunktioniert in HTML (Folien, Case-Study, Quarto-Bericht), nicht im PDF. Für den Projektbericht: statische Grafik zusätzlich bereithalten."
+    "text": "Interaktiv mit plotly\nWer ist der Ausreißer? Mit der Maus über einen Punkt fahren:\n\nGrafikCode\n\n\n\n\n\n\n\n\n\n\n\np_interaktiv &lt;- gesamtdaten |&gt;\n  ggplot(aes(x = ost_name, y = alo_quote)) +\n  geom_jitter(aes(text = paste0(landkreis_name, \" (\", bundesland_name, \"): \", round(alo_quote, 1), \" %\")),\n              width = 0.25, height = 0, alpha = 0.6, colour = \"grey40\") +\n  geom_boxplot(alpha = 0, outlier.shape = NA, width = 0.5) +\n  labs(x = NULL, y = \"Arbeitslosenquote (%)\") + theme_minimal()\nggplotly(p_interaktiv, tooltip = \"text\")    # Tooltip zeigt nur die Spalte \"text\"\n\n\n\n\nFunktioniert in HTML (Folien, Case-Study, Quarto-Bericht), nicht im PDF. Für den Projektbericht: statische Grafik zusätzlich bereithalten."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#verschuldung-und-arbeitslosigkeit",
@@ -1362,7 +1362,7 @@
     "href": "slides/VL_case-study-Teil2.html#schätzfrage-zum-einstieg",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Schätzfrage zum Einstieg",
-    "text": "Schätzfrage zum Einstieg\n\n30 Sekunden, notieren Sie Ihren Tipp:\n\nWelcher Landkreis hatte 2024 die niedrigste Arbeitslosenquote Deutschlands?\nWelcher die höchste?\nAuf welchem Platz liegt Ulm?\n\n\nAuflösung, sobald wir die Quote berechnet haben.\n\nAuflösung auf der Folie “Höchste und niedrigste Quote” im Abschnitt Überblick. Pointe: Platz 1 ist der Landkreis München (nicht die Stadt), Platz 2 Ulm."
+    "text": "Schätzfrage zum Einstieg\n\n30 Sekunden, notieren Sie Ihren Tipp:\n\nWelcher Landkreis hatte 2024 die niedrigste Arbeitslosenquote Deutschlands?\nWelcher die höchste?\nAuf welchem Platz liegt Ulm?\n\n\nAuflösung, sobald wir die Quote berechnet haben.\nTipp: Öffnen Sie die Folien jetzt schon auf Ihrem Laptop. Die Code-Felder (webR) laden im Hintergrund ca. 20 Sekunden.\n\nAuflösung auf der Folie “Höchste und niedrigste Quote” im Abschnitt Überblick. Pointe: Platz 1 ist der Landkreis München (nicht die Stadt), Platz 2 Ulm."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#deskriptiv-oder-induktiv",
@@ -1411,7 +1411,7 @@
     "href": "slides/VL_case-study-Teil2.html#bug-hunt-7-was-stimmt-nicht",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "🐛 Bug Hunt 7: Was stimmt nicht?",
-    "text": "🐛 Bug Hunt 7: Was stimmt nicht?\n\n\nDas ist der Code von eben. Er stammt aus der Vorlesung im letzten Jahr und lief damals einwandfrei. Dieses Jahr läuft er auch: ohne Fehler, ohne Warnung.\n\n2 Minuten, zu zweit: Lesen Sie die Fußnote und dann die grauen Zeilen. Was ist falsch? Warum war es letztes Jahr richtig?\n\n\n\n\n\n\n\n\n\n\n\n\nBundesland\nMittelwert\nSD\nMedian\n\n\n\n\nBayern\n3.60\n0.80\n3.51\n\n\nBaden-Württemberg\n4.10\n0.83\n4.12\n\n\nHessen\n5.50\n1.28\n5.61\n\n\nRheinland-Pfalz\n5.84\n1.52\n5.68\n\n\nSchleswig-Holstein\n5.98\n0.80\n6.12\n\n\nHamburg\n6.11\nNA\n6.11\n\n\nNiedersachsen\n6.18\n1.77\n6.37\n\n\nSaarland\n6.33\n1.85\n5.89\n\n\nSachsen\n6.47\n0.88\n6.27\n\n\nThüringen\n6.68\n1.64\n6.12\n\n\nBrandenburg\n7.06\n1.63\n7.19\n\n\nNordrhein-Westfalen\n7.36\n2.33\n6.94\n\n\nMecklenburg-Vorpommern\n7.94\n1.20\n8.26\n\n\nSachsen-Anhalt\n8.09\n1.48\n7.89\n\n\nBerlin\n8.47\nNA\n8.47\n\n\nBremen\n10.24\n3.56\n10.24\n\n\n\nBitte beachten: \n\n\n\n\n\n Die ostdeutschen Bundesländer sind grau hinterlegt.\n\n\n\n\n\n\n\n\n\n\n\n\n\nGrau hinterlegt sind Saarland und NRW, Brandenburg und Sachsen-Anhalt dagegen nicht. Letztes Jahr fehlten Hamburg und Berlin (Stadtstaaten-Join) und wurden herausgefiltert. Jetzt steht Hamburg auf Platz 6 und schiebt alle Länder darunter um eine Zeile nach unten (Berlin steht auf Platz 15, unterhalb der markierten Zeilen)."
+    "text": "🐛 Bug Hunt 7: Was stimmt nicht?\n\n\nDas ist der Code von eben. Er stammt aus der Vorlesung im letzten Jahr und lief damals einwandfrei. Dieses Jahr läuft er auch: ohne Fehler, ohne Warnung.\n\n2 Minuten, zu zweit: Lesen Sie die Fußnote und dann die grauen Zeilen. Was ist falsch? Warum war es letztes Jahr richtig?\n\n\n\n\n\n\n\n\n\n\n \n  \n    Bundesland \n    Mittelwert \n    SD \n    Median \n  \n \n\n  \n    Bayern \n    3,60 \n    0,80 \n    3,51 \n  \n  \n    Baden-Württemberg \n    4,10 \n    0,83 \n    4,12 \n  \n  \n    Hessen \n    5,50 \n    1,28 \n    5,61 \n  \n  \n    Rheinland-Pfalz \n    5,84 \n    1,52 \n    5,68 \n  \n  \n    Schleswig-Holstein \n    5,98 \n    0,80 \n    6,12 \n  \n  \n    Hamburg \n    6,11 \n    NA \n    6,11 \n  \n  \n    Niedersachsen \n    6,18 \n    1,77 \n    6,37 \n  \n  \n    Saarland \n    6,33 \n    1,85 \n    5,89 \n  \n  \n    Sachsen \n    6,47 \n    0,88 \n    6,27 \n  \n  \n    Thüringen \n    6,68 \n    1,64 \n    6,12 \n  \n  \n    Brandenburg \n    7,06 \n    1,63 \n    7,19 \n  \n  \n    Nordrhein-Westfalen \n    7,36 \n    2,33 \n    6,94 \n  \n  \n    Mecklenburg-Vorpommern \n    7,94 \n    1,20 \n    8,26 \n  \n  \n    Sachsen-Anhalt \n    8,09 \n    1,48 \n    7,89 \n  \n  \n    Berlin \n    8,47 \n    NA \n    8,47 \n  \n  \n    Bremen \n    10,24 \n    3,56 \n    10,24 \n  \n\n\nBitte beachten: \n\n Die ostdeutschen Bundesländer sind grau hinterlegt.\n\n\n\n\n\n\n\nGrau hinterlegt sind Saarland und NRW, Brandenburg und Sachsen-Anhalt dagegen nicht. Letztes Jahr fehlten Hamburg und Berlin (Stadtstaaten-Join) und wurden herausgefiltert. Jetzt steht Hamburg auf Platz 6 und schiebt alle Länder darunter um eine Zeile nach unten (Berlin steht auf Platz 15, unterhalb der markierten Zeilen)."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#jetzt-sie-bug-hunt-7-reparieren",
@@ -1439,7 +1439,7 @@
     "href": "slides/VL_case-study-Teil2.html#ende-von-sitzung-1",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Ende von Sitzung 1",
-    "text": "Ende von Sitzung 1\nHeute: Daten beschreiben und prüfen: skimr, Tabellen, Kennzahlen je Gruppe.\nBis zur nächsten Sitzung:\n\nAbschnitt Deskriptive Analysen der ausformulierten Case-Study lesen\nAnhang “Zum Selbststudium” am Ende dieser Folien: Stadtstaaten-Join reparieren\n\n\nNächstes Mal: Grafiken, Karten und Zusammenhänge. Wir starten mit Kahoot-Checkpoint 2 als Recap."
+    "text": "Ende von Sitzung 1\nHeute: Daten beschreiben und prüfen: skimr, Tabellen, Kennzahlen je Gruppe.\nBis zur nächsten Sitzung:\n\nAbschnitt Deskriptive Analysen der ausformulierten Case-Study lesen\nAnhang “Zum Selbststudium” am Ende dieser Folien: Stadtstaaten-Join reparieren\n\n\nNächstes Mal: Grafiken, Karten und Zusammenhänge."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#recap-kahoot-checkpoint-2",
@@ -1453,7 +1453,7 @@
     "href": "slides/VL_case-study-Teil2.html#schätzfrage-zum-einstieg-1",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Schätzfrage zum Einstieg",
-    "text": "Schätzfrage zum Einstieg\n\n30 Sekunden, notieren: Das mittlere BIP pro Kopf der ostdeutschen Landkreise lag 2024 bei wie viel Prozent des westdeutschen?\n(a) 55 % (b) 65 % (c) 75 % (d) 85 %\n\nUnd: Ist der Abstand seit 2000 kleiner oder größer geworden?\n\nAuflösung auf der Folie “Holt der Osten auf?”: 75 %, relativ kleiner geworden (2000: 64 %), in Euro größer."
+    "text": "Schätzfrage zum Einstieg\n\n30 Sekunden, notieren: Das mittlere BIP pro Kopf der ostdeutschen Landkreise lag 2024 bei wie viel Prozent des westdeutschen?\n(a) 55 % (b) 65 % (c) 75 % (d) 85 %\n\nUnd: Ist der Abstand seit 2000 kleiner oder größer geworden?\nTipp: Folien jetzt auf dem Laptop öffnen, damit webR im Hintergrund lädt.\n\nAuflösung auf der Folie “Holt der Osten auf?”: 75 %, relativ kleiner geworden (2000: 64 %), in Euro größer."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#bug-hunt-8-die-wachstumsrate",
@@ -1516,7 +1516,7 @@
     "href": "slides/VL_case-study-Teil2.html#hausaufgabe-eigene-grafik-erstellen",
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "Hausaufgabe: Eigene Grafik erstellen",
-    "text": "Hausaufgabe: Eigene Grafik erstellen\n\nZiel: Eine aussagekräftige Grafik zur Einkommensverteilung in Deutschland erstellen und interpretieren. Start jetzt (5 Minuten): Gruppen bilden und Fragestellung festlegen.\n\nDaten: einkommen.rds im Repository (case-study/data/): durchschnittliches Einkommen je Arbeitnehmer (vgl. Übung zu Teil 1), Landkreise und Länder, 2000–2022.\n\nGruppen von 4–5 Personen\nFrage wählen: Zeitreihe oder Querschnitt 2022? Was soll die Grafik zeigen?\nGrafik erstellen: Inspiration in der R Graph Gallery und der Case-Study; Chat AI erlaubt\nCheckliste anwenden: mindestens Punkte 1, 6 und 7 schriftlich beantworten\nHochladen: Code + Grafik + drei Sätze Interpretation über das Google-Formular\nFeedback-Runde zu Beginn der nächsten Sitzung: anonymes Feedback von Kommiliton:innen und mir\n\n\n\n\n\n\n\nEinkommen hat dieselbe Schlüsselstruktur wie bip_zeitreihe (2-, 3- und 5-stellig), also vor dem Merge nchar(Regionalschluessel) == 5 filtern, und Hamburg/Berlin prüfen: Sie stehen auch hier nur als 02 und 11 im Datensatz (Stadtstaaten-Falle!). Link zum Google-Formular vor der Vorlesung aktualisieren."
+    "text": "Hausaufgabe: Eigene Grafik erstellen\n\nZiel: Eine aussagekräftige Grafik zum Einkommen in Deutschland erstellen und interpretieren. Start jetzt (5 Minuten): Gruppen bilden und Fragestellung festlegen.\n\nDaten: einkommen.rds (case-study/data/): Bruttolöhne und -gehälter je Arbeitnehmer:in (vgl. Übung zu Teil 1), nominal, am Arbeitsort, 2000–2024. Enthält Bund, Länder, Regierungsbezirke und Kreise.\n\nGruppen von 4–5 Personen\nFrage wählen, z.B.: Holt der Osten beim Einkommen schneller auf als beim BIP pro Kopf? Wie verteilen sich die Einkommen 2024? Wo liegen die Einkommen hoch, wo niedrig (Karte)?\nGrafik erstellen: Mit gesamtdaten verbinden; Inspiration in der R Graph Gallery und der Case-Study; Chat AI erlaubt\nCheckliste anwenden: mindestens Punkte 1, 2, 6 und 7 schriftlich beantworten\nHochladen: Code + Grafik + drei Sätze Interpretation über das Google-Formular\nFeedback-Runde zu Beginn der nächsten Sitzung: anonymes Feedback von Kommiliton:innen und mir\n\n\n\n\n\n\n\nEinkommen hat dieselbe Schlüsselstruktur wie bip_zeitreihe (2-, 3- und 5-stellig), also vor dem Merge nchar(Regionalschluessel) == 5 filtern, und Hamburg/Berlin prüfen: Sie stehen auch hier nur als 02 und 11 im Datensatz (Stadtstaaten-Falle!), also vorher auf 02000 und 11000 umkodieren. Danach 400 Kreise, keine NA. Checkliste Punkt 2: Einkommen am Arbeitsort, wie die Erwerbstätigen (Pendler, vgl. BH 6). Ergebnisse 2024 (Mittel der Kreise, ungewichtet): Ost 39.064 €, West 43.504 €. Ost/West 2000 → 2024: 79 % → 90 %, Abstand 5.340 € → 4.441 €, also auch absolut kleiner (anders als beim BIP). Höchster Wert Wolfsburg (74.909 €), niedrigster Südwestpfalz (33.321 €). Zweimal “München” (Stadt und Landkreis): Namen nicht eindeutig, Schlüssel nutzen. Korrelation mit BIP pro Kopf 0,83, mit Arbeitslosenquote −0,36, mit Anteil Schulden 0,03. Achtung Revision 2024: Ältere Downloads weichen ab, v.a. in Niedersachsen (Wolfsburg). Link zum Google-Formular vor der Vorlesung aktualisieren."
   },
   {
     "objectID": "slides/VL_case-study-Teil2.html#stadtstaaten-join-reparieren",
@@ -1531,6 +1531,34 @@
     "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
     "section": "✍️ Ihr Bundesland hervorheben",
     "text": "✍️ Ihr Bundesland hervorheben\nHeben Sie statt Baden-Württemberg ein anderes Bundesland hervor, z.B. Ihr Heimatbundesland. Passen Sie auch den Untertitel an.\nZusatz: Zeichnen Sie mit geom_hline() den westdeutschen Median ein.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHinweis\n\n\nDen Namen in Zeile 2 und im subtitle ändern. Die Namen müssen exakt stimmen: unique(gesamtdaten$bundesland_name) zeigt alle.\n\n\n\n\n\n\n\n\n\n\n\nLösung (Beispiel NRW)\n\n\ngesamtdaten |&gt;\n  mutate(hervor = bundesland_name == \"Nordrhein-Westfalen\") |&gt;\n  ggplot(aes(x = ost_name, y = alo_quote)) +\n  geom_jitter(aes(colour = hervor), width = 0.25, height = 0, alpha = 0.6) +\n  geom_boxplot(alpha = 0, outlier.shape = NA, width = 0.5) +\n  scale_colour_manual(values = c(\"grey60\", \"#1b5e20\"), guide = \"none\") +\n  labs(subtitle = \"Nordrhein-Westfalen grün\", x = NULL, y = \"Arbeitslosenquote (%)\") +\n  theme_minimal()\nNRW streut über fast den ganzen westdeutschen Bereich: Münsterland unten, Ruhrgebiet ganz oben."
+  },
+  {
+    "objectID": "slides/VL_case-study-Teil2.html#kahoot-checkpoint-1-überblick-und-tabellen",
+    "href": "slides/VL_case-study-Teil2.html#kahoot-checkpoint-1-überblick-und-tabellen",
+    "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
+    "section": "📱 Kahoot-Checkpoint 1: Überblick und Tabellen",
+    "text": "📱 Kahoot-Checkpoint 1: Überblick und Tabellen\n\n\n\n\n\n\n\n\n\n\n\nkahoot.it · PIN am Beamer\n\n10 Fragen, ca. 8 Minuten. Diesmal müssen Sie nachdenken, nicht nur wiedererkennen.\n\ndeskriptiv oder induktiv?\nBoxplot, Mittelwert vs. Median, Quantile\nDer stille Join und wie man ihn findet\nBug Hunt 6: Wohnort vs. Arbeitsort\nBug Hunt 7: feste Zeilennummern\nBremen: Mittel der Kreise vs. Quote des Landes\n\nKahoot öffnen →\n\n\n\n\n\n\n\nFragen mit Antworten und Zeitlimits: kahoot_fragen_teil2.xlsx (im Format der Kahoot-Importvorlage). Nach dem Quiz die Frage mit der schlechtesten Trefferquote kurz an der passenden Folie nachbesprechen."
+  },
+  {
+    "objectID": "slides/VL_case-study-Teil2.html#recap-kahoot-checkpoint-1",
+    "href": "slides/VL_case-study-Teil2.html#recap-kahoot-checkpoint-1",
+    "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
+    "section": "📱 Recap: Kahoot-Checkpoint 1",
+    "text": "📱 Recap: Kahoot-Checkpoint 1\n\n\n\n\n\n\n\n\n\n\n\nkahoot.it · PIN am Beamer\n\nDieselben 10 Fragen wie am Ende der letzten Sitzung. Schaffen Sie diesmal mehr?\nTipp: Folien jetzt auf dem Laptop öffnen, damit webR im Hintergrund lädt.\nKahoot öffnen →"
+  },
+  {
+    "objectID": "slides/VL_case-study-Teil2.html#kahoot-checkpoint-2-grafiken-karten-korrelation",
+    "href": "slides/VL_case-study-Teil2.html#kahoot-checkpoint-2-grafiken-karten-korrelation",
+    "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
+    "section": "📱 Kahoot-Checkpoint 2: Grafiken, Karten, Korrelation",
+    "text": "📱 Kahoot-Checkpoint 2: Grafiken, Karten, Korrelation\n\n\n\n\n\n\n\n\n\n\n\nkahoot.it · PIN am Beamer\n\n7 Fragen, 5 Minuten\n\nLog-Achse: Was heißt “parallel”?\nBug Hunt 8: die Wachstumsrate\nBug Hunt 9: die Lücke in den Klassen\nr aus dem Streudiagramm schätzen\nSchulden pro Kopf oder in % des BIP?\nBug Hunt 10: Korrelation ≠ Kausalität ≠ Steigung\nOst und West getrennt betrachten\n\nKahoot öffnen →\n\n\n\n\n\n\n\nFragenvorschläge (richtige Antwort zuerst): 1. Zwei Linien laufen auf einer Log-Achse parallel. Das heißt … → gleicher relativer Abstand / gleicher Abstand in Euro / gleiche Höhe / kein Wachstum 2. BIP pro Kopf steigt von 100 auf 200. 100 * (x - lag(x)) / x ergibt … → 50 / 100 / 200 / −50 3. Klassen per case_when bis 13,5 %, ein Kreis hat 14,5 % → er wird NA / er landet in der obersten Klasse / Fehlermeldung / Warnung 4. Bild einer fallenden Punktwolke mit viel Streuung (Streudiagramm als Bild in Kahoot hochladen) → r ≈ −0,5 / −0,95 / 0 / +0,5 5. r = 0,55 zwischen Schulden und Arbeitslosigkeit heißt … → Landkreise mit hohen Schulden haben tendenziell höhere Quoten / Schulden verursachen Arbeitslosigkeit / +1 Pp. Schulden = +0,55 Pp. Quote / 55 % der Kreise sind verschuldet 6. Gesamt r = 0,55, im Osten r = 0,04. Daraus folgt … → der Zusammenhang gilt nicht überall gleich / der Code ist falsch / der Osten hat keine Schulden / r ist im Osten nicht berechenbar 7. “Schulden pro Kopf: r = 0,20; Schulden in % des BIP: r = 0,55” zeigt … → die Wahl der Kennzahl ändert die Aussage / einer der Werte ist falsch berechnet / Schulden pro Kopf sind irrelevant / r ist bei Prozentwerten immer höher"
+  },
+  {
+    "objectID": "slides/VL_case-study-Teil2.html#kahoot-checkpoint-2-grafiken-karten-zusammenhänge",
+    "href": "slides/VL_case-study-Teil2.html#kahoot-checkpoint-2-grafiken-karten-zusammenhänge",
+    "title": "Case-Study zur Arbeitslosigkeit in Deutschland",
+    "section": "📱 Kahoot-Checkpoint 2: Grafiken, Karten, Zusammenhänge",
+    "text": "📱 Kahoot-Checkpoint 2: Grafiken, Karten, Zusammenhänge\n\n\n\n\n\n\n\n\n\n\n\nkahoot.it · PIN am Beamer\n\n10 Fragen, ca. 8 Minuten. Auch hier: erst nachdenken, dann drücken.\n\nJitter-Plot und Log-Achse lesen\nHolt der Osten auf? Relativ vs. absolut\nBug Hunt 8: die Wachstumsrate (und group_by())\nBug Hunt 9: die Lücke in den Klassen\nBug Hunt 10: Was eine Korrelation aussagt und was nicht\nSchulden pro Kopf oder in % des BIP?\n\nKahoot öffnen →\n\n\n\n\n\n\n\nFragen mit Antworten und Zeitlimits: kahoot_fragen_teil2_sitzung2.xlsx (im Format der Kahoot-Importvorlage). Nach dem Quiz die Frage mit der schlechtesten Trefferquote kurz an der passenden Folie nachbesprechen."
   },
   {
     "objectID": "slides/VL_KI_und_Projekte.html#wo-stehen-wir",
@@ -1666,11 +1694,11 @@
     "text": "Absorbieren oder spiegeln?\n\n\nWas Gruppen oft tun: absorbieren\n\nDie anderen erledigen Jacks Teil, um die Deadline zu halten\nJack profitiert und lernt nichts\nDie Gruppe trainiert ihn ungewollt zum Free-Rider. Im nächsten Team macht er es wieder so.\n\n\n\nWas die Gruppe tun sollte: spiegeln\n\nDas Problem an Jack zurückgeben: Er trägt die Folgen\nKlare Grenzen, früh und konsequent\nErwartungen ausdrücklich formulieren\nBeiträge dokumentieren"
   },
   {
-    "objectID": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-de-eskalationsgespräch-suchen",
-    "href": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-de-eskalationsgespräch-suchen",
+    "objectID": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-eskalation",
+    "href": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-eskalation",
     "title": "KI und Teamarbeit in den Projekten",
-    "section": "Wenn es nicht besser wird: De-Eskalationsgespräch suchen",
-    "text": "Wenn es nicht besser wird: De-Eskalationsgespräch suchen\n\nIm Team ansprechen, früh und sachlich: konkretes Verhalten, konkrete Erwartung, konkrete Frist\nDokumentieren: Absprachen, Nachrichten, Commits im Repository\nÜbungsleiter und Dozent per Mail einschalten, spätestens 1,5 Wochen nach Projektbeginn: Was ist passiert, was hat das Team schon unternommen?\nLetzte Konsequenz: Das Team streicht die Person von der Abgabe. Sie bekommt für dieses Projekt keine Punkte.\n\n\nSchritt 4 geht nur, wenn Schritt 3 rechtzeitig war. Zwei Tage vor der Abgabe ist es dafür zu spät, wie bei Jack.\n\nDer ganze Ablauf steht im De-Eskalationsmechanismus der Team-Guidelines."
+    "section": "Wenn es nicht besser wird: Eskalation",
+    "text": "Wenn es nicht besser wird: Eskalation\n\nIm Team ansprechen, früh und sachlich: konkretes Verhalten, konkrete Erwartung, konkrete Frist\nDokumentieren: Absprachen, Nachrichten, Commits im Repository\nÜbungsleiter und Dozent per Mail einschalten, spätestens 1,5 Wochen nach Projektbeginn: Was ist passiert, was hat das Team schon unternommen?\nLetzte Konsequenz: Das Team streicht die Person von der Abgabe. Sie bekommt für dieses Projekt keine Punkte.\n\n\nSchritt 4 geht nur, wenn Schritt 3 rechtzeitig war. Zwei Tage vor der Abgabe ist es dafür zu spät, wie bei Jack.\n\nDer ganze Ablauf steht im Eskalationsmechanismus der Team-Guidelines."
   },
   {
     "objectID": "slides/VL_KI_und_Projekte.html#fall-2-henry",
@@ -1722,10 +1750,283 @@
     "text": "Gruppenfeedback: Reports bewerten\nJedes Teammitglied bewertet die drei erhaltenen Reports (Guidelines zum Gruppenfeedback):\n\n\n\n\n\n\n\n\nKriterium\nSkala\nLeitfrage\n\n\n\n\nHilfreich\n1–5\nKönnen wir die Kritik im nächsten Projekt nutzen?\n\n\nSpezifisch\n1–5\nWurde unsere Arbeit gelesen und verstanden? Werden konkrete Stellen genannt?\n\n\nRanking\n1–3\nWelcher Report hat uns am meisten gebracht?\n\n\n\n\n\nZiel: inhaltliche, methodische und stilistische Rückmeldung\nFeedback aktiv nutzen: im Team besprechen und ins nächste Projekt einarbeiten"
   },
   {
+    "objectID": "slides/VL_KI_und_Projekte.html#kahoot-checkpoint-ki-und-teamarbeit",
+    "href": "slides/VL_KI_und_Projekte.html#kahoot-checkpoint-ki-und-teamarbeit",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "📱 Kahoot-Checkpoint: KI und Teamarbeit",
+    "text": "📱 Kahoot-Checkpoint: KI und Teamarbeit\n\n\n\n\n\n\n\n\n\n\n\nkahoot.it · PIN am Beamer\n\n8 Fragen, ca. 6 Minuten.\n\nQuellen und KI-Nutzung angeben\nPrompting: Was fehlt diesem Prompt?\nBug Hunt 11: erfundener und still falscher Code\nRollen im Team\nFree-Rider oder Couch Potato?\nEskalation: Was muss rechtzeitig passieren?\n\nKahoot öffnen →\n\n\n\n\n\n\n\nFragen mit Antworten und Zeitlimits: kahoot_fragen_ki_und_projekte.xlsx (Kahoot-Importvorlage)."
+  },
+  {
     "objectID": "slides/VL_KI_und_Projekte.html#bis-zum-kick-off",
     "href": "slides/VL_KI_und_Projekte.html#bis-zum-kick-off",
     "title": "KI und Teamarbeit in den Projekten",
     "section": "Bis zum Kick-off",
     "text": "Bis zum Kick-off\n\nEinladung zum GitHub-Repository annehmen (innerhalb von 7 Tagen)\nSafe Exam Browser installieren und testen, Probeklausur am Freitag, 20. November\nDie Leitlinien zur Projektabgabe und die Team-Guidelines lesen\nMail am Freitag lesen: Gruppe, Tutorium, Kick-off-Termin\nIm Kick-off: Rollen verteilen und im Repository festhalten\n\n\n\nSie sind als Team für Ihre Abgabe verantwortlich, mit und ohne KI. Viel Erfolg in den Projekten!"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#schätzfrage-zum-einstieg",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#schätzfrage-zum-einstieg",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🔮 Schätzfrage zum Einstieg",
+    "text": "🔮 Schätzfrage zum Einstieg\nDie mittlere Arbeitslosenquote der 400 Kreise liegt 2024 bei 5,61 % (Case-Study Teil 2).\n\nWir ziehen zufällig 50 der 400 Kreise und berechnen deren Mittelwert. Wie weit liegt er typischerweise vom wahren Wert entfernt? Weniger als 0,1 Prozentpunkte? Etwa 0,3? Mehr als 1?\n\n\nIm Lauf der Stunde finden wir es heraus, und zwar auf zwei Wegen: einmal mit der Grundgesamtheit, die wir zufällig kennen, und einmal nur mit einer Stichprobe, wie im echten Leben."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#wo-stehen-wir",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#wo-stehen-wir",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Wo stehen wir?",
+    "text": "Wo stehen wir?\n\n\nCase-Study Teil 1 und 2: deskriptiv\n\nDaten beschaffen, prüfen, beschreiben\nAussagen über genau diese 400 Kreise\nKeine Unsicherheit: Wir haben alle Daten\n\n\nHeute: der Schritt zur Induktion\n\nMeist haben wir nur eine Stichprobe\nWie sicher ist eine Schätzung aus 50 Kreisen, 1.000 Befragten, einem Jahr Daten?\nDas Werkzeug dafür: Wahrscheinlichkeit und Konfidenzintervalle\n\n\n\n\nKonfidenzintervalle stehen in fast jeder empirischen Arbeit, und nächstes Semester in jeder Regressionstabelle. Heute lernen Sie, woher sie kommen und was sie (nicht) bedeuten."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#der-plan-für-heute",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#der-plan-für-heute",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Der Plan für heute",
+    "text": "Der Plan für heute\nSimulieren → Verteilungen → Stichprobe und Konfidenzintervall\n\n\n1. Simulieren\nWahrscheinlichkeiten am Computer ausrechnen: Urne, Black Jack, Monte Carlo\n\n2. Verteilungen\nVerteilungsfunktion, Dichte, Normalverteilung, und wann sie nicht passt\n\n3. Schätzen\nStichprobe, Bootstrap, Konfidenzintervall, und wie man es richtig deutet\n\n\n\n\n\n\n\n\nEin Werkzeug trägt durch alle drei Teile: sample() und replicate(). Wer Ziehen und Wiederholen versteht, versteht Monte Carlo, Bootstrap und Konfidenzintervalle."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#was-ist-eine-wahrscheinlichkeit",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#was-ist-eine-wahrscheinlichkeit",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Was ist eine Wahrscheinlichkeit?",
+    "text": "Was ist eine Wahrscheinlichkeit?\n\nIn einer Urne liegen 2 rote und 3 blaue Kugeln. Wie wahrscheinlich ziehen Sie eine rote?\n\n\n2/5 = 40 %, weil jede Kugel gleich wahrscheinlich gezogen wird.\n\n\nDie Idee dahinter: Wiederholen Sie ein Experiment sehr oft, unabhängig und unter gleichen Bedingungen, dann nähert sich der Anteil, mit dem ein Ereignis eintritt, seiner Wahrscheinlichkeit.\n\nGenau das kann der Computer: ein Experiment zehntausendmal wiederholen. Das heißt Monte-Carlo-Simulation."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#monte-carlo-in-r",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#monte-carlo-in-r",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Monte Carlo in R",
+    "text": "Monte Carlo in R\n\nurne &lt;- rep(c(\"rot\", \"blau\"), times = c(2, 3))\nurne\n\n[1] \"rot\"  \"rot\"  \"blau\" \"blau\" \"blau\"\n\nsample(urne, 1)                            # einmal ziehen\n\n[1] \"blau\"\n\n\n\n\nset.seed(2627)                             # Zufall reproduzierbar machen\nziehungen &lt;- replicate(10000, sample(urne, 1))\nprop.table(table(ziehungen))\n\nziehungen\n  blau    rot \n0.6047 0.3953 \n\n\n\n\nset.seed(): Der Computer erzeugt Pseudo-Zufallszahlen. Mit demselben Seed kommt jedes Mal dasselbe heraus. Ohne Seed ist Ihr Ergebnis nicht reproduzierbar, auch nicht für Ihr Team."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#wie-oft-muss-man-wiederholen",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#wie-oft-muss-man-wiederholen",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Wie oft muss man wiederholen?",
+    "text": "Wie oft muss man wiederholen?\n\n\n🔮 Prognose: Nach 10 Ziehungen, nach 100, nach 10.000: Wie nah liegt der Anteil roter Kugeln an 40 %?\n\n\nAm Anfang springt der Anteil stark\nMit wachsendem \\(N\\) pendelt er sich bei 40 % ein\nFaustregel: so oft, dass weitere Wiederholungen das Ergebnis kaum noch ändern"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#mit-und-ohne-zurücklegen",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#mit-und-ohne-zurücklegen",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Mit und ohne Zurücklegen",
+    "text": "Mit und ohne Zurücklegen\nsample() zieht standardmäßig ohne Zurücklegen. Mit replace = TRUE kommt jede Kugel nach dem Ziehen zurück:\n\nsample(urne, 5)                       # jede Kugel genau einmal: nur eine Reihenfolge\n\n[1] \"blau\" \"rot\"  \"blau\" \"rot\"  \"blau\"\n\nsample(urne, 5, replace = TRUE)       # Kugeln können mehrfach vorkommen\n\n[1] \"blau\" \"blau\" \"blau\" \"rot\"  \"rot\" \n\n\n\n\n\nMit Zurücklegen: Die Ziehungen sind unabhängig. Der erste Zug ändert nichts am zweiten.\n\nOhne Zurücklegen: Die Ziehungen sind abhängig. Nach einer roten Kugel ist nur noch eine rote in der Urne."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#abhängigkeit-und-bedingte-wahrscheinlichkeit",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#abhängigkeit-und-bedingte-wahrscheinlichkeit",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Abhängigkeit und bedingte Wahrscheinlichkeit",
+    "text": "Abhängigkeit und bedingte Wahrscheinlichkeit\nBeim Kartenspiel (52 Karten, 4 Asse) wird ohne Zurücklegen gegeben:\n\nErste Karte ein Ass: \\(4/52\\)\nZweite Karte ein Ass, gegeben die erste war eins: \\(3/51\\)\n\n\\[\n\\Pr(\\text{2. Ass} \\mid \\text{1. Ass}) = \\tfrac{3}{51}\n\\qquad\\text{Bei Unabhängigkeit: } \\Pr(A \\mid B) = \\Pr(A)\n\\]\n\nMultiplikationsregel: Dass A und B eintreten:\n\\[\n\\Pr(A \\text{ und } B) = \\Pr(A) \\cdot \\Pr(B \\mid A)\n\\qquad\\Rightarrow\\qquad\n\\Pr(\\text{zwei Asse}) = \\tfrac{4}{52} \\cdot \\tfrac{3}{51} \\approx 0{,}45\\,\\%\n\\]\nBei unabhängigen Ereignissen vereinfacht sich das zu \\(\\Pr(A)\\cdot\\Pr(B)\\). Umgestellt liefert die Regel die bedingte Wahrscheinlichkeit: \\(\\Pr(B \\mid A) = \\Pr(A \\text{ und } B) / \\Pr(A)\\)."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#black-jack-exakt-gerechnet",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#black-jack-exakt-gerechnet",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Black Jack: exakt gerechnet",
+    "text": "Black Jack: exakt gerechnet\nBlack Jack mit den ersten zwei Karten: ein Ass und eine Zehnerkarte (10, Bube, Dame, König; 16 Karten).\n\nZwei Reihenfolgen führen zum Ziel:\n\\[\n\\underbrace{\\tfrac{4}{52}\\cdot\\tfrac{16}{51}}_{\\text{Ass zuerst}} \\;+\\; \\underbrace{\\tfrac{16}{52}\\cdot\\tfrac{4}{51}}_{\\text{Zehner zuerst}} \\;=\\; 2 \\cdot \\tfrac{4 \\cdot 16}{52 \\cdot 51} \\approx 4,83 %\n\\]\n\n\n\nDas geht noch im Kopf. Aber was ist mit “drei Karten, Summe 21”? Dann simulieren wir."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#black-jack-simuliert",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#black-jack-simuliert",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Black Jack: simuliert",
+    "text": "Black Jack: simuliert\n\nfarben  &lt;- c(\"Kreuz\", \"Pik\", \"Herz\", \"Karo\")\nwerte   &lt;- c(\"Ass\", \"König\", \"Dame\", \"Bube\", \"10\", \"9\", \"8\", \"7\", \"6\", \"5\", \"4\", \"3\", \"2\")\ndeck    &lt;- paste(rep(farben, times = 13), rep(werte, each = 4))\nasse    &lt;- paste(farben, \"Ass\");  zehner &lt;- deck[sub(\".* \", \"\", deck) %in% c(\"König\", \"Dame\", \"Bube\", \"10\")]\n\nblack_jack &lt;- function() {\n  hand &lt;- sample(deck, 2)                                    # ohne Zurücklegen\n  (hand[1] %in% asse & hand[2] %in% zehner) | (hand[2] %in% asse & hand[1] %in% zehner)\n}\n\nset.seed(2627)\nmean(replicate(100000, black_jack()))                        # TRUE zählt als 1\n\n[1] 0.04882\n\n\n\nSimuliert und exakt (4,83 %) stimmen überein. mean() auf TRUE/FALSE liefert direkt den Anteil."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-12-black-jack-von-chat-ai",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-12-black-jack-von-chat-ai",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🐛 Bug Hunt 12: Black Jack von Chat AI",
+    "text": "🐛 Bug Hunt 12: Black Jack von Chat AI\nPrompt: “Simuliere die Wahrscheinlichkeit, mit den ersten zwei Karten Black Jack zu bekommen.”\n\nblack_jack_ki &lt;- function() {\n  hand &lt;- sample(deck, 2)\n  hand[1] %in% asse & hand[2] %in% zehner\n}\nset.seed(2627)\nmean(replicate(100000, black_jack_ki()))\n\n[1] 0.02427\n\n\n\n\n\n“Die Wahrscheinlichkeit für einen Black Jack liegt bei etwa 2,4 %. Die Simulation mit 100.000 Wiederholungen ist sehr genau.”\n\n\n\n\n2 Minuten: Der Code läuft, die Simulation ist genau. Warum ist das Ergebnis trotzdem falsch?"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-12-auflösung",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-12-auflösung",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🐛 Bug Hunt 12: Auflösung",
+    "text": "🐛 Bug Hunt 12: Auflösung\n\nDie Funktion prüft nur eine Reihenfolge: Ass zuerst, dann Zehner. “Zehner zuerst, dann Ass” zählt nicht.\nErgebnis: genau die Hälfte von 4,83 %\n“Sehr genau” stimmt sogar, nur misst die Simulation das Falsche genau\n\n\n\nEine große Zahl an Wiederholungen schützt vor Zufallsschwankung, nicht vor einem falschen Ereignis. Prüfen Sie Simulationen gegen einen Fall, den Sie exakt ausrechnen können."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#jetzt-sie-zwei-asse",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#jetzt-sie-zwei-asse",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "✍️ Jetzt Sie: zwei Asse",
+    "text": "✍️ Jetzt Sie: zwei Asse\nSimulieren Sie die Wahrscheinlichkeit, mit den ersten zwei Karten zwei Asse zu bekommen. Exakt sind es \\(\\frac{4}{52}\\cdot\\frac{3}{51} \\approx 0{,}45\\,\\%\\).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHinweis\n\n\nZwei Karten ziehen, ohne Zurücklegen (das ist der Standard). Beide Karten müssen in asse liegen.\n\n\n\n\n\n\n\n\n\n\n\nLösung\n\n\nzwei_asse &lt;- function() {\n  hand &lt;- sample(deck, 2)\n  all(hand %in% asse)\n}\nset.seed(1)\nmean(replicate(100000, zwei_asse()))"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#von-kugeln-zu-kreisen",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#von-kugeln-zu-kreisen",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Von Kugeln zu Kreisen",
+    "text": "Von Kugeln zu Kreisen\nUrnen und Karten sind diskret: endlich viele Ausgänge, jeder mit einer Wahrscheinlichkeit.\nDie Arbeitslosenquote ist stetig: Jeder Wert zwischen 1,88 % und 14,46 % ist möglich.\n\n\nZiehen wir zufällig einen der 400 Kreise: Wie wahrscheinlich hat er eine Quote von genau 5,000 %? Und eine zwischen 4 und 6 %?\n\n\n\n\nGenau 5,000 %: praktisch 0. Bei stetigen Größen fragt man nach Intervallen.\nZwischen 4 und 6 %: der Anteil der Kreise in diesem Intervall. Jeder Kreis ist gleich wahrscheinlich, also gilt: Wahrscheinlichkeit = Anteil.\n\nDatentypen kurz: kategorial (Bundesland), ordinal (kalt &lt; warm &lt; heiß), numerisch diskret (Anzahl Arbeitslose: ganze Zahlen) oder stetig (Quote, Einkommen)."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-verteilungsfunktion",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-verteilungsfunktion",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Die Verteilungsfunktion",
+    "text": "Die Verteilungsfunktion\n\n\n\\[F(a) = \\Pr(X \\le a)\\]\nAnteil der Kreise mit einer Quote bis \\(a\\):\n\nF_n &lt;- ecdf(gesamtdaten$alo_quote)\nF_n(5)\n\n[1] 0.445\n\nF_n(6) - F_n(4)\n\n[1] 0.335\n\n\n\n44,5 % der Kreise liegen bei 5 % oder darunter\n33,5 % liegen zwischen 4 und 6 %\n\n\n\n\n\n\n\n\n\n\n\n\necdf() = empirical cumulative distribution function. Weil sie aus Daten geschätzt ist, heißt sie empirische Verteilungsfunktion \\(\\hat F_n\\)."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-dichte-fläche-statt-höhe",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-dichte-fläche-statt-höhe",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Die Dichte: Fläche statt Höhe",
+    "text": "Die Dichte: Fläche statt Höhe\n\n\n\n\n\n\n\n\n\n\n\n\n\nHistogramm: einfacher Schätzer der Dichte; das Ergebnis hängt von der Balkenbreite ab\nKerndichte (geom_density()): glättet das Histogramm zu einer Kurve\nDie Fläche unter der Kurve ist 1\nDie Fläche zwischen 4 und 6 % ≈ Anteil der Kreise dort: 33,5 %\n\n\n\nDie y-Achse einer Dichte ist kein Anteil. Nur Flächen sind Anteile."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-normalverteilung",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-normalverteilung",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Die Normalverteilung",
+    "text": "Die Normalverteilung\nDurch zwei Zahlen bestimmt: Mittelwert \\(\\mu\\) und Standardabweichung \\(\\sigma\\). Symmetrisch, glockenförmig.\n\n\n\n\n\n\n\n\n\n\n\n\n\nEtwa 68 % liegen innerhalb von \\(\\mu \\pm \\sigma\\)\nEtwa 95 % innerhalb von \\(\\mu \\pm 2\\sigma\\)\nEtwa 99,7 % innerhalb von \\(\\mu \\pm 3\\sigma\\)\n\nIn R:\n\npnorm(a, mu, sigma) = \\(\\Pr(X \\le a)\\)\nqnorm(p, mu, sigma) = der Wert, unter dem der Anteil \\(p\\) liegt"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#passt-die-normalverteilung-zu-unseren-kreisen",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#passt-die-normalverteilung-zu-unseren-kreisen",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Passt die Normalverteilung zu unseren Kreisen?",
+    "text": "Passt die Normalverteilung zu unseren Kreisen?\n\n\n\n\n\n\n\n\n\n\n\n\n🔮 Prognose: Wo passt sie gut, wo schlecht?\n\n\nIn der Mitte gut: 68,2 % der Kreise liegen in \\(\\mu \\pm \\sigma\\) (Normalverteilung: 68,3 %)\nAn den Rändern schlecht: Die Daten sind rechtsschief, links gibt es eine harte Grenze\nDie Normalverteilung erlaubt sogar negative Quoten\nZwei Gipfel: West und Ost (Teil 2). Eine einzige Glocke kann das nicht abbilden"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-13-wie-viele-kreise-unter-2",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-13-wie-viele-kreise-unter-2",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🐛 Bug Hunt 13: Wie viele Kreise unter 2 %?",
+    "text": "🐛 Bug Hunt 13: Wie viele Kreise unter 2 %?\nPrompt: “Wie viele der 400 Kreise haben eine Arbeitslosenquote unter 2 %?” Chat AI:\n\nx &lt;- gesamtdaten$alo_quote\n400 * pnorm(2, mean = mean(x), sd = sd(x))\n\n[1] 16.87626\n\n\n\n\n\n“Arbeitslosenquoten sind annähernd normalverteilt. Damit haben rund 17 Kreise eine Quote unter 2 %.”\n\n\n\n\n2 Minuten: Wie würden Sie das prüfen? Was kommt heraus?"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-13-auflösung",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-13-auflösung",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🐛 Bug Hunt 13: Auflösung",
+    "text": "🐛 Bug Hunt 13: Auflösung\n\nsum(x &lt; 2)                                  # einfach nachzählen\n\n[1] 1\n\ngesamtdaten |&gt; filter(alo_quote &lt; 2) |&gt; select(landkreis_name, alo_quote)\n\n# A tibble: 1 × 2\n  landkreis_name alo_quote\n  &lt;chr&gt;              &lt;dbl&gt;\n1 München             1.88\n\n\n\n\nEin Kreis statt 17. Die Normalverteilung überschätzt den linken Rand um mehr als das Zehnfache.\nLaut Normalverteilung hätten sogar 1,5 Kreise eine negative Quote.\nDie Frage brauchte gar kein Modell: Wir haben alle 400 Kreise, also zählen wir.\n\n\nEine Verteilungsannahme ist eine Annahme. Prüfen Sie sie an den Daten, besonders an den Rändern, wo die interessanten Fälle liegen."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#jetzt-sie-über-8",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#jetzt-sie-über-8",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "✍️ Jetzt Sie: über 8 %",
+    "text": "✍️ Jetzt Sie: über 8 %\nWelcher Anteil der Kreise hat eine Quote über 8 %? Berechnen Sie ihn einmal durch Zählen und einmal mit der Normalverteilung.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHinweis\n\n\nmean() auf einem logischen Vektor (x &gt; 8) liefert den Anteil. pnorm(8, …) ist der Anteil bis 8, Sie brauchen den Rest.\n\n\n\n\n\n\n\n\n\n\n\nLösung\n\n\nempirisch &lt;- mean(x &gt; 8)\nnormal    &lt;- 1 - pnorm(8, mean = mean(x), sd = sd(x))\nc(empirisch = empirisch, normal = normal)"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#grundbegriffe",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#grundbegriffe",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Grundbegriffe",
+    "text": "Grundbegriffe\n\n\n\n\n\n\n\n\nBegriff\nBedeutung\nBei uns\n\n\n\n\nGrundgesamtheit\nalle Einheiten, über die wir etwas wissen wollen\ndie 400 Kreise\n\n\nParameter \\(\\mu\\)\nder wahre Wert in der Grundgesamtheit, meist unbekannt\nmittlere Quote 5,61 %\n\n\nStichprobe\nzufällig ausgewählte Teilmenge der Größe \\(n\\)\n50 Kreise\n\n\nPunktschätzer \\(\\bar x\\)\naus der Stichprobe berechneter Schätzwert für \\(\\mu\\)\nMittelwert der 50\n\n\nZensus\nVollerhebung aller Einheiten\nCase-Study Teil 1 und 2\n\n\n\n\nZufallsstichprobe: Jede Einheit hat dieselbe Chance, gezogen zu werden. Dann ist die Stichprobe unverzerrt, und Ergebnisse lassen sich auf die Grundgesamtheit verallgemeinern.\n\n\n\n\n\n\nStichprobenverzerrung: Haben manche Einheiten eine höhere Chance (z.B. nur Großstädte, nur wer an einer Online-Umfrage teilnimmt), hilft auch ein großes \\(n\\) nicht."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#eine-stichprobe",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#eine-stichprobe",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Eine Stichprobe",
+    "text": "Eine Stichprobe\nStellen wir uns vor, wir hätten nur 50 zufällig gezogene Kreise:\n\nset.seed(2627)\nstichprobe &lt;- sample(gesamtdaten$alo_quote, 50)\nmean(stichprobe)\n\n\n\n[1] 5.384455\n\n\n\nDer wahre Wert ist 5,61 %. Wir liegen 0,23 Prozentpunkte daneben.\n\nWar das Glück oder Pech? Mit einer einzigen Zahl können wir das nicht wissen. Wir brauchen die Schwankung des Schätzers."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-stichprobenverteilung",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#die-stichprobenverteilung",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Die Stichprobenverteilung",
+    "text": "Die Stichprobenverteilung\nWeil wir die Grundgesamtheit hier ausnahmsweise kennen, können wir 1.000-mal neu ziehen:\n\n\n\nmittel_50 &lt;- replicate(1000,\n  mean(sample(gesamtdaten$alo_quote, 50)))\nsd(mittel_50)\n\n\n\n[1] 0.2831495\n\n\n\nDie Mittelwerte streuen um den wahren Wert\nIhre Standardabweichung heißt Standardfehler (SE)\nAntwort auf die Schätzfrage: typischerweise etwa 0,3 Prozentpunkte"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#größere-stichprobe-kleinerer-fehler",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#größere-stichprobe-kleinerer-fehler",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🔮 Größere Stichprobe, kleinerer Fehler?",
+    "text": "🔮 Größere Stichprobe, kleinerer Fehler?\n\nMit 12 statt 50 Kreisen: Wie viel breiter wird die Stichprobenverteilung? Doppelt so breit? Viermal?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSE bei n = 12: 0,56, bei n = 50: 0,28\nEtwa doppelt so breit, obwohl viermal weniger Daten\n\n\\[SE = \\frac{\\sigma}{\\sqrt{n}}\\]\nViermal so viele Daten halbieren den Fehler."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#das-problem-wir-haben-nur-eine-stichprobe",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#das-problem-wir-haben-nur-eine-stichprobe",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Das Problem: Wir haben nur eine Stichprobe",
+    "text": "Das Problem: Wir haben nur eine Stichprobe\nIn der Praxis können wir nicht 1.000-mal neu ziehen. Wir haben eine Stichprobe.\n\nDer Bootstrap: Wir behandeln die Stichprobe so, als wäre sie die Grundgesamtheit, und ziehen aus ihr mit Zurücklegen immer wieder neue Stichproben derselben Größe.\n\nboot &lt;- replicate(1000, mean(sample(stichprobe, replace = TRUE)))\nsd(boot)\n\n\n\n[1] 0.2469458\n\n\n\n\n\nBootstrap-SE 0,25, wahrer SE 0,28. Aus einer einzigen Stichprobe haben wir die Schwankung gut geschätzt, ohne Formel und ohne Grundgesamtheit.\n\nBootstrap: sich an den eigenen Stiefelschlaufen aus dem Sumpf ziehen, wie Münchhausen am eigenen Schopf."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bootstrap-und-stichprobenverteilung-im-vergleich",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bootstrap-und-stichprobenverteilung-im-vergleich",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Bootstrap und Stichprobenverteilung im Vergleich",
+    "text": "Bootstrap und Stichprobenverteilung im Vergleich\n\n\n\n\n\n\n\n\n\n\n\n\nOben: gezogen aus der Grundgesamtheit. Deren Mittelwert ist \\(\\mu\\), also streuen die Mittelwerte um \\(\\mu\\).\n\nUnten: Der Bootstrap zieht aus unserer Stichprobe. Deren Mittelwert ist \\(\\bar x\\), also streuen die Bootstrap-Mittel um \\(\\bar x\\) (mean(boot) = 5,36). \\(\\mu\\) kennt der Bootstrap nicht, er sieht nur die Stichprobe.\n\n\n\nLage: falsch, wenn \\(\\bar x\\) daneben liegt\nBreite: stimmt gut (0,25 vs. 0,28)\n\n\nDer Bootstrap macht die Schätzung nicht genauer. Er sagt uns, wie ungenau sie ist."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#das-konfidenzintervall",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#das-konfidenzintervall",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Das Konfidenzintervall",
+    "text": "Das Konfidenzintervall\nEin 95 %-Konfidenzintervall ist ein Bereich plausibler Werte für \\(\\mu\\). Zwei gängige Wege:\n\n\nPerzentil-Methode (Bootstrap)\nDie mittleren 95 % der Bootstrap-Mittelwerte:\n\nquantile(boot, c(0.025, 0.975))\n\n    2.5%    97.5% \n4.902974 5.842596 \n\n\n\nStandardfehler-Methode (Normalverteilung)\n\\(\\bar x \\pm 1{,}96 \\cdot SE\\) mit \\(SE = s/\\sqrt{n}\\):\n\nse &lt;- sd(stichprobe) / sqrt(50)\nmean(stichprobe) + c(-1, 1) * 1.96 * se\n\n[1] 4.893000 5.875911\n\n\n\n\nWoher kommt 1,96? qnorm(0.975) = 1,96: Zwischen \\(-1{,}96\\) und \\(+1{,}96\\) liegen bei der Normalverteilung genau 95 %. Mit 2 statt 1,96 wären es 95,4 %."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-14-das-konfidenzintervall-von-chat-ai",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-14-das-konfidenzintervall-von-chat-ai",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🐛 Bug Hunt 14: Das Konfidenzintervall von Chat AI",
+    "text": "🐛 Bug Hunt 14: Das Konfidenzintervall von Chat AI\nPrompt: “Berechne ein 95 %-Konfidenzintervall für die mittlere Arbeitslosenquote aus meiner Stichprobe von 50 Kreisen und interpretiere es.”\n\nmean(stichprobe) + c(-1, 1) * 1.96 * sd(stichprobe)\n\n[1] 1.909342 8.859569\n\n\n\n\n\n“Mit 95 % Wahrscheinlichkeit liegt die mittlere Arbeitslosenquote aller Kreise zwischen 1,9 % und 8,9 %.”\n\n\n\n\n3 Minuten, zu zweit: Zwei Fehler, einer im Code, einer in der Interpretation. Woran sehen Sie schon ohne zu rechnen, dass das Intervall nicht stimmen kann?"
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-14-auflösung",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#bug-hunt-14-auflösung",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "🐛 Bug Hunt 14: Auflösung",
+    "text": "🐛 Bug Hunt 14: Auflösung\n1. Code: Standardabweichung statt Standardfehler\n\nsd(stichprobe) misst, wie stark die Kreise streuen, nicht wie stark der Mittelwert schwankt\nRichtig: sd(stichprobe) / sqrt(50). Das Intervall ist \\(\\sqrt{50} \\approx 7\\)-mal zu breit\nPlausibilitätscheck: Ein Intervall von 1,9 bis 8,9 % umfasst fast alle Kreise. Für einen Mittelwert aus 50 Kreisen ist das absurd ungenau.\n\n\n2. Interpretation: Die Wahrscheinlichkeit gehört zum Verfahren, nicht zu \\(\\mu\\)\n\n\\(\\mu\\) ist eine feste Zahl. Sie liegt im Intervall oder nicht, ohne “mit 95 % Wahrscheinlichkeit”\nZufällig ist das Intervall: Jede Stichprobe liefert ein anderes\nRichtig: “Das Verfahren erzeugt in 95 % aller Stichproben ein Intervall, das den wahren Wert enthält.”\n\n\n\n\nRichtig gerechnet: [4,89 %; 5,88 %]. Der wahre Wert 5,61 % liegt drin. Diesmal."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#stichproben-100-intervalle",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#stichproben-100-intervalle",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "100 Stichproben, 100 Intervalle",
+    "text": "100 Stichproben, 100 Intervalle\n\n\n\n\n\n\n\n\n\n\n\n\n\nJede Linie: eine neue Stichprobe von 50 Kreisen, ein Bootstrap-Intervall\n95 von 100 enthalten den wahren Wert, 5 verfehlen ihn\nMit einem anderen Seed wären es z.B. 92 oder 97: Auch diese Zahl schwankt, erst auf lange Sicht sind es 95 %\n\n\n\nGenau das bedeutet “95 %”: ein Versprechen über das Verfahren auf lange Sicht. Ob Ihr Intervall zu den Treffern gehört, wissen Sie nie.\n\n\nGrafik nach Ismay & Kim (2019), ModernDive, Kap. 8.5."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#was-macht-ein-intervall-breit-oder-schmal",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#was-macht-ein-intervall-breit-oder-schmal",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Was macht ein Intervall breit oder schmal?",
+    "text": "Was macht ein Intervall breit oder schmal?\n\n\n\n\n\n\n\n\nStellschraube\nWirkung\nWarum\n\n\n\n\nGrößere Stichprobe \\(n\\)\nschmaler\n\\(SE = \\sigma / \\sqrt{n}\\)\n\n\nHöheres Konfidenzniveau (99 % statt 95 %)\nbreiter\nqnorm(0.995) = 2,58 statt qnorm(0.975) = 1,96\n\n\nStärkere Streuung \\(\\sigma\\)\nbreiter\nmehr Zufall in jeder Stichprobe\n\n\n\nZweiseitig: Bei 95 % bleiben links und rechts je 2,5 % übrig, also das 97,5 %-Quantil. Bei 99 % je 0,5 %, also das 99,5 %-Quantil.\n\n\nEin Konfidenzintervall für einen Effekt reicht von −0,5 bis +3,0. Heißt das “kein Effekt”?\n\n\n\nNein. Es heißt: Die Daten reichen nicht, um “kein Effekt” auszuschließen. Ein breites Intervall um die 0 ist oft ein Zeichen für zu wenig Daten (geringe Power), nicht für einen fehlenden Effekt. Mehr dazu nächstes Semester bei der Regression."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#jetzt-sie-ihr-eigenes-konfidenzintervall",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#jetzt-sie-ihr-eigenes-konfidenzintervall",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "✍️ Jetzt Sie: Ihr eigenes Konfidenzintervall",
+    "text": "✍️ Jetzt Sie: Ihr eigenes Konfidenzintervall\nZiehen Sie mit Ihrem Geburtstag als Seed (z.B. 0312) eine eigene Stichprobe von 50 Kreisen und berechnen Sie das 95 %-Bootstrap-Intervall. Enthält es den wahren Wert 5,61 %?\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHinweis\n\n\nBootstrap heißt: mit Zurücklegen ziehen. Für 95 % schneiden Sie links und rechts je 2,5 % ab.\n\n\n\n\n\n\n\n\n\n\n\nLösung\n\n\nset.seed(0312)\nstichprobe &lt;- sample(x, 50)\nboot &lt;- replicate(1000, mean(sample(stichprobe, replace = TRUE)))\nki   &lt;- quantile(boot, c(0.025, 0.975))\nki\n\n\n\n\n\n\n\n\nAuflösung im Hörsaal: Handzeichen, wessen Intervall den wahren Wert verfehlt. Bei 100 Studierenden sollten es etwa 5 sein. Damit wird die Grafik “100 Intervalle” live nachgespielt."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#zusammenfassung",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#zusammenfassung",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Zusammenfassung",
+    "text": "Zusammenfassung\n\nWahrscheinlichkeit = langfristiger Anteil. Mit sample() und replicate() simulieren, mit einem exakt lösbaren Fall prüfen (Bug Hunt 12)\nVerteilungsfunktion \\(F(a)\\) liefert Anteile; bei einer Dichte sind nur Flächen Anteile\nNormalverteilung: zwei Parameter, pnorm() / qnorm(). Eine Annahme, die man prüfen muss, vor allem an den Rändern (Bug Hunt 13)\nStandardfehler = Schwankung des Schätzers, nicht der Daten; schrumpft mit \\(\\sqrt{n}\\)\nBootstrap: Schwankung aus einer einzigen Stichprobe schätzen\nKonfidenzintervall: 95 % beziehen sich auf das Verfahren, nicht auf \\(\\mu\\) (Bug Hunt 14)\n\n\n\nNächstes Semester: Konfidenzintervalle für Regressionskoeffizienten. Dieselbe Logik, dieselben Fallen."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#kahoot-checkpoint-wahrscheinlichkeiten-und-konfidenzintervalle",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#kahoot-checkpoint-wahrscheinlichkeiten-und-konfidenzintervalle",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "📱 Kahoot-Checkpoint: Wahrscheinlichkeiten und Konfidenzintervalle",
+    "text": "📱 Kahoot-Checkpoint: Wahrscheinlichkeiten und Konfidenzintervalle\n\n\n\n\n\n\n\n\n\n\n\nkahoot.it · PIN am Beamer\n\n10 Fragen, ca. 8 Minuten.\n\nMonte Carlo und set.seed()\nBedingte Wahrscheinlichkeit, Multiplikationsregel\nVerteilungsfunktion und Dichte lesen\nNormalverteilung: wann sie passt\nStandardfehler vs. Standardabweichung\nBootstrap und Konfidenzintervall richtig deuten\n\nKahoot öffnen →\n\n\n\n\n\n\n\nFragen mit Antworten und Zeitlimits: kahoot_fragen_wahrscheinlichkeit.xlsx (Kahoot-Importvorlage)."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#permutationen-und-kombinationen",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#permutationen-und-kombinationen",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Permutationen und Kombinationen",
+    "text": "Permutationen und Kombinationen\nStatt zu simulieren, können wir alle möglichen Hände aufzählen (Paket gtools):\n\nlibrary(gtools)\nhaende_p &lt;- permutations(52, 2, v = deck)    # Reihenfolge zählt: 52 · 51 Hände\nnrow(haende_p)\n\n[1] 2652\n\nmean(haende_p[, 1] %in% asse & haende_p[, 2] %in% asse)\n\n[1] 0.004524887\n\nhaende_k &lt;- combinations(52, 2, v = deck)    # Reihenfolge egal: 52 · 51 / 2 Hände\nnrow(haende_k)\n\n[1] 1326\n\nmean((haende_k[, 1] %in% asse & haende_k[, 2] %in% zehner) |\n     (haende_k[, 2] %in% asse & haende_k[, 1] %in% zehner))\n\n[1] 0.04826546\n\n\nAufzählen ist exakt, wird aber schnell unmöglich: Für 5 Karten gibt es schon 2.598.960 Kombinationen. Dann bleibt die Simulation."
+  },
+  {
+    "objectID": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#kerndichteschätzer-die-definition",
+    "href": "slides/VL_Wahrscheinlichkeit_und_Konfidenzintervalle.html#kerndichteschätzer-die-definition",
+    "title": "Wahrscheinlichkeiten und Konfidenzintervalle",
+    "section": "Kerndichteschätzer: die Definition",
+    "text": "Kerndichteschätzer: die Definition\nEin Kern ist eine Funktion \\(K: \\mathbb{R} \\to [0, \\infty)\\) mit\n\n\\(K(x) \\ge 0\\) für alle \\(x\\)\n\\(\\int_{\\mathbb{R}} K(x)\\,dx = 1\\)\n\nDer Kerndichteschätzer legt um jeden Datenpunkt einen kleinen Kern der Breite \\(h\\) (Bandbreite) und addiert sie:\n\\[\\hat f_h(x) = \\frac{1}{n h} \\sum_{i=1}^{n} K\\!\\left(\\frac{x - x_i}{h}\\right)\\]\n\nKleine Bandbreite \\(h\\): zackig, zeigt Zufallsschwankungen\nGroße Bandbreite: glatt, verwischt echte Strukturen\ngeom_density() wählt \\(h\\) automatisch (bw.nrd0), mit adjust = 2 wird es glatter"
+  },
+  {
+    "objectID": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-de-eskalationsgespräch-suchen",
+    "href": "slides/VL_KI_und_Projekte.html#wenn-es-nicht-besser-wird-de-eskalationsgespräch-suchen",
+    "title": "KI und Teamarbeit in den Projekten",
+    "section": "Wenn es nicht besser wird: De-Eskalationsgespräch suchen",
+    "text": "Wenn es nicht besser wird: De-Eskalationsgespräch suchen\n\nIm Team ansprechen, früh und sachlich: konkretes Verhalten, konkrete Erwartung, konkrete Frist\nDokumentieren: Absprachen, Nachrichten, Commits im Repository\nÜbungsleiter und Dozent per Mail einschalten, spätestens 1,5 Wochen nach Projektbeginn: Was ist passiert, was hat das Team schon unternommen?\nLetzte Konsequenz: Das Team streicht die Person von der Abgabe. Sie bekommt für dieses Projekt keine Punkte.\n\n\nSchritt 4 geht nur, wenn Schritt 3 rechtzeitig war. Zwei Tage vor der Abgabe ist es dafür zu spät, wie bei Jack.\n\nDer ganze Ablauf steht im De-Eskalationsmechanismus der Team-Guidelines."
   }
 ]
