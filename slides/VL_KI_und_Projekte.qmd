@@ -42,9 +42,9 @@ k <- list(
   # Probeklausur (TODO 26/27: Uhrzeit und Raum prüfen)
   probeklausur     = "Freitag, 20. November",
   pk_zeit          = "10:00 Uhr",
-  pk_raum          = "H4/5",
+  pk_raum          = "H Innere Medizin",
   vl_ende          = "ca. 11:45 Uhr",
-  seb_tests        = 4,
+  seb_tests        = 2,
   # Links
   leitlinien       = paste0(tut, "leitlinien_zur_projektabgabe"),
   ki_guideline     = paste0(tut, "quellenverweise-und-ai-policy"),
